@@ -1,0 +1,8 @@
+Developed by Diego Cristina <diegocc100@gmail.com>
+Code under GPLv3 license (see COPYING)
+
+Requeriments:
+f.lux for linux: <http://stereopsis.com/flux/>
+Python-KDE4
+plasma-scriptengine-python
+
