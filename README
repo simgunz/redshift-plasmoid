@@ -11,3 +11,7 @@ Requires:
 Plasma
 Python-KDE4
 plasma-scriptengine-python
+
+How to install:
+Use install.sh to generate and install the plasmoid file or compress the directory and install it like any other plasmoid.
+

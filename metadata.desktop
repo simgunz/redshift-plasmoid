@@ -1,19 +1,18 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=F.lux manager
-Comment=Provides a switch to start/stop F.lux daemon, and to change location/temperature
+Comment=Adjusts and configures screen luminosity depending on your surroundings, using f.lux or Redshift.
 Type=Service
 ServiceTypes=Plasma/Applet
 X-Plasma-API=python
 X-Plasma-MainScript=code/main.py
 Icon=help-hint
 
-
 X-KDE-PluginInfo-Author=Diego Cristina
 X-KDE-PluginInfo-Email=diegocc100@gmail.com
 X-KDE-PluginInfo-Name=plasma_flux
-X-KDE-PluginInfo-Version=0.1
-X-KDE-PluginInfo-Website=http://plasma.kde.org/
+X-KDE-PluginInfo-Version=0.2
+X-KDE-PluginInfo-Website=http://github.com/diegc/plasma-flux
 
 #X-KDE-PluginInfo-Depends=Python-kde4, plasma-scriptengine-python
 X-KDE-PluginInfo-License=GPL V3
