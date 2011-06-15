@@ -3,7 +3,7 @@
 
 '''
 Provides a switch to start/stop F.lux daemon, and to change location/temperature
-Copyright (C) 2001 Diego Cristina
+Copyright (C) 2011 Diego Cristina
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
