@@ -3,7 +3,7 @@
 
 '''
 Provides a switch to start/stop F.lux daemon, and to change location/temperature
-Copyright (C) 2001 Diego Cristina
+Copyright (C) 2011 Diego Cristina
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,11 +31,15 @@ from ConfigParser import ConfigParser
 #import commands for executing shell commands
 import commands
 import os
+from subprocess import Popen
 
 #Plasmoid gained by inheritance
 class FluxApplet(plasmascript.Applet):
 
-	DEBUG = False
+	'''f.lux executable'''
+	FLUX = "xflux"
+	'''Redshift executable'''
+	REDSHIFT = "redshift"
 
 	#constructor
 	def __init__(self, parent, args=None):
@@ -73,14 +77,30 @@ class FluxApplet(plasmascript.Applet):
 			cfgParser = ConfigParser()
 			cfgFile = open(strFile)
 			cfgParser.readfp(cfgFile)
-			self.lon = float(cfgParser.get('settings', 'lon'))
-			self.lat = float(cfgParser.get('settings', 'lat'))
-			self.tmp = int(cfgParser.get('settings', 'tmp'))
-			cfgFile.close()
+			try:
+				self.lon = float(cfgParser.get('settings', 'lon'))
+				self.lat = float(cfgParser.get('settings', 'lat'))
+				self.nighttmp = int(cfgParser.get('settings', 'nighttmp'))
+				self.daytmp = int(cfgParser.get('settings', 'daytmp'))
+				self.smooth = bool(cfgParser.get('settings', 'smooth'))
+				self.program = str(cfgParser.get('settings', 'program'))
+				self.mode = str(cfgParser.get('settings', 'mode'))
+				self.gamma = float(cfgParser.get('settings', 'gamma'))
+				cfgFile.close()
+			except:
+				self.defaultOptions()
 		else:
-			self.lon = float(0)
-			self.lat = float(0)
-			self.tmp = int(3400)
+			self.defaultOptions()
+			
+	def defaultOptions(self):
+		self.lon = float(0)
+		self.lat = float(0)
+		self.nighttmp = int(3400)
+		self.daytmp = int(6500)
+		self.smooth = True
+		self.program = "Redshift"
+		self.mode = "randr"
+		self.gamma = float(0)
 
 	#done when timer is resetted
 	def timerEvent(self, event):
@@ -100,34 +120,39 @@ class FluxApplet(plasmascript.Applet):
 	#get the pid
 	def updateStatus(self):
 		self.pid = commands.getoutput("pidof xflux")
-		
+		if not self.pid:
+			self.pid = commands.getoutput("pidof redshift")
+
 	def toggle(self):
 		status = self.checkStatus()
-		if status is "Stopped":
-			self.startXflux()
-		elif status is "Running":
-			self.stopXflux()
+		if status == "Stopped":
+			if self.program == "f.lux":
+				self.startXflux()
+			elif self.program == "Redshift":
+				self.startRedshift()
+		elif status == "Running":
+			self.stopProgram()
 		else:
 			print("Unknown status")
 	
 	def startXflux(self):
-		print("Starting xflux with latitude %f, longitude %f, temperature %d" % (self.lat, self.lon, self.tmp))
-		result = commands.getoutput("xflux -l %f -g %f -k %d" % (self.lat, self.lon, self.tmp))
-		if self.DEBUG:
-			print(result)
-		
-	def stopXflux(self):
-		print("Stopping xflux")
-		result = commands.getoutput("kill %s" % self.pid)
-		if self.DEBUG:
-			print(result)
+		print("Starting f.lux with latitude %f, longitude %f, temperature %d" % (self.lat, self.lon, self.nighttmp))
+		self.pid = Popen("xflux -l %f -g %f -k %d" % (self.lat, self.lon, self.nighttmp), shell=True).pid
+
+	def startRedshift(self):
+		print("Starting Redshift with latitude %f, longitude %f, day temperature %d, night temperature %d, gamma ramp %f, smooth transition = %s" % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ("yes" if self.smooth else "no")))
+		self.pid = Popen("redshift -l %f:%f -t %d:%d -g %f -m %s %s" %(self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ("-r" if not self.smooth else "")), shell=True).pid
+
+	def stopProgram(self):
+		print("Stopping")
+		Popen("kill %s" % self.pid, shell=True)
 
 	#draw method
 	def paintInterface(self, painter, option, rect):
 		self.updateStatus()
-		if self.checkStatus() is "Running":
+		if self.checkStatus() == "Running":
 			self.button.setIcon(self.iconOnline)
-		elif self.checkStatus() is "Stopped":
+		elif self.checkStatus() == "Stopped":
 			self.button.setIcon(self.iconOffline)
 		else:
 			self.button.setIcon(self.iconUnknown)
@@ -135,7 +160,7 @@ class FluxApplet(plasmascript.Applet):
 
 	#create config interface
 	def createConfigurationInterface(self, parent):
-		values = {'lon':self.lon,'lat':self.lat,'tmp':self.tmp}
+		values = {'lon':self.lon, 'lat':self.lat, 'daytmp':self.daytmp, 'nighttmp':self.nighttmp, 'program':self.program, 'smooth':self.smooth, 'mode':self.mode, 'gamma':self.gamma}
 		self.conf = FluxConfig(self,values)
 		page = parent.addPage(self.conf,"")
 		self.connect(parent, SIGNAL("okClicked()"), self.configAccepted)
@@ -144,14 +169,24 @@ class FluxApplet(plasmascript.Applet):
 	def configAccepted(self):
 		self.lon = self.conf.getLongitude()
 		self.lat = self.conf.getLatitude()
-		self.tmp = self.conf.getTemperature()
+		self.nighttmp = self.conf.getNightTemperature()
+		self.daytmp = self.conf.getDayTemperature()
+		self.smooth = self.conf.getSmooth()
+		self.program = self.conf.getProgram()
+		self.mode = self.conf.getMode()
+		self.gamma = self.conf.getGamma()
 		cfgParser = ConfigParser()
 		cfgParser.read(self.cfgfile)
 		if not cfgParser.has_section('settings'):
 			cfgParser.add_section('settings')
 		cfgParser.set('settings', 'lat', self.lat)
 		cfgParser.set('settings','lon', self.lon)
-		cfgParser.set('settings','tmp', self.tmp)
+		cfgParser.set('settings','nighttmp', self.nighttmp)
+		cfgParser.set('settings','daytmp', self.daytmp)
+		cfgParser.set('settings','smooth', self.smooth)
+		cfgParser.set('settings','program', self.program)
+		cfgParser.set('settings','mode', self.mode)
+		cfgParser.set('settings', 'gamma', self.gamma)
 		strFile = os.path.join(os.path.expanduser('~'),self.cfgfile)
 		cfgFile = open(strFile,"w")
 		cfgParser.write(cfgFile)

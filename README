@@ -1,8 +1,13 @@
-Developed by Diego Cristina <diegocc100@gmail.com>
+This little plasmoid provides a switch to start/stop F.lux / Redshift daemons, and to change location, "temperature" and other configuration variables. See f.lux and Redshift websites for more detailed info.
+
+Developed by Diego Cristina <diegocc100 AT gmail DOT com>
 Code under GPLv3 license (see COPYING)
 
-Requeriments:
+Supported programs:
 f.lux for linux: <http://stereopsis.com/flux/>
+Redshift for linux: <http://jonls.dk/redshift/>
+
+Requires:
+Plasma
 Python-KDE4
 plasma-scriptengine-python
-

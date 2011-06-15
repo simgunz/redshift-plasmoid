@@ -3,7 +3,7 @@
 
 '''
 Provides a switch to start/stop F.lux daemon, and to change location/temperature
-Copyright (C) 2001 Diego Cristina
+Copyright (C) 2011 Diego Cristina
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt4.QtGui import QWidget
 from cfgdialog import Ui_cfgDialog
+from PyQt4 import QtCore
 
 class FluxConfig(QWidget, Ui_cfgDialog):
 
@@ -31,14 +32,47 @@ class FluxConfig(QWidget, Ui_cfgDialog):
 		if values:
 			self.lonBox.setValue(float(values['lon']))
 			self.latBox.setValue(float(values['lat']))
-			self.tmpBox.setValue(int(values['tmp']))
+			self.nightTmpBox.setValue(int(values['nighttmp']))
+			self.dayTmpBox.setValue(int(values['daytmp']))
+			self.smoothCheckBox.setChecked(bool(values['smooth']))
+			index = self.programComboBox.findText(str(values['program']))
+			self.programComboBox.setCurrentIndex(index if not (index < 0) else 0)
+			index = self.modeComboBox.findText(str(values['mode']))
+			self.modeComboBox.setCurrentIndex(index if not (index < 0) else 0)
+			self.gammaBox.setValue(float(values['gamma']))
+		self.toggleProgram()
+		QtCore.QObject.connect(self.programComboBox, QtCore.SIGNAL("currentIndexChanged(int)"), self.toggleProgram)
+
 
 	def getLongitude(self):
 		return self.lonBox.value()
-	
+
 	def getLatitude(self):
 		return self.latBox.value()
-	
-	def getTemperature(self):
-		return self.tmpBox.value()
 
+	def getNightTemperature(self):
+		return self.nightTmpBox.value()
+
+	def getDayTemperature(self):
+		return self.dayTmpBox.value()
+
+	def getSmooth(self):
+		return self.smoothCheckBox.isChecked()
+
+	def getProgram(self):
+		return str(self.programComboBox.currentText())
+
+	def getMode(self):
+		return str(self.modeComboBox.currentText())
+		
+	def getGamma(self):
+		return self.gammaBox.value()
+
+	def toggleProgram(self):
+		enabled = bool(self.getProgram() == 'Redshift')
+		self.smoothCheckBox.setEnabled(enabled)
+		self.dayTmpLabel.setEnabled(enabled)
+		self.dayTmpBox.setEnabled(enabled)
+		self.modeLabel.setEnabled(enabled)
+		self.modeComboBox.setEnabled(enabled)
+		self.gammaBox.setEnabled(enabled)

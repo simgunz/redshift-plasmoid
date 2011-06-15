@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
 # plasma_flux/contents/ui/config.ui
 Provides a switch to start/stop F.lux daemon, and to change location/temperature
-Copyright (C) 2001 Diego Cristina
+Copyright (C) 2011 Diego Cristina
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +18,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
 <ui version="4.0">
  <author>Diego Cristina</author>
  <class>cfgDialog</class>
@@ -31,20 +29,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>150</width>
-    <height>80</height>
+    <width>200</width>
+    <height>200</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>150</width>
-    <height>80</height>
+    <width>200</width>
+    <height>200</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>150</width>
-    <height>80</height>
+    <width>200</width>
+    <height>200</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -55,21 +59,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>151</width>
-     <height>81</height>
+     <width>201</width>
+     <height>201</height>
     </rect>
    </property>
-   <layout class="QFormLayout" name="layout">
-    <property name="fieldGrowthPolicy">
-     <enum>QFormLayout::ExpandingFieldsGrow</enum>
-    </property>
-    <property name="labelAlignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-    </property>
-    <property name="formAlignment">
-     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
-    </property>
+   <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
+     <widget class="QLabel" name="programLabel">
+      <property name="text">
+       <string>Program</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QComboBox" name="programComboBox">
+      <item>
+       <property name="text">
+        <string notr="true">f.lux</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Redshift</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="1" column="0">
      <widget class="QLabel" name="latLabel">
       <property name="locale">
        <locale language="English" country="UnitedStates"/>
@@ -79,7 +95,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="1" column="1">
      <widget class="QDoubleSpinBox" name="latBox">
       <property name="buttonSymbols">
        <enum>QAbstractSpinBox::UpDownArrows</enum>
@@ -101,7 +117,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QLabel" name="lonLabel">
       <property name="locale">
        <locale language="English" country="UnitedStates"/>
@@ -111,7 +127,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="2" column="1">
      <widget class="QDoubleSpinBox" name="lonBox">
       <property name="suffix">
        <string>º</string>
@@ -130,29 +146,91 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="tmpLabel">
-      <property name="locale">
-       <locale language="English" country="UnitedStates"/>
-      </property>
+    <item row="5" column="0" colspan="2">
+     <widget class="QCheckBox" name="smoothCheckBox">
       <property name="text">
-       <string>Temperature</string>
+       <string>Smooth transition</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QSpinBox" name="tmpBox">
+    <item row="3" column="1">
+     <widget class="QSpinBox" name="dayTmpBox">
       <property name="buttonSymbols">
        <enum>QAbstractSpinBox::PlusMinus</enum>
       </property>
       <property name="suffix">
-       <string>ºC</string>
-      </property>
-      <property name="prefix">
-       <string/>
+       <string>ºK</string>
       </property>
       <property name="maximum">
-       <number>9999</number>
+       <number>15000</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QSpinBox" name="nightTmpBox">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::PlusMinus</enum>
+      </property>
+      <property name="suffix">
+       <string>ºK</string>
+      </property>
+      <property name="maximum">
+       <number>15000</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="dayTmpLabel">
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
+      <property name="text">
+       <string>Day temperature</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="nightTmpLabel">
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
+      <property name="text">
+       <string>Night temperature</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="modeComboBox">
+      <item>
+       <property name="text">
+        <string>randr</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>vidmode</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="modeLabel">
+      <property name="text">
+       <string>Mode</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QDoubleSpinBox" name="gammaBox">
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="gammaLabel">
+      <property name="text">
+       <string>Gamma ramp</string>
       </property>
      </widget>
     </item>
