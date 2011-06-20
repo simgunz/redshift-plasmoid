@@ -33,7 +33,12 @@ import commands
 import os
 from subprocess import Popen
 
-#Default config
+'''Theme'''
+THEME = 'widgets/background'
+'''Icons'''
+ICON_STOPPED = 'user-offline'
+ICON_RUNNING = 'user-online'
+ICON_UNKNOWN = 'user-busy'
 '''f.lux executable'''
 FLUX = 'xflux'
 '''Redshift executable'''
@@ -49,7 +54,6 @@ DEFAULT_MODE = 'randr'
 '''Default program'''
 DEFAULT_PROGRAM = 'Redshift'
 
-
 #Plasmoid gained by inheritance
 class FluxApplet(plasmascript.Applet):
 
@@ -61,9 +65,9 @@ class FluxApplet(plasmascript.Applet):
 	#done once when initiating
 	def init(self):
 		self.button = Plasma.IconWidget(self.parent)
-		self.iconOffline = KIcon("user-offline")
-		self.iconOnline = KIcon("user-online")
-		self.iconUnknown = KIcon("user-busy")
+		self.iconStopped = KIcon(ICON_STOPPED)
+		self.iconRunning = KIcon(ICON_RUNNING)
+		self.iconUnknown = KIcon(ICON_UNKNOWN)
 		self.pid = None
 
 		self.setHasConfigurationInterface(True)
@@ -73,9 +77,9 @@ class FluxApplet(plasmascript.Applet):
 		self.setBackgroundHints(Plasma.Applet.DefaultBackground)
 
 		self.theme = Plasma.Svg(self)
-		self.theme.setImagePath('widgets/background')
+		self.theme.setImagePath(THEME)
 		self.layout = QGraphicsGridLayout(self.applet)
-		self.layout.setContentsMargins(0,0,0,0)
+		self.layout.setContentsMargins(2,2,2,2)
 		self.setMinimumSize(10,10)
 
 		#set timer interval
@@ -104,6 +108,7 @@ class FluxApplet(plasmascript.Applet):
 				self.defaultOptions()
 		else:
 			self.defaultOptions()
+		self.updateStatus()
 		if self.auto and self.checkStatus() == "Stopped":
 			print("Auto-starting %s" % self.program)
 			self.toggle()
@@ -126,6 +131,7 @@ class FluxApplet(plasmascript.Applet):
 
 	#parse the status
 	def checkStatus(self):
+		self.updateStatus()
 		if self.pid:
 			if self.pid.isdigit():
 				return "Running"
@@ -166,11 +172,10 @@ class FluxApplet(plasmascript.Applet):
 
 	#draw method
 	def paintInterface(self, painter, option, rect):
-		self.updateStatus()
 		if self.checkStatus() == "Running":
-			self.button.setIcon(self.iconOnline)
+			self.button.setIcon(self.iconRunning)
 		elif self.checkStatus() == "Stopped":
-			self.button.setIcon(self.iconOffline)
+			self.button.setIcon(self.iconStopped)
 		else:
 			self.button.setIcon(self.iconUnknown)
 		self.layout.addItem(self.button, 0, 0)

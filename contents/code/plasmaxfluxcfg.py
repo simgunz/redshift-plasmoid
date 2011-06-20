@@ -79,4 +79,5 @@ class FluxConfig(QWidget, Ui_cfgDialog):
 		self.dayTmpBox.setEnabled(enabled)
 		self.modeLabel.setEnabled(enabled)
 		self.modeComboBox.setEnabled(enabled)
+		self.gammaLabel.setEnabled(enabled)
 		self.gammaBox.setEnabled(enabled)
