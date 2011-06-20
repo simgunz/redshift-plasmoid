@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-# plasma_flux/contents/ui/config.ui
-Provides a switch to start/stop F.lux daemon, and to change location/temperature
-Copyright (C) 2011 Diego Cristina
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
 <ui version="4.0">
  <author>Diego Cristina</author>
  <class>cfgDialog</class>
@@ -30,7 +11,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>200</height>
+    <height>240</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -42,13 +23,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="minimumSize">
    <size>
     <width>200</width>
-    <height>200</height>
+    <height>240</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>200</width>
-    <height>200</height>
+    <height>240</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -60,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
      <x>0</x>
      <y>0</y>
      <width>201</width>
-     <height>201</height>
+     <height>241</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -231,6 +212,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
      <widget class="QLabel" name="gammaLabel">
       <property name="text">
        <string>Gamma ramp</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" colspan="2">
+     <widget class="QCheckBox" name="autolaunchCheckBox">
+      <property name="text">
+       <string>Auto-launch</string>
       </property>
      </widget>
     </item>

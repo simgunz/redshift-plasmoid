@@ -33,13 +33,25 @@ import commands
 import os
 from subprocess import Popen
 
+#Default config
+'''f.lux executable'''
+FLUX = 'xflux'
+'''Redshift executable'''
+REDSHIFT = 'redshift'
+'''Refresh (check if running) rate, in ms'''
+REFRESH = 1000
+'''Default night temp'''
+DEFAULT_NIGHT = 4000
+'''Default day temp'''
+DEFAULT_DAY = 6500
+'''Default Redshift mode'''
+DEFAULT_MODE = 'randr'
+'''Default program'''
+DEFAULT_PROGRAM = 'Redshift'
+
+
 #Plasmoid gained by inheritance
 class FluxApplet(plasmascript.Applet):
-
-	'''f.lux executable'''
-	FLUX = "xflux"
-	'''Redshift executable'''
-	REDSHIFT = "redshift"
 
 	#constructor
 	def __init__(self, parent, args=None):
@@ -53,24 +65,24 @@ class FluxApplet(plasmascript.Applet):
 		self.iconOnline = KIcon("user-online")
 		self.iconUnknown = KIcon("user-busy")
 		self.pid = None
-		
+
 		self.setHasConfigurationInterface(True)
 		#set size of Plasmoid
 		self.resize(50, 50)
 		self.setAspectRatioMode(Plasma.KeepAspectRatio)
 		self.setBackgroundHints(Plasma.Applet.DefaultBackground)
-		
+
 		self.theme = Plasma.Svg(self)
 		self.theme.setImagePath('widgets/background')
 		self.layout = QGraphicsGridLayout(self.applet)
 		self.layout.setContentsMargins(0,0,0,0)
 		self.setMinimumSize(10,10)
-		
-		#set timer interval in ms (1000=1s)
-		self.startTimer(1000)
+
+		#set timer interval
+		self.startTimer(REFRESH)
 		self.button.setIcon(self.iconUnknown)
 		QObject.connect(self.button, SIGNAL('clicked()'), self.toggle)
-		
+
 		self.cfgfile = ".plasma-flux.cfg"
 		strFile = os.path.join(os.path.expanduser('~'), self.cfgfile)
 		if os.path.exists(strFile):
@@ -78,29 +90,34 @@ class FluxApplet(plasmascript.Applet):
 			cfgFile = open(strFile)
 			cfgParser.readfp(cfgFile)
 			try:
-				self.lon = float(cfgParser.get('settings', 'lon'))
-				self.lat = float(cfgParser.get('settings', 'lat'))
-				self.nighttmp = int(cfgParser.get('settings', 'nighttmp'))
-				self.daytmp = int(cfgParser.get('settings', 'daytmp'))
-				self.smooth = bool(cfgParser.get('settings', 'smooth'))
-				self.program = str(cfgParser.get('settings', 'program'))
-				self.mode = str(cfgParser.get('settings', 'mode'))
-				self.gamma = float(cfgParser.get('settings', 'gamma'))
+				self.lon = cfgParser.getfloat('settings', 'lon')
+				self.lat = cfgParser.getfloat('settings', 'lat')
+				self.nighttmp = cfgParser.getint('settings', 'nighttmp')
+				self.daytmp = cfgParser.getint('settings', 'daytmp')
+				self.smooth = cfgParser.getboolean('settings', 'smooth')
+				self.program = cfgParser.get('settings', 'program')
+				self.mode = cfgParser.get('settings', 'mode')
+				self.gamma = cfgParser.getfloat('settings', 'gamma')
+				self.auto = cfgParser.getboolean('settings', 'auto')
 				cfgFile.close()
 			except:
 				self.defaultOptions()
 		else:
 			self.defaultOptions()
-			
+		if self.auto and self.checkStatus() == "Stopped":
+			print("Auto-starting %s" % self.program)
+			self.toggle()
+
 	def defaultOptions(self):
 		self.lon = float(0)
 		self.lat = float(0)
-		self.nighttmp = int(3400)
-		self.daytmp = int(6500)
+		self.nighttmp = int(DEFAULT_NIGHT)
+		self.daytmp = int(DEFAULT_DAY)
 		self.smooth = True
-		self.program = "Redshift"
-		self.mode = "randr"
+		self.program = str(DEFAULT_PROGRAM)
+		self.mode = str(DEFAULT_MODE)
 		self.gamma = float(0)
+		self.auto = False
 
 	#done when timer is resetted
 	def timerEvent(self, event):
@@ -160,12 +177,12 @@ class FluxApplet(plasmascript.Applet):
 
 	#create config interface
 	def createConfigurationInterface(self, parent):
-		values = {'lon':self.lon, 'lat':self.lat, 'daytmp':self.daytmp, 'nighttmp':self.nighttmp, 'program':self.program, 'smooth':self.smooth, 'mode':self.mode, 'gamma':self.gamma}
+		values = {'lon':self.lon, 'lat':self.lat, 'daytmp':self.daytmp, 'nighttmp':self.nighttmp, 'program':self.program, 'smooth':self.smooth, 'mode':self.mode, 'gamma':self.gamma, 'auto':self.auto}
 		self.conf = FluxConfig(self,values)
 		page = parent.addPage(self.conf,"")
 		self.connect(parent, SIGNAL("okClicked()"), self.configAccepted)
 		#self.connect(parent, SIGNAL("cancelClicked()"), self.configDenied)
-		
+
 	def configAccepted(self):
 		self.lon = self.conf.getLongitude()
 		self.lat = self.conf.getLatitude()
@@ -175,6 +192,7 @@ class FluxApplet(plasmascript.Applet):
 		self.program = self.conf.getProgram()
 		self.mode = self.conf.getMode()
 		self.gamma = self.conf.getGamma()
+		self.auto = self.conf.getAutoLaunch()
 		cfgParser = ConfigParser()
 		cfgParser.read(self.cfgfile)
 		if not cfgParser.has_section('settings'):
@@ -187,13 +205,11 @@ class FluxApplet(plasmascript.Applet):
 		cfgParser.set('settings','program', self.program)
 		cfgParser.set('settings','mode', self.mode)
 		cfgParser.set('settings', 'gamma', self.gamma)
+		cfgParser.set('settings', 'auto', self.auto)
 		strFile = os.path.join(os.path.expanduser('~'),self.cfgfile)
 		cfgFile = open(strFile,"w")
 		cfgParser.write(cfgFile)
 		cfgFile.close()
-	
-	#def configDenied(self):
-		
 
 	def showConfigurationInterface(self):
 		dialog = KPageDialog()
@@ -204,4 +220,4 @@ class FluxApplet(plasmascript.Applet):
 
 def CreateApplet(parent):
 	return FluxApplet(parent)
-	
+

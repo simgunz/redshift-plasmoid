@@ -40,6 +40,7 @@ class FluxConfig(QWidget, Ui_cfgDialog):
 			index = self.modeComboBox.findText(str(values['mode']))
 			self.modeComboBox.setCurrentIndex(index if not (index < 0) else 0)
 			self.gammaBox.setValue(float(values['gamma']))
+			self.autolaunchCheckBox.setChecked(bool(values['auto']))
 		self.toggleProgram()
 		QtCore.QObject.connect(self.programComboBox, QtCore.SIGNAL("currentIndexChanged(int)"), self.toggleProgram)
 
@@ -67,6 +68,9 @@ class FluxConfig(QWidget, Ui_cfgDialog):
 		
 	def getGamma(self):
 		return self.gammaBox.value()
+		
+	def getAutoLaunch(self):
+		return self.autolaunchCheckBox.isChecked()
 
 	def toggleProgram(self):
 		enabled = bool(self.getProgram() == 'Redshift')

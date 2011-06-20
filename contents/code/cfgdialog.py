@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'contents/ui/config.ui'
 #
-# Created: Wed Jun 15 21:22:24 2011
+# Created: Mon Jun 20 21:18:10 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,16 +13,16 @@ class Ui_cfgDialog(object):
 	def setupUi(self, cfgDialog):
 		cfgDialog.setObjectName("cfgDialog")
 		cfgDialog.setWindowModality(QtCore.Qt.NonModal)
-		cfgDialog.resize(200, 200)
+		cfgDialog.resize(200, 240)
 		sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.MinimumExpanding)
 		sizePolicy.setHorizontalStretch(0)
 		sizePolicy.setVerticalStretch(0)
 		sizePolicy.setHeightForWidth(cfgDialog.sizePolicy().hasHeightForWidth())
 		cfgDialog.setSizePolicy(sizePolicy)
-		cfgDialog.setMinimumSize(QtCore.QSize(200, 200))
-		cfgDialog.setMaximumSize(QtCore.QSize(200, 200))
+		cfgDialog.setMinimumSize(QtCore.QSize(200, 240))
+		cfgDialog.setMaximumSize(QtCore.QSize(200, 240))
 		self.formLayoutWidget = QtGui.QWidget(cfgDialog)
-		self.formLayoutWidget.setGeometry(QtCore.QRect(0, 0, 201, 201))
+		self.formLayoutWidget.setGeometry(QtCore.QRect(0, 0, 201, 241))
 		self.formLayoutWidget.setObjectName("formLayoutWidget")
 		self.gridLayout = QtGui.QGridLayout(self.formLayoutWidget)
 		self.gridLayout.setObjectName("gridLayout")
@@ -95,6 +95,9 @@ class Ui_cfgDialog(object):
 		self.gammaLabel = QtGui.QLabel(self.formLayoutWidget)
 		self.gammaLabel.setObjectName("gammaLabel")
 		self.gridLayout.addWidget(self.gammaLabel, 7, 0, 1, 1)
+		self.autolaunchCheckBox = QtGui.QCheckBox(self.formLayoutWidget)
+		self.autolaunchCheckBox.setObjectName("autolaunchCheckBox")
+		self.gridLayout.addWidget(self.autolaunchCheckBox, 8, 0, 1, 2)
 
 		self.retranslateUi(cfgDialog)
 		QtCore.QMetaObject.connectSlotsByName(cfgDialog)
@@ -115,4 +118,5 @@ class Ui_cfgDialog(object):
 		self.modeComboBox.setItemText(1, QtGui.QApplication.translate("cfgDialog", "vidmode", None, QtGui.QApplication.UnicodeUTF8))
 		self.modeLabel.setText(QtGui.QApplication.translate("cfgDialog", "Mode", None, QtGui.QApplication.UnicodeUTF8))
 		self.gammaLabel.setText(QtGui.QApplication.translate("cfgDialog", "Gamma ramp", None, QtGui.QApplication.UnicodeUTF8))
+		self.autolaunchCheckBox.setText(QtGui.QApplication.translate("cfgDialog", "Auto-launch", None, QtGui.QApplication.UnicodeUTF8))
 
