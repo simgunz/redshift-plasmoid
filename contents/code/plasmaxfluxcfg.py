@@ -39,7 +39,10 @@ class FluxConfig(QWidget, Ui_cfgDialog):
 			self.programComboBox.setCurrentIndex(index if not (index < 0) else 0)
 			index = self.modeComboBox.findText(str(values['mode']))
 			self.modeComboBox.setCurrentIndex(index if not (index < 0) else 0)
-			self.gammaBox.setValue(float(values['gamma']))
+			rgb = values['gamma'].split(':')
+			self.gammaBoxR.setValue(float(rgb[0]))
+			self.gammaBoxG.setValue(float(rgb[1]))
+			self.gammaBoxB.setValue(float(rgb[2]))
 			self.autolaunchCheckBox.setChecked(bool(values['auto']))
 		self.toggleProgram()
 		QtCore.QObject.connect(self.programComboBox, QtCore.SIGNAL("currentIndexChanged(int)"), self.toggleProgram)
@@ -67,7 +70,7 @@ class FluxConfig(QWidget, Ui_cfgDialog):
 		return str(self.modeComboBox.currentText())
 		
 	def getGamma(self):
-		return self.gammaBox.value()
+		return str("%.2f:%.2f:%.2f" % (self.gammaBoxR.value(), self.gammaBoxG.value(), self.gammaBoxB.value()))
 		
 	def getAutoLaunch(self):
 		return self.autolaunchCheckBox.isChecked()
@@ -80,4 +83,6 @@ class FluxConfig(QWidget, Ui_cfgDialog):
 		self.modeLabel.setEnabled(enabled)
 		self.modeComboBox.setEnabled(enabled)
 		self.gammaLabel.setEnabled(enabled)
-		self.gammaBox.setEnabled(enabled)
+		self.gammaBoxR.setEnabled(enabled)
+		self.gammaBoxG.setEnabled(enabled)
+		self.gammaBoxB.setEnabled(enabled)

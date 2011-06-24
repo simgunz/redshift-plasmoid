@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>200</width>
-    <height>240</height>
+    <width>270</width>
+    <height>260</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,37 +22,126 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>200</width>
-    <height>240</height>
+    <width>270</width>
+    <height>260</height>
    </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>200</width>
-    <height>240</height>
-   </size>
-  </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
   </property>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>201</width>
-     <height>241</height>
+     <width>271</width>
+     <height>261</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="0" column="0" colspan="2">
      <widget class="QLabel" name="programLabel">
       <property name="text">
        <string>Program</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="1" column="0" colspan="2">
+     <widget class="QLabel" name="latLabel">
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
+      <property name="text">
+       <string>Latitude</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QLabel" name="lonLabel">
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
+      <property name="text">
+       <string>Longitude</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="4">
+     <widget class="QCheckBox" name="smoothCheckBox">
+      <property name="text">
+       <string>Smooth transition</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QLabel" name="dayTmpLabel">
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
+      <property name="text">
+       <string>Day temperature</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QLabel" name="nightTmpLabel">
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
+      <property name="text">
+       <string>Night temperature</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="2">
+     <widget class="QLabel" name="modeLabel">
+      <property name="text">
+       <string>Mode</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" colspan="4">
+     <widget class="QCheckBox" name="autolaunchCheckBox">
+      <property name="text">
+       <string>Auto-launch</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QDoubleSpinBox" name="gammaBoxR">
+      <property name="toolTip">
+       <string>Gamma correction (Red)</string>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="gammaLabel">
+      <property name="text">
+       <string>Gamma (RGB)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
+     <widget class="QDoubleSpinBox" name="gammaBoxG">
+      <property name="toolTip">
+       <string>Gamma correction (Green)</string>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="3">
+     <widget class="QDoubleSpinBox" name="gammaBoxB">
+      <property name="toolTip">
+       <string>Gamma correction (Blue)</string>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2" colspan="2">
      <widget class="QComboBox" name="programComboBox">
       <item>
        <property name="text">
@@ -66,17 +155,7 @@
       </item>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="latLabel">
-      <property name="locale">
-       <locale language="English" country="UnitedStates"/>
-      </property>
-      <property name="text">
-       <string>Latitude</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
+    <item row="1" column="2" colspan="2">
      <widget class="QDoubleSpinBox" name="latBox">
       <property name="buttonSymbols">
        <enum>QAbstractSpinBox::UpDownArrows</enum>
@@ -98,17 +177,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="lonLabel">
-      <property name="locale">
-       <locale language="English" country="UnitedStates"/>
-      </property>
-      <property name="text">
-       <string>Longitude</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
+    <item row="2" column="2" colspan="2">
      <widget class="QDoubleSpinBox" name="lonBox">
       <property name="suffix">
        <string>º</string>
@@ -127,15 +196,11 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0" colspan="2">
-     <widget class="QCheckBox" name="smoothCheckBox">
-      <property name="text">
-       <string>Smooth transition</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
+    <item row="3" column="2" colspan="2">
      <widget class="QSpinBox" name="dayTmpBox">
+      <property name="toolTip">
+       <string>Day temperature. Neutral is 6500</string>
+      </property>
       <property name="buttonSymbols">
        <enum>QAbstractSpinBox::PlusMinus</enum>
       </property>
@@ -147,8 +212,11 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="4" column="2" colspan="2">
      <widget class="QSpinBox" name="nightTmpBox">
+      <property name="toolTip">
+       <string>Night temperature. Recommended is 4000</string>
+      </property>
       <property name="buttonSymbols">
        <enum>QAbstractSpinBox::PlusMinus</enum>
       </property>
@@ -160,27 +228,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="dayTmpLabel">
-      <property name="locale">
-       <locale language="English" country="UnitedStates"/>
-      </property>
-      <property name="text">
-       <string>Day temperature</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="nightTmpLabel">
-      <property name="locale">
-       <locale language="English" country="UnitedStates"/>
-      </property>
-      <property name="text">
-       <string>Night temperature</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
+    <item row="6" column="2" colspan="2">
      <widget class="QComboBox" name="modeComboBox">
       <item>
        <property name="text">
@@ -192,34 +240,6 @@
         <string>vidmode</string>
        </property>
       </item>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="modeLabel">
-      <property name="text">
-       <string>Mode</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QDoubleSpinBox" name="gammaBox">
-      <property name="singleStep">
-       <double>0.100000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="gammaLabel">
-      <property name="text">
-       <string>Gamma ramp</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0" colspan="2">
-     <widget class="QCheckBox" name="autolaunchCheckBox">
-      <property name="text">
-       <string>Auto-launch</string>
-      </property>
      </widget>
     </item>
    </layout>

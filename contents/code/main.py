@@ -101,7 +101,7 @@ class FluxApplet(plasmascript.Applet):
 				self.smooth = cfgParser.getboolean('settings', 'smooth')
 				self.program = cfgParser.get('settings', 'program')
 				self.mode = cfgParser.get('settings', 'mode')
-				self.gamma = cfgParser.getfloat('settings', 'gamma')
+				self.gamma = cfgParser.get('settings', 'gamma')
 				self.auto = cfgParser.getboolean('settings', 'auto')
 				cfgFile.close()
 			except:
@@ -159,12 +159,12 @@ class FluxApplet(plasmascript.Applet):
 			print("Unknown status")
 	
 	def startXflux(self):
-		print("Starting f.lux with latitude %f, longitude %f, temperature %d" % (self.lat, self.lon, self.nighttmp))
-		self.pid = Popen("xflux -l %f -g %f -k %d" % (self.lat, self.lon, self.nighttmp), shell=True).pid
+		print("Starting f.lux with latitude %.1f, longitude %.1f, temperature %d" % (self.lat, self.lon, self.nighttmp))
+		self.pid = Popen("xflux -l %.1f -g %.1f -k %d" % (self.lat, self.lon, self.nighttmp), shell=True).pid
 
 	def startRedshift(self):
-		print("Starting Redshift with latitude %f, longitude %f, day temperature %d, night temperature %d, gamma ramp %f, smooth transition = %s" % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ("yes" if self.smooth else "no")))
-		self.pid = Popen("redshift -l %f:%f -t %d:%d -g %f -m %s %s" %(self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ("-r" if not self.smooth else "")), shell=True).pid
+		print("Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s" % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ("yes" if self.smooth else "no")))
+		self.pid = Popen("redshift -l %.1f:%.1f -t %d:%d -g %s -m %s %s" %(self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ("-r" if not self.smooth else "")), shell=True).pid
 
 	def stopProgram(self):
 		print("Stopping")
