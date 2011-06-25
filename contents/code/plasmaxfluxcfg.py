@@ -40,6 +40,8 @@ class FluxConfig(QWidget, Ui_cfgDialog):
 			index = self.modeComboBox.findText(str(values['mode']))
 			self.modeComboBox.setCurrentIndex(index if not (index < 0) else 0)
 			rgb = values['gamma'].split(':')
+			if len(rgb) < 3:
+				rgb = (float(rgb[0]), float(rgb[0]), float(rgb[0]))
 			self.gammaBoxR.setValue(float(rgb[0]))
 			self.gammaBoxG.setValue(float(rgb[1]))
 			self.gammaBoxB.setValue(float(rgb[2]))

@@ -121,7 +121,7 @@ class FluxApplet(plasmascript.Applet):
 		self.smooth = True
 		self.program = str(DEFAULT_PROGRAM)
 		self.mode = str(DEFAULT_MODE)
-		self.gamma = float(0)
+		self.gamma = '1.00:1.00:1.00'
 		self.auto = False
 
 	#done when timer is resetted
