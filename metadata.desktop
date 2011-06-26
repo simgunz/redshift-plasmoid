@@ -6,6 +6,7 @@ Type=Service
 ServiceTypes=Plasma/Applet
 X-Plasma-API=python
 X-Plasma-MainScript=code/main.py
+X-Plasma-NotificationArea=true
 Icon=help-hint
 
 X-KDE-PluginInfo-Author=Diego Cristina

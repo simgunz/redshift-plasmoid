@@ -79,13 +79,14 @@ class FluxApplet(plasmascript.Applet):
 		self.theme = Plasma.Svg(self)
 		self.theme.setImagePath(THEME)
 		self.layout = QGraphicsGridLayout(self.applet)
-		self.layout.setContentsMargins(2,2,2,2)
+		self.layout.setContentsMargins(3,3,3,3)
 		self.setMinimumSize(10,10)
 
 		#set timer interval
-		self.startTimer(REFRESH)
+		self.timer = self.startTimer(REFRESH)
 		self.button.setIcon(self.iconUnknown)
 		QObject.connect(self.button, SIGNAL('clicked()'), self.toggle)
+		self.appletDestroyed.connect(self.destroy)
 
 		self.cfgfile = ".plasma-flux.cfg"
 		strFile = os.path.join(os.path.expanduser('~'), self.cfgfile)
@@ -160,11 +161,11 @@ class FluxApplet(plasmascript.Applet):
 	
 	def startXflux(self):
 		print("Starting f.lux with latitude %.1f, longitude %.1f, temperature %d" % (self.lat, self.lon, self.nighttmp))
-		self.pid = Popen("xflux -l %.1f -g %.1f -k %d" % (self.lat, self.lon, self.nighttmp), shell=True).pid
+		self.pid = Popen("%s -l %.1f -g %.1f -k %d" % (FLUX, self.lat, self.lon, self.nighttmp), shell=True).pid
 
 	def startRedshift(self):
 		print("Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s" % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ("yes" if self.smooth else "no")))
-		self.pid = Popen("redshift -l %.1f:%.1f -t %d:%d -g %s -m %s %s" %(self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ("-r" if not self.smooth else "")), shell=True).pid
+		self.pid = Popen("%s -l %.1f:%.1f -t %d:%d -g %s -m %s %s" %(REDSHIFT, self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ("-r" if not self.smooth else "")), shell=True).pid
 
 	def stopProgram(self):
 		print("Stopping")
@@ -222,6 +223,9 @@ class FluxApplet(plasmascript.Applet):
 		dialog.setButtons(KDialog.ButtonCode(KDialog.Ok | KDialog.Cancel))
 		self.createConfigurationInterface(dialog)
 		dialog.exec_()
+
+	def destroy(self):
+		self.killTimer(self.timer)
 
 def CreateApplet(parent):
 	return FluxApplet(parent)
