@@ -158,6 +158,8 @@ class FluxApplet(plasmascript.Applet):
 			self.stopProgram()
 		else:
 			print("Unknown status")
+			#May be more than one instance running?
+			self.stopProgram()
 	
 	def startXflux(self):
 		print("Starting f.lux with latitude %.1f, longitude %.1f, temperature %d" % (self.lat, self.lon, self.nighttmp))
