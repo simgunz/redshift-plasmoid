@@ -36,6 +36,7 @@ from subprocess import Popen
 '''Theme'''
 THEME = 'widgets/background'
 '''Icons'''
+ICON_PLASMOID = 'help-hint'
 ICON_STOPPED = 'user-offline'
 ICON_RUNNING = 'user-online'
 ICON_UNKNOWN = 'user-busy'
@@ -88,7 +89,7 @@ class FluxApplet(plasmascript.Applet):
 		QObject.connect(self.button, SIGNAL('clicked()'), self.toggle)
 		self.appletDestroyed.connect(self.destroy)
 
-		self.cfgfile = ".plasma-flux.cfg"
+		self.cfgfile = '.plasma-flux.cfg'
 		strFile = os.path.join(os.path.expanduser('~'), self.cfgfile)
 		if os.path.exists(strFile):
 			cfgParser = ConfigParser()
@@ -110,8 +111,8 @@ class FluxApplet(plasmascript.Applet):
 		else:
 			self.defaultOptions()
 		self.updateStatus()
-		if self.auto and self.checkStatus() == "Stopped":
-			print("Auto-starting %s" % self.program)
+		if self.auto and self.checkStatus() == 'Stopped':
+			print('Auto-starting %s' % self.program)
 			self.toggle()
 
 	def defaultOptions(self):
@@ -135,49 +136,49 @@ class FluxApplet(plasmascript.Applet):
 		self.updateStatus()
 		if self.pid:
 			if self.pid.isdigit():
-				return "Running"
+				return 'Running'
 			else:
-				return "Unknown"
+				return 'Unknown'
 		else:
-			return "Stopped"
+			return 'Stopped'
 
 	#get the pid
 	def updateStatus(self):
-		self.pid = commands.getoutput("pidof xflux")
+		self.pid = commands.getoutput('pidof xflux')
 		if not self.pid:
-			self.pid = commands.getoutput("pidof redshift")
+			self.pid = commands.getoutput('pidof redshift')
 
 	def toggle(self):
 		status = self.checkStatus()
-		if status == "Stopped":
-			if self.program == "f.lux":
+		if status == 'Stopped':
+			if self.program == 'f.lux':
 				self.startXflux()
-			elif self.program == "Redshift":
+			elif self.program == 'Redshift':
 				self.startRedshift()
-		elif status == "Running":
+		elif status == 'Running':
 			self.stopProgram()
 		else:
-			print("Unknown status")
+			print('Unknown status')
 			#May be more than one instance running?
 			self.stopProgram()
 	
 	def startXflux(self):
-		print("Starting f.lux with latitude %.1f, longitude %.1f, temperature %d" % (self.lat, self.lon, self.nighttmp))
-		self.pid = Popen("%s -l %.1f -g %.1f -k %d" % (FLUX, self.lat, self.lon, self.nighttmp), shell=True).pid
+		print('Starting f.lux with latitude %.1f, longitude %.1f, temperature %d' % (self.lat, self.lon, self.nighttmp))
+		self.pid = Popen('%s -l %.1f -g %.1f -k %d' % (FLUX, self.lat, self.lon, self.nighttmp), shell=True).pid
 
 	def startRedshift(self):
-		print("Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s" % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ("yes" if self.smooth else "no")))
-		self.pid = Popen("%s -l %.1f:%.1f -t %d:%d -g %s -m %s %s" %(REDSHIFT, self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ("-r" if not self.smooth else "")), shell=True).pid
+		print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ('yes' if self.smooth else 'no')))
+		self.pid = Popen('%s -l %.1f:%.1f -t %d:%d -g %s -m %s %s' %(REDSHIFT, self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ('-r' if not self.smooth else '')), shell=True).pid
 
 	def stopProgram(self):
-		print("Stopping")
-		Popen("kill %s" % self.pid, shell=True)
+		print('Stopping')
+		Popen('kill %s' % self.pid, shell=True)
 
 	#draw method
 	def paintInterface(self, painter, option, rect):
-		if self.checkStatus() == "Running":
+		if self.checkStatus() == 'Running':
 			self.button.setIcon(self.iconRunning)
-		elif self.checkStatus() == "Stopped":
+		elif self.checkStatus() == 'Stopped':
 			self.button.setIcon(self.iconStopped)
 		else:
 			self.button.setIcon(self.iconUnknown)
@@ -187,9 +188,11 @@ class FluxApplet(plasmascript.Applet):
 	def createConfigurationInterface(self, parent):
 		values = {'lon':self.lon, 'lat':self.lat, 'daytmp':self.daytmp, 'nighttmp':self.nighttmp, 'program':self.program, 'smooth':self.smooth, 'mode':self.mode, 'gamma':self.gamma, 'auto':self.auto}
 		self.conf = FluxConfig(self,values)
-		page = parent.addPage(self.conf,"")
-		self.connect(parent, SIGNAL("okClicked()"), self.configAccepted)
-		#self.connect(parent, SIGNAL("cancelClicked()"), self.configDenied)
+		self.conf.setWindowTitle('Widget configuration')
+		page = parent.addPage(self.conf,'Configuration')
+		page.setIcon(KIcon(ICON_PLASMOID))
+		self.connect(parent, SIGNAL('okClicked()'), self.configAccepted)
+		#self.connect(parent, SIGNAL('cancelClicked()'), self.configDenied)
 
 	def configAccepted(self):
 		self.lon = self.conf.getLongitude()
@@ -215,16 +218,9 @@ class FluxApplet(plasmascript.Applet):
 		cfgParser.set('settings', 'gamma', self.gamma)
 		cfgParser.set('settings', 'auto', self.auto)
 		strFile = os.path.join(os.path.expanduser('~'),self.cfgfile)
-		cfgFile = open(strFile,"w")
+		cfgFile = open(strFile,'w')
 		cfgParser.write(cfgFile)
 		cfgFile.close()
-
-	def showConfigurationInterface(self):
-		dialog = KPageDialog()
-		dialog.setFaceType(KPageDialog.Plain)
-		dialog.setButtons(KDialog.ButtonCode(KDialog.Ok | KDialog.Cancel))
-		self.createConfigurationInterface(dialog)
-		dialog.exec_()
 
 	def destroy(self):
 		self.killTimer(self.timer)
