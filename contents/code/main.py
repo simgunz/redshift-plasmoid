@@ -31,7 +31,7 @@ from ConfigParser import ConfigParser
 #import commands for executing shell commands
 import commands
 import os
-from subprocess import Popen
+from subprocess import Popen, PIPE
 
 '''Theme'''
 THEME = 'widgets/background'
@@ -70,6 +70,8 @@ class FluxApplet(plasmascript.Applet):
 		self.iconRunning = KIcon(ICON_RUNNING)
 		self.iconUnknown = KIcon(ICON_UNKNOWN)
 		self.pid = None
+		self.subp = None
+		self.waiting = False
 
 		self.setHasConfigurationInterface(True)
 		#set size of Plasmoid
@@ -147,6 +149,19 @@ class FluxApplet(plasmascript.Applet):
 		self.pid = commands.getoutput('pidof xflux')
 		if not self.pid:
 			self.pid = commands.getoutput('pidof redshift')
+		if not self.waiting:
+			self.waiting = True
+			if self.subp:
+				if not self.pid:
+					retcode = os.waitpid(int(self.subp.pid), os.WNOHANG)
+					if retcode[1]:
+						stderr = self.subp.stderr.read()
+						stdout = self.subp.stdout.read()
+						QMessageBox.critical(self.parent, 'An error has occurred', '%s exited abnormally, probably due to wrong configuration.\nPlease report this to the developer:\n===================================================\n\nExit code:\n(%d, %s)\n\nstderr:\n%s\n\nstdout:\n%s\n===================================================' % (self.program, retcode[1], os.WEXITSTATUS(self.subp.pid), stderr, stdout))
+					#self.subp.stderr.close()
+					#self.subp.stdout.close()
+					self.subp = None
+			self.waiting = False
 
 	def toggle(self):
 		status = self.checkStatus()
@@ -160,19 +175,23 @@ class FluxApplet(plasmascript.Applet):
 		else:
 			print('Unknown status')
 			#May be more than one instance running?
-			self.stopProgram()
+			self.killProgram()
 	
 	def startXflux(self):
 		print('Starting f.lux with latitude %.1f, longitude %.1f, temperature %d' % (self.lat, self.lon, self.nighttmp))
-		self.pid = Popen('%s -l %.1f -g %.1f -k %d' % (FLUX, self.lat, self.lon, self.nighttmp), shell=True).pid
+		self.subp = Popen('%s -l %.1f -g %.1f -k %d -nofork' % (FLUX, self.lat, self.lon, self.nighttmp), shell=True, stdout=PIPE, stderr=PIPE)
 
 	def startRedshift(self):
 		print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ('yes' if self.smooth else 'no')))
-		self.pid = Popen('%s -l %.1f:%.1f -t %d:%d -g %s -m %s %s' %(REDSHIFT, self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ('-r' if not self.smooth else '')), shell=True).pid
+		self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s -m %s %s' %(REDSHIFT, self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ('-r' if not self.smooth else '')), shell=True, stdout=PIPE, stderr=PIPE)
 
 	def stopProgram(self):
 		print('Stopping')
 		Popen('kill %s' % self.pid, shell=True)
+
+	def killProgram(self):
+		print('Killing processes: %s' % self.pid)
+		Popen('kill -9 %s' % self.pid, shell=True)
 
 	#draw method
 	def paintInterface(self, painter, option, rect):

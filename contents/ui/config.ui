@@ -65,6 +65,9 @@
     </item>
     <item row="5" column="0" colspan="4">
      <widget class="QCheckBox" name="smoothCheckBox">
+      <property name="toolTip">
+       <string>Check this if you want smooth transitions</string>
+      </property>
       <property name="text">
        <string>Smooth transition</string>
       </property>
@@ -99,6 +102,9 @@
     </item>
     <item row="8" column="0" colspan="4">
      <widget class="QCheckBox" name="autolaunchCheckBox">
+      <property name="toolTip">
+       <string>Launch at start-up</string>
+      </property>
       <property name="text">
        <string>Auto-launch</string>
       </property>
@@ -109,6 +115,12 @@
       <property name="toolTip">
        <string>Gamma correction (Red)</string>
       </property>
+      <property name="minimum">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10.000000000000000</double>
+      </property>
       <property name="singleStep">
        <double>0.100000000000000</double>
       </property>
@@ -116,6 +128,9 @@
     </item>
     <item row="7" column="0">
      <widget class="QLabel" name="gammaLabel">
+      <property name="toolTip">
+       <string>Additional gamma correction (default is 1:1:1)</string>
+      </property>
       <property name="text">
        <string>Gamma (RGB)</string>
       </property>
@@ -126,6 +141,12 @@
       <property name="toolTip">
        <string>Gamma correction (Green)</string>
       </property>
+      <property name="minimum">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10.090000000000000</double>
+      </property>
       <property name="singleStep">
        <double>0.100000000000000</double>
       </property>
@@ -135,6 +156,12 @@
      <widget class="QDoubleSpinBox" name="gammaBoxB">
       <property name="toolTip">
        <string>Gamma correction (Blue)</string>
+      </property>
+      <property name="minimum">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10.000000000000000</double>
       </property>
       <property name="singleStep">
        <double>0.100000000000000</double>
@@ -215,7 +242,7 @@
     <item row="4" column="2" colspan="2">
      <widget class="QSpinBox" name="nightTmpBox">
       <property name="toolTip">
-       <string>Night temperature. Recommended is 4000</string>
+       <string>Night temperature. Recommended is 4500 for Redshift and 3400 for F.lux</string>
       </property>
       <property name="buttonSymbols">
        <enum>QAbstractSpinBox::PlusMinus</enum>
@@ -230,6 +257,9 @@
     </item>
     <item row="6" column="2" colspan="2">
      <widget class="QComboBox" name="modeComboBox">
+      <property name="toolTip">
+       <string>Video mode</string>
+      </property>
       <item>
        <property name="text">
         <string>randr</string>

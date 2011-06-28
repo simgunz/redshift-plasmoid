@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'contents/ui/config.ui'
 #
-# Created: Fri Jun 24 14:08:50 2011
+# Created: Wed Jun 29 00:19:46 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -54,6 +54,8 @@ class Ui_cfgDialog(object):
 		self.autolaunchCheckBox.setObjectName("autolaunchCheckBox")
 		self.gridLayout.addWidget(self.autolaunchCheckBox, 8, 0, 1, 4)
 		self.gammaBoxR = QtGui.QDoubleSpinBox(self.formLayoutWidget)
+		self.gammaBoxR.setMinimum(0.1)
+		self.gammaBoxR.setMaximum(10.0)
 		self.gammaBoxR.setSingleStep(0.1)
 		self.gammaBoxR.setObjectName("gammaBoxR")
 		self.gridLayout.addWidget(self.gammaBoxR, 7, 1, 1, 1)
@@ -61,10 +63,14 @@ class Ui_cfgDialog(object):
 		self.gammaLabel.setObjectName("gammaLabel")
 		self.gridLayout.addWidget(self.gammaLabel, 7, 0, 1, 1)
 		self.gammaBoxG = QtGui.QDoubleSpinBox(self.formLayoutWidget)
+		self.gammaBoxG.setMinimum(0.1)
+		self.gammaBoxG.setMaximum(10.09)
 		self.gammaBoxG.setSingleStep(0.1)
 		self.gammaBoxG.setObjectName("gammaBoxG")
 		self.gridLayout.addWidget(self.gammaBoxG, 7, 2, 1, 1)
 		self.gammaBoxB = QtGui.QDoubleSpinBox(self.formLayoutWidget)
+		self.gammaBoxB.setMinimum(0.1)
+		self.gammaBoxB.setMaximum(10.0)
 		self.gammaBoxB.setSingleStep(0.1)
 		self.gammaBoxB.setObjectName("gammaBoxB")
 		self.gridLayout.addWidget(self.gammaBoxB, 7, 3, 1, 1)
@@ -113,12 +119,15 @@ class Ui_cfgDialog(object):
 		self.programLabel.setText(QtGui.QApplication.translate("cfgDialog", "Program", None, QtGui.QApplication.UnicodeUTF8))
 		self.latLabel.setText(QtGui.QApplication.translate("cfgDialog", "Latitude", None, QtGui.QApplication.UnicodeUTF8))
 		self.lonLabel.setText(QtGui.QApplication.translate("cfgDialog", "Longitude", None, QtGui.QApplication.UnicodeUTF8))
+		self.smoothCheckBox.setToolTip(QtGui.QApplication.translate("cfgDialog", "Check this if you want smooth transitions", None, QtGui.QApplication.UnicodeUTF8))
 		self.smoothCheckBox.setText(QtGui.QApplication.translate("cfgDialog", "Smooth transition", None, QtGui.QApplication.UnicodeUTF8))
 		self.dayTmpLabel.setText(QtGui.QApplication.translate("cfgDialog", "Day temperature", None, QtGui.QApplication.UnicodeUTF8))
 		self.nightTmpLabel.setText(QtGui.QApplication.translate("cfgDialog", "Night temperature", None, QtGui.QApplication.UnicodeUTF8))
 		self.modeLabel.setText(QtGui.QApplication.translate("cfgDialog", "Mode", None, QtGui.QApplication.UnicodeUTF8))
+		self.autolaunchCheckBox.setToolTip(QtGui.QApplication.translate("cfgDialog", "Launch at start-up", None, QtGui.QApplication.UnicodeUTF8))
 		self.autolaunchCheckBox.setText(QtGui.QApplication.translate("cfgDialog", "Auto-launch", None, QtGui.QApplication.UnicodeUTF8))
 		self.gammaBoxR.setToolTip(QtGui.QApplication.translate("cfgDialog", "Gamma correction (Red)", None, QtGui.QApplication.UnicodeUTF8))
+		self.gammaLabel.setToolTip(QtGui.QApplication.translate("cfgDialog", "Additional gamma correction (default is 1:1:1)", None, QtGui.QApplication.UnicodeUTF8))
 		self.gammaLabel.setText(QtGui.QApplication.translate("cfgDialog", "Gamma (RGB)", None, QtGui.QApplication.UnicodeUTF8))
 		self.gammaBoxG.setToolTip(QtGui.QApplication.translate("cfgDialog", "Gamma correction (Green)", None, QtGui.QApplication.UnicodeUTF8))
 		self.gammaBoxB.setToolTip(QtGui.QApplication.translate("cfgDialog", "Gamma correction (Blue)", None, QtGui.QApplication.UnicodeUTF8))
@@ -126,8 +135,9 @@ class Ui_cfgDialog(object):
 		self.lonBox.setSuffix(QtGui.QApplication.translate("cfgDialog", "º", None, QtGui.QApplication.UnicodeUTF8))
 		self.dayTmpBox.setToolTip(QtGui.QApplication.translate("cfgDialog", "Day temperature. Neutral is 6500", None, QtGui.QApplication.UnicodeUTF8))
 		self.dayTmpBox.setSuffix(QtGui.QApplication.translate("cfgDialog", "ºK", None, QtGui.QApplication.UnicodeUTF8))
-		self.nightTmpBox.setToolTip(QtGui.QApplication.translate("cfgDialog", "Night temperature. Recommended is 4000", None, QtGui.QApplication.UnicodeUTF8))
+		self.nightTmpBox.setToolTip(QtGui.QApplication.translate("cfgDialog", "Night temperature. Recommended is 4500 for Redshift and 3400 for F.lux", None, QtGui.QApplication.UnicodeUTF8))
 		self.nightTmpBox.setSuffix(QtGui.QApplication.translate("cfgDialog", "ºK", None, QtGui.QApplication.UnicodeUTF8))
+		self.modeComboBox.setToolTip(QtGui.QApplication.translate("cfgDialog", "Video mode", None, QtGui.QApplication.UnicodeUTF8))
 		self.modeComboBox.setItemText(0, QtGui.QApplication.translate("cfgDialog", "randr", None, QtGui.QApplication.UnicodeUTF8))
 		self.modeComboBox.setItemText(1, QtGui.QApplication.translate("cfgDialog", "vidmode", None, QtGui.QApplication.UnicodeUTF8))
 
