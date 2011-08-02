@@ -248,6 +248,7 @@ class FluxApplet(plasmascript.Applet):
 
 	def destroy(self):
 		self.killTimer(self.timer)
+                self.stopProgram()
 
 def CreateApplet(parent):
 	return FluxApplet(parent)
