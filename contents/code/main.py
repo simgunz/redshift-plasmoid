@@ -24,6 +24,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyKDE4.kdeui import *
 from PyKDE4.plasma import Plasma
+from PyKDE4.kdecore import KSystemTimeZones
 from PyKDE4 import plasmascript
 from plasmaxfluxcfg import FluxConfig
 from ConfigParser import ConfigParser
@@ -54,6 +55,9 @@ DEFAULT_DAY = 6500
 DEFAULT_MODE = 'randr'
 '''Default program'''
 DEFAULT_PROGRAM = 'Redshift'
+'''Get latitude and longitude from KDE and set them as default'''
+DEFAULT_LATITUDE = KSystemTimeZones.local().latitude()
+DEFAULT_LONGITUDE = KSystemTimeZones.local().longitude()
 
 #Plasmoid gained by inheritance
 class FluxApplet(plasmascript.Applet):
@@ -118,8 +122,8 @@ class FluxApplet(plasmascript.Applet):
 			self.toggle()
 
 	def defaultOptions(self):
-		self.lon = float(0)
-		self.lat = float(0)
+		self.lon = float(DEFAULT_LONGITUDE)
+		self.lat = float(DEFAULT_LATITUDE)
 		self.nighttmp = int(DEFAULT_NIGHT)
 		self.daytmp = int(DEFAULT_DAY)
 		self.smooth = True
