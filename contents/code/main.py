@@ -48,9 +48,9 @@ REDSHIFT = 'redshift'
 '''Refresh (check if running) rate, in ms'''
 REFRESH = 1000
 '''Default night temp'''
-DEFAULT_NIGHT = 4000
+DEFAULT_NIGHT = 3700
 '''Default day temp'''
-DEFAULT_DAY = 6500
+DEFAULT_DAY = 5500
 '''Default Redshift mode'''
 DEFAULT_MODE = 'randr'
 '''Default program'''
