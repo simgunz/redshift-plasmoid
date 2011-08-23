@@ -150,9 +150,9 @@ class FluxApplet(plasmascript.Applet):
 
 	#get the pid
 	def updateStatus(self):
-		self.pid = commands.getoutput('pidof xflux')
+		self.pid = commands.getoutput('pidof %s' % FLUX)
 		if not self.pid:
-			self.pid = commands.getoutput('pidof redshift')
+			self.pid = commands.getoutput('pidof %s' % REDSHIFT)
 		if not self.waiting:
 			self.waiting = True
 			if self.subp:
@@ -192,7 +192,24 @@ class FluxApplet(plasmascript.Applet):
 
 	def stopProgram(self):
 		print('Stopping')
-		Popen('kill %s' % self.pid, shell=True)
+		import signal
+		#Popen('kill %s' % self.pid, shell=True)
+		'''if commands.getoutput('pidof %s' % FLUX):
+			#xflux
+			if self.subp:
+				self.subp.send_signal(signal.SIGTERM)
+			else:
+				os.kill(int(self.pid), signal.SIGTERM)
+		elif commands.getoutput('pidof %s ' % REDSHIFT):
+			#redshift
+			if self.subp:
+				self.subp.send_signal(signal.SIGUSR1)
+			else:
+				os.kill(int(self.pid), signal.SIGUSR1)'''
+		if self.subp:
+			self.subp.send_signal(signal.SIGTERM)
+		elif self.pid:
+			os.kill(int(self.pid), signal.SIGTERM)
 
 	def killProgram(self):
 		print('Killing processes: %s' % self.pid)
