@@ -47,8 +47,6 @@ REFRESH = 1000
 DEFAULT_NIGHT = 3700
 '''Default day temp'''
 DEFAULT_DAY = 5500
-'''Default Redshift mode'''
-DEFAULT_MODE = 'randr'
 '''Default program'''
 DEFAULT_PROGRAM = 'Redshift'
 '''Get latitude and longitude from KDE and set them as default'''
@@ -104,7 +102,6 @@ class RedshiftApplet(plasmascript.Applet):
         self.nighttmp = cfgGeneral.readEntry('nightTemp', DEFAULT_NIGHT).toInt()
         self.daytmp = cfgGeneral.readEntry('dayTemp', DEFAULT_DAY).toInt()
         self.smooth = cfgGeneral.readEntry('smooth', True).toBool()
-        self.mode = cfgGeneral.readEntry('mode', DEFAULT_MODE).toString()
         self.gammaR = cfgGeneral.readEntry('gammaR', 1.00).toFloat()
         self.gammaG = cfgGeneral.readEntry('gammaG', 1.00).toFloat()
         self.gammaB = cfgGeneral.readEntry('gammaB', 1.00).toFloat()
@@ -157,7 +154,7 @@ class RedshiftApplet(plasmascript.Applet):
 
     def startRedshift(self):
         print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ('yes' if self.smooth else 'no')))
-        self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s -m %s %s' %(REDSHIFT, self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, self.mode, ('-r' if not self.smooth else '')), shell=True, stdout=PIPE, stderr=PIPE)
+        self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s %s' %(REDSHIFT, self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ('-r' if not self.smooth else '')), shell=True, stdout=PIPE, stderr=PIPE)
 
     def stopProgram(self):
         print('Stopping')

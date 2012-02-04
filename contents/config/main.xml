@@ -25,10 +25,6 @@
       <label>Program</label>
       <default>True</default>
     </entry>
-    <entry name="mode" type="String">
-      <label>Program</label>
-      <default>"randr"</default>
-    </entry>
     <entry name="gammaR" type="Double">
       <label>Program</label>
       <default>0</default>
