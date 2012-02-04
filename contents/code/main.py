@@ -35,12 +35,10 @@ from subprocess import Popen, PIPE
 '''Theme'''
 THEME = 'widgets/background'
 '''Icons'''
-ICON_PLASMOID = 'help-hint'
-ICON_STOPPED = 'user-offline'
-ICON_RUNNING = 'user-online'
+ICON_PLASMOID = 'redshift'
+ICON_STOPPED = 'redshift-status-off'
+ICON_RUNNING = 'redshift-status-on'
 ICON_UNKNOWN = 'user-busy'
-'''f.lux executable'''
-FLUX = 'xflux'
 '''Redshift executable'''
 REDSHIFT = 'redshift'
 '''Refresh (check if running) rate, in ms'''
@@ -58,7 +56,7 @@ DEFAULT_LATITUDE = KSystemTimeZones.local().latitude()
 DEFAULT_LONGITUDE = KSystemTimeZones.local().longitude()
 
 #Plasmoid gained by inheritance
-class FluxApplet(plasmascript.Applet):
+class RedshiftApplet(plasmascript.Applet):
 
     #constructor
     def __init__(self, parent, args=None):
@@ -95,24 +93,22 @@ class FluxApplet(plasmascript.Applet):
         self.connect(self.configScheme(), SIGNAL("configChanged ()"), self.configChanged)
         self.updateStatus()
         self.configChanged()
-
+        if self.auto and self.checkStatus() == 'Stopped':
+            print('Auto-starting %s' % self.program)
+            self.toggle()
+            
     def configChanged(self):
         cfgGeneral = self.config().group("General")
-        self.lat = cfgGeneral.readEntry('lat',DEFAULT_LATITUDE).toFloat()               
-        self.lon = cfgGeneral.readEntry('lon',DEFAULT_LONGITUDE).toFloat()
-        self.nighttmp = cfgGeneral.readEntry('nighttmp', DEFAULT_NIGHT).toInt()
-        self.daytmp = cfgGeneral.readEntry('daytmp', DEFAULT_DAY).toInt()
+        self.lat = cfgGeneral.readEntry('latitude',DEFAULT_LATITUDE).toFloat()               
+        self.lon = cfgGeneral.readEntry('longitude',DEFAULT_LONGITUDE).toFloat()
+        self.nighttmp = cfgGeneral.readEntry('nightTemp', DEFAULT_NIGHT).toInt()
+        self.daytmp = cfgGeneral.readEntry('dayTemp', DEFAULT_DAY).toInt()
         self.smooth = cfgGeneral.readEntry('smooth', True).toBool()
-        self.program = cfgGeneral.readEntry('program', DEFAULT_PROGRAM).toString()
         self.mode = cfgGeneral.readEntry('mode', DEFAULT_MODE).toString()
         self.gammaR = cfgGeneral.readEntry('gammaR', 1.00).toFloat()
         self.gammaG = cfgGeneral.readEntry('gammaG', 1.00).toFloat()
         self.gammaB = cfgGeneral.readEntry('gammaB', 1.00).toFloat()
         self.auto = cfgGeneral.readEntry('auto', False).toBool()
-        
-        if self.auto and self.checkStatus() == 'Stopped':
-            print('Auto-starting %s' % self.program)
-            self.toggle()
             
     #done when timer is resetted
     def timerEvent(self, event):
@@ -132,9 +128,7 @@ class FluxApplet(plasmascript.Applet):
 
     #get the pid
     def updateStatus(self):
-        self.pid = commands.getoutput('pidof %s' % FLUX)
-        if not self.pid:
-            self.pid = commands.getoutput('pidof %s' % REDSHIFT)
+        self.pid = commands.getoutput('pidof %s' % REDSHIFT)
         if not self.waiting:
             self.waiting = True
             if self.subp:
@@ -152,10 +146,7 @@ class FluxApplet(plasmascript.Applet):
     def toggle(self):
         status = self.checkStatus()
         if status == 'Stopped':
-            if self.program == 'f.lux':
-                self.startXflux()
-            elif self.program == 'Redshift':
-                self.startRedshift()
+            self.startRedshift()
         elif status == 'Running':
             self.stopProgram()
         else:
@@ -163,10 +154,6 @@ class FluxApplet(plasmascript.Applet):
             #May be more than one instance running?
             self.killProgram()
             self.toggle()
-    
-    def startXflux(self):
-        print('Starting f.lux with latitude %.1f, longitude %.1f, temperature %d' % (self.lat, self.lon, self.nighttmp))
-        self.subp = Popen('%s -l %.1f -g %.1f -k %d -nofork' % (FLUX, self.lat, self.lon, self.nighttmp), shell=True, stdout=PIPE, stderr=PIPE)
 
     def startRedshift(self):
         print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ('yes' if self.smooth else 'no')))
@@ -212,5 +199,5 @@ class FluxApplet(plasmascript.Applet):
         self.stopProgram()
 
 def CreateApplet(parent):
-    return FluxApplet(parent)
+    return RedshiftApplet(parent)
 
