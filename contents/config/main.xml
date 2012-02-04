@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="plasmafluxrc"/>
+  <group name="General">
+    <entry name="program" type="String">
+      <label>Program</label>
+      <default>"Redshift"</default>
+    </entry>
+    <entry name="latitude" type="Double">
+      <label>Program</label>
+      <default>KSystemTimeZones.local().latitude()</default>
+    </entry>
+    <entry name="longitude" type="Double">
+      <label>Program</label>
+      <default>KSystemTimeZones.local().longitude()</default>
+    </entry>
+    <entry name="dayTemp" type="Int">
+      <label>Program</label>
+      <default>5500</default>
+    </entry>
+    <entry name="nightTemp" type="Int">
+      <label>Program</label>
+      <default>3700</default>
+    </entry>
+    <entry name="smooth" type="Bool">
+      <label>Program</label>
+      <default>True</default>
+    </entry>
+    <entry name="mode" type="String">
+      <label>Program</label>
+      <default>"randr"</default>
+    </entry>
+    <entry name="gammaR" type="Double">
+      <label>Program</label>
+      <default>0</default>
+    </entry>
+    <entry name="gammaG" type="Double">
+      <label>Program</label>
+      <default>0</default>
+    </entry>
+    <entry name="gammaB" type="Double">
+      <label>Program</label>
+      <default>0</default>
+    </entry>
+    <entry name="autolaunch" type="Bool">
+      <label>Program</label>
+      <default>False</default>
+    </entry>
+  </group>
+</kcfg>
