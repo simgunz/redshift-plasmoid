@@ -31,169 +31,125 @@ from PyKDE4 import plasmascript
 import commands
 import os
 from subprocess import Popen, PIPE
-
+import subprocess
+import signal
+from time import sleep
 '''Theme'''
 THEME = 'widgets/background'
 '''Icons'''
 ICON_PLASMOID = 'redshift'
 ICON_STOPPED = 'redshift-status-off'
 ICON_RUNNING = 'redshift-status-on'
-ICON_UNKNOWN = 'user-busy'
-'''Redshift executable'''
-REDSHIFT = 'redshift'
-'''Refresh (check if running) rate, in ms'''
-REFRESH = 1000
 '''Default night temp'''
 DEFAULT_NIGHT = 3700
 '''Default day temp'''
 DEFAULT_DAY = 5500
-'''Default program'''
-DEFAULT_PROGRAM = 'Redshift'
 '''Get latitude and longitude from KDE and set them as default'''
 DEFAULT_LATITUDE = KSystemTimeZones.local().latitude()
 DEFAULT_LONGITUDE = KSystemTimeZones.local().longitude()
 
-#Plasmoid gained by inheritance
 class RedshiftApplet(plasmascript.Applet):
 
-    #constructor
     def __init__(self, parent, args=None):
         plasmascript.Applet.__init__(self, parent)
         self.parent = parent
 
-    #done once when initiating
     def init(self):
-        self.button = Plasma.IconWidget(self.parent)
+        
         self.iconStopped = KIcon(ICON_STOPPED)
         self.iconRunning = KIcon(ICON_RUNNING)
-        self.iconUnknown = KIcon(ICON_UNKNOWN)
-        self.pid = None
         self.subp = None
-        self.waiting = False
 
         self.setHasConfigurationInterface(True)
+        
         #set size of Plasmoid
         self.resize(50, 50)
         self.setAspectRatioMode(Plasma.KeepAspectRatio)
         self.setBackgroundHints(Plasma.Applet.DefaultBackground)
-
+        self.button = Plasma.IconWidget(self.parent)
+        self.button.setIcon(self.iconStopped)
         self.theme = Plasma.Svg(self)
         self.theme.setImagePath(THEME)
         self.layout = QGraphicsGridLayout(self.applet)
-        self.layout.setContentsMargins(3,3,3,3)
+        self.layout.setContentsMargins(0,0,0,0)
         self.setMinimumSize(10,10)
 
-        #set timer interval
-        self.timer = self.startTimer(REFRESH)
-        self.button.setIcon(self.iconUnknown)
-        QObject.connect(self.button, SIGNAL('clicked()'), self.toggle)
+        self.connect(self.button, SIGNAL('clicked()'), self.toggle)
         self.appletDestroyed.connect(self.destroy)
-        self.connect(self.configScheme(), SIGNAL("configChanged ()"), self.configChanged)
-        self.updateStatus()
+        self.connect(self.configScheme(), SIGNAL("configChanged()"), self.configChanged)
+        
+        # Kill any instance of redshift launched by others
+        pid = commands.getoutput('pidof redshift')
+        if pid:
+            commands.getoutput('pkill -9 redshift')
+            commands.getoutput('redshift -x')
+        
         self.configChanged()
-        if self.auto and self.checkStatus() == 'Stopped':
-            print('Auto-starting %s' % self.program)
+        self.status = 'Stopped'
+        if self.autolaunch:
+            print('Auto-starting')
             self.toggle()
             
     def configChanged(self):
         cfgGeneral = self.config().group("General")
-        self.lat = cfgGeneral.readEntry('latitude',DEFAULT_LATITUDE).toFloat()               
-        self.lon = cfgGeneral.readEntry('longitude',DEFAULT_LONGITUDE).toFloat()
-        self.nighttmp = cfgGeneral.readEntry('nightTemp', DEFAULT_NIGHT).toInt()
-        self.daytmp = cfgGeneral.readEntry('dayTemp', DEFAULT_DAY).toInt()
+        self.latitude = cfgGeneral.readEntry('latitude',DEFAULT_LATITUDE).toFloat()[0]
+        self.longitude = cfgGeneral.readEntry('longitude',DEFAULT_LONGITUDE).toFloat()[0]
+        self.nighttemp = cfgGeneral.readEntry('nightTemp', DEFAULT_NIGHT).toInt()[0]
+        self.daytemp = cfgGeneral.readEntry('dayTemp', DEFAULT_DAY).toInt()[0]
         self.smooth = cfgGeneral.readEntry('smooth', True).toBool()
-        self.gammaR = cfgGeneral.readEntry('gammaR', 1.00).toFloat()
-        self.gammaG = cfgGeneral.readEntry('gammaG', 1.00).toFloat()
-        self.gammaB = cfgGeneral.readEntry('gammaB', 1.00).toFloat()
-        self.auto = cfgGeneral.readEntry('auto', False).toBool()
-            
-    #done when timer is resetted
-    def timerEvent(self, event):
-        #call draw method
-        self.update()
+        self.autolaunch = cfgGeneral.readEntry('autolaunch', False).toBool()
+        gammaR = cfgGeneral.readEntry('gammaR', 1.00).toFloat()[0]
+        gammaG = cfgGeneral.readEntry('gammaG', 1.00).toFloat()[0]
+        gammaB = cfgGeneral.readEntry('gammaB', 1.00).toFloat()[0]        
+        self.gamma = str("%.2f:%.2f:%.2f" % (gammaR, gammaG, gammaB))
+        self.restartRedshift()
 
-    #parse the status
-    def checkStatus(self):
-        self.updateStatus()
-        if self.pid:
-            if self.pid.isdigit():
-                return 'Running'
-            else:
-                return 'Unknown'
-        else:
-            return 'Stopped'
-
-    #get the pid
-    def updateStatus(self):
-        self.pid = commands.getoutput('pidof %s' % REDSHIFT)
-        if not self.waiting:
-            self.waiting = True
-            if self.subp:
-                if not self.pid:
-                    retcode = os.waitpid(int(self.subp.pid), os.WNOHANG)
-                    if retcode[1]:
-                        stderr = self.subp.stderr.read()
-                        stdout = self.subp.stdout.read()
-                        QMessageBox.critical(self.parent, 'An error has occurred', '%s exited abnormally, probably due to wrong configuration.\nPlease report this to the developer:\n===================================================\n\nExit code:\n(%d, %s)\n\nstderr:\n%s\n\nstdout:\n%s\n===================================================' % (self.program, retcode[1], os.WEXITSTATUS(self.subp.pid), stderr, stdout))
-                    #self.subp.stderr.close()
-                    #self.subp.stdout.close()
-                    self.subp = None
-            self.waiting = False
 
     def toggle(self):
-        status = self.checkStatus()
-        if status == 'Stopped':
+        if self.status == 'Running':
+            print('Pausing Redshift')
+            commands.getoutput('pkill -USR1 redshift')
+            self.status = 'Paused'
+        elif self.status == 'Paused':    
+            print('Resuming Redshift')
+            commands.getoutput('pkill -USR1 redshift')
+            self.status = 'Running'
+        else:
             self.startRedshift()
-        elif status == 'Running':
-            self.stopProgram()
-        else:
-            print('Unknown status')
-            #May be more than one instance running?
-            self.killProgram()
-            self.toggle()
-
+            self.status = 'Running'
+        self.update()
+            
     def startRedshift(self):
-        print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ('yes' if self.smooth else 'no')))
-        self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s %s' %(REDSHIFT, self.lat, self.lon, self.daytmp, self.nighttmp, self.gamma, ('-r' if not self.smooth else '')), shell=True, stdout=PIPE, stderr=PIPE)
+        print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('yes' if self.smooth else 'no')))
+        self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s %s' %('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')), shell=True, stdout=PIPE, stderr=PIPE)
 
-    def stopProgram(self):
-        print('Stopping')
-        import signal
-        #Popen('kill %s' % self.pid, shell=True)
-        '''if commands.getoutput('pidof %s' % FLUX):
-            #xflux
-            if self.subp:
-                self.subp.send_signal(signal.SIGTERM)
-            else:
-                os.kill(int(self.pid), signal.SIGTERM)
-        elif commands.getoutput('pidof %s ' % REDSHIFT):
-            #redshift
-            if self.subp:
-                self.subp.send_signal(signal.SIGUSR1)
-            else:
-                os.kill(int(self.pid), signal.SIGUSR1)'''
+    def stopRedshift(self):
+        print 'Stopping Redshift'
         if self.subp:
-            self.subp.send_signal(signal.SIGTERM)
-        elif self.pid:
-            os.kill(int(self.pid), signal.SIGTERM)
+            self.subp.terminate()
+            self.subp.wait()
+    
+    def restartRedshift(self):
+        # Called when the configuration is changed, the process is killed and eventually restarted
+        if not self.status == 'Stopped':
+            self.stopRedshift()
+            if self.status == 'Paused':
+                self.status = 'Stopped'
+            elif self.status == 'Running':
+                self.startRedshift()
 
-    def killProgram(self):
-        print('Killing processes: %s' % self.pid)
-        Popen('kill -9 %s' % self.pid, shell=True)
-
-    #draw method
     def paintInterface(self, painter, option, rect):
-        if self.checkStatus() == 'Running':
+        if self.status == 'Running':
             self.button.setIcon(self.iconRunning)
-        elif self.checkStatus() == 'Stopped':
+        elif self.status == 'Stopped' or self.status == 'Paused':
             self.button.setIcon(self.iconStopped)
-        else:
-            self.button.setIcon(self.iconUnknown)
         self.layout.addItem(self.button, 0, 0)
 
     def destroy(self):
-        self.killTimer(self.timer)
-        self.stopProgram()
+        print 'des'
+        if not self.status == 'Stopped':
+            self.stopRedshift()
+            self.status = "Paused"
 
 def CreateApplet(parent):
     return RedshiftApplet(parent)
