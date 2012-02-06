@@ -2,8 +2,9 @@
 # plasma_flux/contents/code/main.py
 
 '''
-Provides a switch to start/stop F.lux daemon, and to change location/temperature
+Provides a configuration interface and a switch to start/stop Redshift daemon. 
 Copyright (C) 2011 Diego Cristina
+Copyright (C) 2012 Simone Gaiarin
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,23 +31,19 @@ from PyKDE4 import plasmascript
 #import commands for executing shell commands
 import commands
 import os
-from subprocess import Popen, PIPE
-import subprocess
-import signal
-from time import sleep
-'''Theme'''
+from subprocess import Popen
+
+# Theme
 THEME = 'widgets/background'
-'''Icons'''
+# Icons
 ICON_PLASMOID = 'redshift'
 ICON_STOPPED = 'redshift-status-off'
 ICON_RUNNING = 'redshift-status-on'
-'''Default night temp'''
+# Default color temperature
 DEFAULT_NIGHT = 3700
-'''Default day temp'''
 DEFAULT_DAY = 5500
-'''Get latitude and longitude from KDE and set them as default'''
-DEFAULT_LATITUDE = KSystemTimeZones.local().latitude()
-DEFAULT_LONGITUDE = KSystemTimeZones.local().longitude()
+# Status constants
+STOP,RUN,PAUSE = range(3)
 
 class RedshiftApplet(plasmascript.Applet):
 
@@ -55,13 +52,10 @@ class RedshiftApplet(plasmascript.Applet):
         self.parent = parent
 
     def init(self):
-        
         self.iconStopped = KIcon(ICON_STOPPED)
         self.iconRunning = KIcon(ICON_RUNNING)
         self.subp = None
-
         self.setHasConfigurationInterface(True)
-        
         #set size of Plasmoid
         self.resize(50, 50)
         self.setAspectRatioMode(Plasma.KeepAspectRatio)
@@ -73,27 +67,31 @@ class RedshiftApplet(plasmascript.Applet):
         self.layout = QGraphicsGridLayout(self.applet)
         self.layout.setContentsMargins(0,0,0,0)
         self.setMinimumSize(10,10)
-
         self.connect(self.button, SIGNAL('clicked()'), self.toggle)
         self.appletDestroyed.connect(self.destroy)
-        self.connect(self.configScheme(), SIGNAL("configChanged()"), self.configChanged)
-        
         # Kill any instance of redshift launched by others
         pid = commands.getoutput('pidof redshift')
         if pid:
             commands.getoutput('pkill -9 redshift')
             commands.getoutput('redshift -x')
-        
         self.configChanged()
-        self.status = 'Stopped'
+        # Set the default latitude and longitude values in the configuration file 
+        # so that the config dialog can read them
+        if not (self.latitude or self.longitude):
+            default_latitude = KSystemTimeZones.local().latitude()
+            default_longitude = KSystemTimeZones.local().longitude()
+            cfgGeneral = self.config().group("General")
+            cfgGeneral.writeEntry('latitude',default_latitude)
+            cfgGeneral.writeEntry('longitude',default_longitude)
+        self.status = STOP
         if self.autolaunch:
-            print('Auto-starting')
+            print('Autostarting Redshift')
             self.toggle()
             
     def configChanged(self):
         cfgGeneral = self.config().group("General")
-        self.latitude = cfgGeneral.readEntry('latitude',DEFAULT_LATITUDE).toFloat()[0]
-        self.longitude = cfgGeneral.readEntry('longitude',DEFAULT_LONGITUDE).toFloat()[0]
+        self.latitude = cfgGeneral.readEntry('latitude',0).toFloat()[0]
+        self.longitude = cfgGeneral.readEntry('longitude',0).toFloat()[0]
         self.nighttemp = cfgGeneral.readEntry('nightTemp', DEFAULT_NIGHT).toInt()[0]
         self.daytemp = cfgGeneral.readEntry('dayTemp', DEFAULT_DAY).toInt()[0]
         self.smooth = cfgGeneral.readEntry('smooth', True).toBool()
@@ -101,22 +99,21 @@ class RedshiftApplet(plasmascript.Applet):
         gammaR = cfgGeneral.readEntry('gammaR', 1.00).toFloat()[0]
         gammaG = cfgGeneral.readEntry('gammaG', 1.00).toFloat()[0]
         gammaB = cfgGeneral.readEntry('gammaB', 1.00).toFloat()[0]        
-        self.gamma = str("%.2f:%.2f:%.2f" % (gammaR, gammaG, gammaB))
+        self.gamma = str("%.2f:%.2f:%.2f" % (gammaR, gammaG, gammaB))  
         self.restartRedshift()
 
-
     def toggle(self):
-        if self.status == 'Running':
+        if self.status == RUN:
             print('Pausing Redshift')
             commands.getoutput('pkill -USR1 redshift')
-            self.status = 'Paused'
-        elif self.status == 'Paused':    
+            self.status = PAUSE
+        elif self.status == PAUSE:    
             print('Resuming Redshift')
             commands.getoutput('pkill -USR1 redshift')
-            self.status = 'Running'
+            self.status = RUN
         else:
             self.startRedshift()
-            self.status = 'Running'
+            self.status = RUN
         self.update()
             
     def startRedshift(self):
@@ -131,25 +128,25 @@ class RedshiftApplet(plasmascript.Applet):
     
     def restartRedshift(self):
         # Called when the configuration is changed, the process is killed and eventually restarted
-        if not self.status == 'Stopped':
+        if not self.status == STOP:
             self.stopRedshift()
-            if self.status == 'Paused':
-                self.status = 'Stopped'
-            elif self.status == 'Running':
+            if self.status == PAUSE:
+                self.status = STOP
+            elif self.status == RUN:
                 self.startRedshift()
 
     def paintInterface(self, painter, option, rect):
-        if self.status == 'Running':
+        if self.status == RUN:
             self.button.setIcon(self.iconRunning)
-        elif self.status == 'Stopped' or self.status == 'Paused':
+        else:
             self.button.setIcon(self.iconStopped)
         self.layout.addItem(self.button, 0, 0)
 
     def destroy(self):
-        print 'des'
-        if not self.status == 'Stopped':
-            self.stopRedshift()
-            self.status = "Paused"
+        if not self.status == STOP:
+            print 'Stopping Redshift'
+            if self.subp:
+                self.subp.terminate()
 
 def CreateApplet(parent):
     return RedshiftApplet(parent)
