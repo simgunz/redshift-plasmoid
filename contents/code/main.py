@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# plasma_flux/contents/code/main.py
+# redshift-plasmoid/contents/code/main.py
 
 '''
 Provides a configuration interface and a switch to start/stop Redshift daemon. 
@@ -20,7 +20,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-#import kde and qt specific stuff
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyKDE4.kdeui import *
@@ -28,20 +27,17 @@ from PyKDE4.plasma import Plasma
 from PyKDE4.kdecore import KProcess, KSystemTimeZones, i18n
 from PyKDE4 import plasmascript
 
-#import commands for executing shell commands
+import os
 import subprocess
+import signal
 
-# Theme
 THEME = 'widgets/background'
-# Icons
 ICON_PLASMOID = 'redshift'
 ICON_STOPPED = 'redshift-status-off'
 ICON_RUNNING = 'redshift-status-on'
 # Default color temperature
 DEFAULT_NIGHT = 3700
 DEFAULT_DAY = 5500
-# Status constants
-STOP,RUN,PAUSE = range(3)
 
 class RedshiftApplet(plasmascript.Applet):
 
@@ -52,21 +48,21 @@ class RedshiftApplet(plasmascript.Applet):
     def init(self):
         self.iconStopped = KIcon(ICON_STOPPED)
         self.iconRunning = KIcon(ICON_RUNNING)
-        self.subp = None
         self.setHasConfigurationInterface(True)
         self.process = KProcess()
+        self.dontStart = False
         # Set size of Plasmoid
         self.resize(100, 100)
+        self.setMinimumSize(10,10)
         self.setAspectRatioMode(Plasma.KeepAspectRatio)
         self.setBackgroundHints(Plasma.Applet.DefaultBackground)
-        self.button = Plasma.IconWidget(self.parent)
-        self.button.setIcon(KIcon(ICON_STOPPED))
         self.theme = Plasma.Svg(self)
         self.theme.setImagePath(THEME)
+        self.button = Plasma.IconWidget(self.parent)
+        self.button.setIcon(self.iconStopped)
         self.layout = QGraphicsGridLayout(self.applet)
         self.layout.setContentsMargins(0,0,0,0)
-        self.layout.addItem(self.button, 0, 0)
-        self.setMinimumSize(10,10)
+        self.layout.addItem(self.button, 0, 0)        
         # Set the tooltip
         tooltip = Plasma.ToolTipContent()
         tooltip.setMainText(i18n('Redshift'))
@@ -76,23 +72,24 @@ class RedshiftApplet(plasmascript.Applet):
         # Connect signals and slots
         self.button.clicked.connect(self.toggle)
         self.appletDestroyed.connect(self.destroy)
-        self.process.finished.connect(self.startRedshift)
+        self.process.finished.connect(self.toggle)
         # Load configuration
         self.configChanged()
-        # Set the default latitude and longitude values in the configuration file 
-        # so that the config dialog can read them
+        # Set the default latitude and longitude values in the
+        # configuration file, so that the config dialog can read them
         if not (self.latitude or self.longitude):
             default_latitude = KSystemTimeZones.local().latitude()
             default_longitude = KSystemTimeZones.local().longitude()
             cfgGeneral = self.config().group("General")
             cfgGeneral.writeEntry('latitude',default_latitude)
             cfgGeneral.writeEntry('longitude',default_longitude)
-        self.status = STOP
+        # Autolaunch
         if self.autolaunch:
             print('Autostarting Redshift')
             self.toggle()
             
     def configChanged(self):
+        # Read the values from the configuration file, called automatically when configuration is changed
         cfgGeneral = self.config().group("General")
         self.latitude = cfgGeneral.readEntry('latitude',0).toFloat()[0]
         self.longitude = cfgGeneral.readEntry('longitude',0).toFloat()[0]
@@ -105,44 +102,50 @@ class RedshiftApplet(plasmascript.Applet):
         gammaB = cfgGeneral.readEntry('gammaB', 1.00).toFloat()[0]        
         self.gamma = str("%.2f:%.2f:%.2f" % (gammaR, gammaG, gammaB))  
         self.restartRedshift()
-
+        
     def toggle(self):
-        if self.status == RUN:
-            print('Pausing Redshift')
-            self.status = PAUSE
-            self.button.setIcon(KIcon(ICON_STOPPED))
-            subprocess.call(['pkill','-USR1','redshift'])
-        elif self.status == PAUSE:    
-            print('Resuming Redshift')
-            self.status = RUN
-            self.button.setIcon(KIcon(ICON_RUNNING))
-            subprocess.call(['pkill','-USR1','redshift'])
-        else:
-            self.status = RUN
+        # Toggle Redshift on/off
+        if self.process.state() == QProcess.Running:
+            os.kill(int(self.process.pid()), signal.SIGUSR1)
+            if self.button.icon().name() == self.iconRunning.name():
+                self.button.setIcon(self.iconStopped)
+            else:
+                self.button.setIcon(self.iconRunning)
+        elif not self.dontStart:
             self.startRedshift()
+        self.dontStart = False
             
     def startRedshift(self):
+        """Start redshift if all conditions are satisfied
+        
+        Wait for any previous instance of Redshift launched by the applet to terminate,
+        if redshift is launched outside the applet, notify the user and don't start Redshift
+        """
         self.process.waitForFinished()
-        #if commands.getoutput('pidof redshift'):
         if not subprocess.call(['pidof','redshift']):
-            self.status = STOP
             KNotification.event(KNotification.Notification, i18n('Redshift'),i18n('Another instance of Redshift is running. It must be closed before you can use this applet.'), KIcon(ICON_PLASMOID).pixmap(QSize(32,32)));
-        elif self.status == RUN:
-            print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('yes' if self.smooth else 'no')))
-            self.button.setIcon(KIcon(ICON_RUNNING))
-            self.process.setShellCommand('%s -l %.1f:%.1f -t %d:%d -g %s %s' % ('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')))
-            self.process.start()        
+            return
+        print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('yes' if self.smooth else 'no')))
+        self.button.setIcon(self.iconRunning)
+        self.process.setShellCommand('%s -l %.1f:%.1f -t %d:%d -g %s %s' % ('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')))
+        self.process.start()
         
     def restartRedshift(self):
-        # Called when the configuration is changed, the process is killed and eventually restarted
+        """Terminate the redshift process and eventually restart it
+        
+        If Redshift is not running no signal is emitted so toggle is not called
+        If Redshift is running, it is terminated, a signal is emitted and toggle is called:
+            if Redshift was not active the flag dontStart is setted and no new process is started
+            if Redshift was active it is started    
+        """
         print 'Stopping Redshift'
-        if not self.status == RUN:
-            self.status = STOP
+        if (not self.button.icon().name() == self.iconRunning.name()) and (self.process.state() == QProcess.Running):
+            self.dontStart = True
         self.process.terminate()
     
     def destroy(self):
+        # Kill redshift and clear any gamma correction
         print 'Killing Redshift'
-        self.status = STOP
         self.process.kill()
         self.process.waitForFinished()
         subprocess.call(['redshift','-x'])
