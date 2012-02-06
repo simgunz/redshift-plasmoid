@@ -66,6 +66,7 @@ class RedshiftApplet(plasmascript.Applet):
         self.theme.setImagePath(THEME)
         self.layout = QGraphicsGridLayout(self.applet)
         self.layout.setContentsMargins(0,0,0,0)
+        self.layout.addItem(self.button, 0, 0)
         self.setMinimumSize(10,10)
         # Set the tooltip
         tooltip = Plasma.ToolTipContent()
@@ -74,13 +75,9 @@ class RedshiftApplet(plasmascript.Applet):
         tooltip.setImage(KIcon(ICON_PLASMOID))
         Plasma.ToolTipManager.self().setContent(self.applet, tooltip)
         # Connect signals and slots
-        self.connect(self.button, SIGNAL('clicked()'), self.toggle)
+        self.button.clicked.connect(self.toggle)
         self.appletDestroyed.connect(self.stopRedshift)
-        # Kill any instance of redshift launched by others
-        pid = commands.getoutput('pidof redshift')
-        if pid:
-            commands.getoutput('pkill -9 redshift')
-            commands.getoutput('redshift -x')
+        # Load configuration
         self.configChanged()
         # Set the default latitude and longitude values in the configuration file 
         # so that the config dialog can read them
@@ -112,49 +109,42 @@ class RedshiftApplet(plasmascript.Applet):
     def toggle(self):
         if self.status == RUN:
             self.status = PAUSE
+            self.button.setIcon(self.iconStopped)
             print('Pausing Redshift')
             commands.getoutput('pkill -USR1 redshift')
         elif self.status == PAUSE:    
             self.status = RUN
+            self.button.setIcon(self.iconRunning)
             print('Resuming Redshift')
             commands.getoutput('pkill -USR1 redshift')
         else:
             self.startRedshift()
-        self.update()
             
     def startRedshift(self):
-        self.status = RUN
-        print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('yes' if self.smooth else 'no')))
-        self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s %s' %('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')), shell=True)
-        
+        if commands.getoutput('pidof redshift'):
+            KNotification.event(KNotification.Notification, i18n('Redshift'),i18n('Another instance of Redshift is running. It must be closed before you can use this applet.'), KIcon(ICON_PLASMOID).pixmap(QSize(32,32)));
+        else:
+            self.status = RUN
+            self.button.setIcon(self.iconRunning)
+            print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('yes' if self.smooth else 'no')))
+            self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s %s' %('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')), shell=True)
+            
     def stopRedshift(self):
         self.status = STOP
         if self.subp:
             print 'Stopping Redshift'
-            self.subp.terminate()
-            
-    def killRedshift(self):
-        self.status = STOP
-        if self.subp:
-            print 'Killing Redshift'
             self.subp.kill()
             self.subp.wait()
+            self.subp = None
             commands.getoutput('redshift -x')
             
     def restartRedshift(self):
         # Called when the configuration is changed, the process is killed and eventually restarted
         if self.status == RUN:
-            self.killRedshift()
+            self.stopRedshift()
             self.startRedshift()
         else:
-            self.killRedshift()
-                
-    def paintInterface(self, painter, option, rect):
-        if self.status == RUN:
-            self.button.setIcon(self.iconRunning)
-        else:
-            self.button.setIcon(self.iconStopped)
-        self.layout.addItem(self.button, 0, 0)
+            self.stopRedshift()
 
 def CreateApplet(parent):
     return RedshiftApplet(parent)
