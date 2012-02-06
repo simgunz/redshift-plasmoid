@@ -56,7 +56,7 @@ class RedshiftApplet(plasmascript.Applet):
         self.setHasConfigurationInterface(True)
         self.process = KProcess()
         # Set size of Plasmoid
-        self.resize(50, 50)
+        self.resize(100, 100)
         self.setAspectRatioMode(Plasma.KeepAspectRatio)
         self.setBackgroundHints(Plasma.Applet.DefaultBackground)
         self.button = Plasma.IconWidget(self.parent)
