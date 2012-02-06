@@ -25,7 +25,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyKDE4.kdeui import *
 from PyKDE4.plasma import Plasma
-from PyKDE4.kdecore import KSystemTimeZones
+from PyKDE4.kdecore import KSystemTimeZones, i18n
 from PyKDE4 import plasmascript
 
 #import commands for executing shell commands
@@ -67,6 +67,13 @@ class RedshiftApplet(plasmascript.Applet):
         self.layout = QGraphicsGridLayout(self.applet)
         self.layout.setContentsMargins(0,0,0,0)
         self.setMinimumSize(10,10)
+        # Set the tooltip
+        tooltip = Plasma.ToolTipContent()
+        tooltip.setMainText(i18n('Redshift'))
+        tooltip.setSubText(i18n('Click to toggle on/off'))
+        tooltip.setImage(KIcon(ICON_PLASMOID))
+        Plasma.ToolTipManager.self().setContent(self.applet, tooltip)
+        # Connect signals and slots
         self.connect(self.button, SIGNAL('clicked()'), self.toggle)
         self.appletDestroyed.connect(self.stopRedshift)
         # Kill any instance of redshift launched by others
