@@ -68,7 +68,7 @@ class RedshiftApplet(plasmascript.Applet):
         self.layout.setContentsMargins(0,0,0,0)
         self.setMinimumSize(10,10)
         self.connect(self.button, SIGNAL('clicked()'), self.toggle)
-        self.appletDestroyed.connect(self.destroy)
+        self.appletDestroyed.connect(self.stopRedshift)
         # Kill any instance of redshift launched by others
         pid = commands.getoutput('pidof redshift')
         if pid:
@@ -104,49 +104,50 @@ class RedshiftApplet(plasmascript.Applet):
 
     def toggle(self):
         if self.status == RUN:
+            self.status = PAUSE
             print('Pausing Redshift')
             commands.getoutput('pkill -USR1 redshift')
-            self.status = PAUSE
         elif self.status == PAUSE:    
+            self.status = RUN
             print('Resuming Redshift')
             commands.getoutput('pkill -USR1 redshift')
-            self.status = RUN
         else:
             self.startRedshift()
-            self.status = RUN
         self.update()
             
     def startRedshift(self):
+        self.status = RUN
         print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('yes' if self.smooth else 'no')))
-        self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s %s' %('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')), shell=True, stdout=PIPE, stderr=PIPE)
-
+        self.subp = Popen('%s -l %.1f:%.1f -t %d:%d -g %s %s' %('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')), shell=True)
+        
     def stopRedshift(self):
-        print 'Stopping Redshift'
+        self.status = STOP
         if self.subp:
+            print 'Stopping Redshift'
             self.subp.terminate()
+            
+    def killRedshift(self):
+        self.status = STOP
+        if self.subp:
+            print 'Killing Redshift'
+            self.subp.kill()
             self.subp.wait()
-    
+            commands.getoutput('redshift -x')
+            
     def restartRedshift(self):
         # Called when the configuration is changed, the process is killed and eventually restarted
-        if not self.status == STOP:
-            self.stopRedshift()
-            if self.status == PAUSE:
-                self.status = STOP
-            elif self.status == RUN:
-                self.startRedshift()
-
+        if self.status == RUN:
+            self.killRedshift()
+            self.startRedshift()
+        else:
+            self.killRedshift()
+                
     def paintInterface(self, painter, option, rect):
         if self.status == RUN:
             self.button.setIcon(self.iconRunning)
         else:
             self.button.setIcon(self.iconStopped)
         self.layout.addItem(self.button, 0, 0)
-
-    def destroy(self):
-        if not self.status == STOP:
-            print 'Stopping Redshift'
-            if self.subp:
-                self.subp.terminate()
 
 def CreateApplet(parent):
     return RedshiftApplet(parent)
