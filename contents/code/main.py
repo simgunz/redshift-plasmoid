@@ -127,7 +127,7 @@ class RedshiftApplet(plasmascript.Applet):
             return
         print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('yes' if self.smooth else 'no')))
         self.button.setIcon(self.iconRunning)
-        self.process.setShellCommand('%s -l %.1f:%.1f -t %d:%d -g %s %s' % ('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')))
+        self.process.setShellCommand('%s -c /dev/null -l %.1f:%.1f -t %d:%d -g %s %s' % ('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')))
         self.process.start()
         
     def restartRedshift(self):
