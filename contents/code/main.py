@@ -148,7 +148,7 @@ class RedshiftApplet(plasmascript.Applet):
         print 'Killing Redshift'
         self.process.kill()
         self.process.waitForFinished()
-        subprocess.call(['redshift','-x'])
+        subprocess.call(['redshift','-c','/dev/null','-x'])
         
 def CreateApplet(parent):
     return RedshiftApplet(parent)
