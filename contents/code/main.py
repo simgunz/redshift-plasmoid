@@ -51,6 +51,7 @@ class RedshiftApplet(plasmascript.Applet):
         self.setHasConfigurationInterface(True)
         self.process = KProcess()
         self.dontStart = False
+        self.restart = False
         # Set size of Plasmoid
         self.resize(100, 100)
         self.setMinimumSize(10,10)
@@ -64,11 +65,11 @@ class RedshiftApplet(plasmascript.Applet):
         self.layout.setContentsMargins(0,0,0,0)
         self.layout.addItem(self.button, 0, 0)        
         # Set the tooltip
-        tooltip = Plasma.ToolTipContent()
-        tooltip.setMainText(i18n('Redshift'))
-        tooltip.setSubText(i18n('Click to toggle on/off'))
-        tooltip.setImage(KIcon(ICON_PLASMOID))
-        Plasma.ToolTipManager.self().setContent(self.applet, tooltip)
+        self.tooltip = Plasma.ToolTipContent()
+        self.tooltip.setMainText(i18n('Redshift'))
+        self.tooltip.setSubText(i18n('Click to toggle it on'))
+        self.tooltip.setImage(self.iconStopped)
+        Plasma.ToolTipManager.self().setContent(self.applet, self.tooltip)
         # Connect signals and slots
         self.button.clicked.connect(self.toggle)
         self.appletDestroyed.connect(self.destroy)
@@ -102,17 +103,28 @@ class RedshiftApplet(plasmascript.Applet):
         gammaB = cfgGeneral.readEntry('gammaB', 1.00).toFloat()[0]        
         self.gamma = str("%.2f:%.2f:%.2f" % (gammaR, gammaG, gammaB))  
         self.restartRedshift()
+    
+    def toggleStatus(self):
+        print self.button.icon().name()
+        if self.button.icon().name() == self.iconRunning.name():
+            self.button.setIcon(self.iconStopped)
+            self.tooltip.setImage(self.iconStopped)
+            self.tooltip.setSubText(i18n('Click to toggle it on'))
+        else:
+            self.button.setIcon(self.iconRunning)
+            self.tooltip.setImage(self.iconRunning)
+            self.tooltip.setSubText(i18n('Click to toggle it off'))
+        Plasma.ToolTipManager.self().setContent(self.applet, self.tooltip)
         
     def toggle(self):
         # Toggle Redshift on/off
         if self.process.state() == QProcess.Running:
             os.kill(int(self.process.pid()), signal.SIGUSR1)
-            if self.button.icon().name() == self.iconRunning.name():
-                self.button.setIcon(self.iconStopped)
-            else:
-                self.button.setIcon(self.iconRunning)
         elif not self.dontStart:
             self.startRedshift()
+        if not self.restart:
+            self.toggleStatus()
+        self.restart = False
         self.dontStart = False
             
     def startRedshift(self):
@@ -126,7 +138,6 @@ class RedshiftApplet(plasmascript.Applet):
             KNotification.event(KNotification.Notification, i18n('Redshift'),i18n('Another instance of Redshift is running. It must be closed before you can use this applet.'), KIcon(ICON_PLASMOID).pixmap(QSize(32,32)));
             return
         print('Starting Redshift with latitude %.1f, longitude %.1f, day temperature %d, night temperature %d, gamma ramp %s, smooth transition = %s' % (self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('yes' if self.smooth else 'no')))
-        self.button.setIcon(self.iconRunning)
         self.process.setShellCommand('%s -c /dev/null -l %.1f:%.1f -t %d:%d -g %s %s' % ('redshift', self.latitude, self.longitude, self.daytemp, self.nighttemp, self.gamma, ('-r' if not self.smooth else '')))
         self.process.start()
         
@@ -139,13 +150,14 @@ class RedshiftApplet(plasmascript.Applet):
             if Redshift was active it is started    
         """
         print 'Stopping Redshift'
-        if (not self.button.icon().name() == self.iconRunning.name()) and (self.process.state() == QProcess.Running):
-            self.dontStart = True
+        if (self.process.state() == QProcess.Running):
+            self.restart = True
+            if self.button.icon().name() == self.iconStopped.name():
+                self.dontStart = True
         self.process.terminate()
     
     def destroy(self):
         # Kill redshift and clear any gamma correction
-        print 'Killing Redshift'
         self.process.kill()
         self.process.waitForFinished()
         subprocess.call(['redshift','-c','/dev/null','-x'])
