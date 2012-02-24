@@ -1,0 +1,18 @@
+This plasmoid provides a configuration interface and a switch to start/stop Redshift daemon. 
+See Redshift website for more detailed info <http://jonls.dk/redshift/>.
+
+Developed by:
+Simone Gaiarin <simgunz AT gmail DOT com>
+
+Code under GPLv3 license (see COPYING)
+
+Requires:
+KDE SC 4.x
+Redshift 
+
+How to install:
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` ..
+make
+sudo make install
