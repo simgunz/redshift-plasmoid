@@ -79,11 +79,11 @@ class RedshiftApplet(plasmascript.Applet):
         # Set the default latitude and longitude values in the
         # configuration file, so that the config dialog can read them
         if not (self.latitude or self.longitude):
-            default_latitude = KSystemTimeZones.local().latitude()
-            default_longitude = KSystemTimeZones.local().longitude()
+            self.latitude = KSystemTimeZones.local().latitude()
+            self.longitude = KSystemTimeZones.local().longitude()
             cfgGeneral = self.config().group("General")
-            cfgGeneral.writeEntry('latitude',default_latitude)
-            cfgGeneral.writeEntry('longitude',default_longitude)
+            cfgGeneral.writeEntry('latitude',self.latitude)
+            cfgGeneral.writeEntry('longitude',self.longitude)
         # Autolaunch
         if self.autolaunch:
             print('Autostarting Redshift')
@@ -91,7 +91,7 @@ class RedshiftApplet(plasmascript.Applet):
             
     def configChanged(self):
         # Read the values from the configuration file, called automatically when configuration is changed
-        cfgGeneral = self.config().group("General")
+        cfgGeneral = self.config().group("General")        
         self.latitude = cfgGeneral.readEntry('latitude',0).toFloat()[0]
         self.longitude = cfgGeneral.readEntry('longitude',0).toFloat()[0]
         self.nighttemp = cfgGeneral.readEntry('nightTemp', DEFAULT_NIGHT).toInt()[0]
@@ -101,11 +101,10 @@ class RedshiftApplet(plasmascript.Applet):
         gammaR = cfgGeneral.readEntry('gammaR', 1.00).toFloat()[0]
         gammaG = cfgGeneral.readEntry('gammaG', 1.00).toFloat()[0]
         gammaB = cfgGeneral.readEntry('gammaB', 1.00).toFloat()[0]        
-        self.gamma = str("%.2f:%.2f:%.2f" % (gammaR, gammaG, gammaB))  
+        self.gamma = str("%.2f:%.2f:%.2f" % (gammaR, gammaG, gammaB))                     
         self.restartRedshift()
     
     def toggleStatus(self):
-        print self.button.icon().name()
         if self.button.icon().name() == self.iconRunning.name():
             self.button.setIcon(self.iconStopped)
             self.tooltip.setImage(self.iconStopped)
