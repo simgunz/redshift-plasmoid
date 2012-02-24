@@ -1,0 +1,16 @@
+[Desktop Entry]
+# ctxt: plasma data engine
+Name=Redshift
+Comment=Redshift information
+X-KDE-ServiceTypes=Plasma/DataEngine
+Type=Service
+Icon=redshift
+X-KDE-Library=plasma_engine_redshift
+
+X-KDE-PluginInfo-Author=Simone Gaiarin
+X-KDE-PluginInfo-Email=simgunz@gmail.com
+X-KDE-PluginInfo-Name=redshift
+X-KDE-PluginInfo-Version=
+X-KDE-PluginInfo-Website=
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=

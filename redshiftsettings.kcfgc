@@ -1,0 +1,4 @@
+File=redshift.kcfg 
+ClassName=RedshiftSettings 
+Singleton=true
+Mutators=nightTemp

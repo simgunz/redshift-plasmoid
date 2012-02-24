@@ -1,0 +1,17 @@
+[Desktop Entry]
+Comment=Plasma Timekpr
+Icon=redshift
+Name=Redshift
+Type=Service
+X-KDE-Library=plasma_applet_redshift
+X-KDE-PluginInfo-Author=Simone Gaiarin
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-Email=simgunz@gmail.com
+X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=redshift
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=http://plasma.kde.org/
+X-KDE-ServiceTypes=Plasma/Applet
+X-Plasma-NotificationArea=true
