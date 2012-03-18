@@ -21,18 +21,18 @@
 #define REDSHIFTCONTROLLER_H
 
 #include <KProcess>
-#include <QDebug>
-#include "redshiftsettings.h"
+#include <QThread>
 
-class RedshiftController : public QObject
+class RedshiftController : public QThread
 {
     Q_OBJECT
+    Q_ENUMS(RedshiftState)    
+    
     public:
         enum RedshiftState {
         Running,
-        Paused,
         Stopped
-        };
+        };        
         RedshiftController();
         ~RedshiftController();
         void start();
@@ -40,9 +40,11 @@ class RedshiftController : public QObject
         void stop();
         void restart();
         void readConfig();
+        bool autolaunch() {return m_autolaunch;}
+        void autostart();
     private:
         KProcess *m_process;
-        bool m_state;
+        RedshiftState m_state;
         float m_latitude;
         float m_longitude;
         int m_dayTemp;
@@ -54,7 +56,7 @@ class RedshiftController : public QObject
         bool m_autolaunch;
         
     signals:
-        void statusChanged(int status);
+        void stateChanged(bool state);
 };
 
 #endif // REDSHIFTCONTROLLER_H

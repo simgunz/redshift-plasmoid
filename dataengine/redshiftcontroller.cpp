@@ -17,14 +17,16 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
 **************************************************************************/
 
+#include "redshiftsettings.h"
 #include "redshiftcontroller.h"
 
-RedshiftController::RedshiftController() : m_state(false)
+#include <QThread>
+#include <QDebug>
+
+RedshiftController::RedshiftController() : m_state(Stopped)
 {
     m_process = new KProcess();    
     readConfig();
-    if(m_autolaunch)
-        start();
 }
 
 RedshiftController::~RedshiftController()
@@ -33,42 +35,44 @@ RedshiftController::~RedshiftController()
 }
 
 void RedshiftController::start()
-{        
+{            
     m_process->waitForFinished();
-    QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7").arg(m_latitude,0,'f',1).arg(m_longitude,0,'f',1).arg(m_dayTemp).arg(m_nightTemp).arg(m_gammaR,0,'f',2).arg(m_gammaG,0,'f',2).arg(m_gammaB,0,'f',2);
-    if(!m_smooth)
-        command.append(" -r");
-    m_process->setShellCommand(command);
-    m_process->start();
-    emit statusChanged(1);
+    m_process->start();    
 }
 
 void RedshiftController::stop()
 {
-    m_process->terminate();
-    emit statusChanged(0);
+    m_process->terminate();        
 }
 
 void RedshiftController::toggle()
 {
-    if(!m_process->state())
+    if(m_state == Stopped)
     {
         start();
-        m_state = true;
+        m_state = Running;
+        emit stateChanged(true);
     }
     else
     {
         stop();
-        m_state = false;
-    }
+        m_state = Stopped;
+        emit stateChanged(false);
+    }    
+    
 }
 
 void RedshiftController::restart()
 {
     readConfig();
     stop();
-    if(m_state)
+    if(m_state == Running)
         start();
+}
+
+void RedshiftController::autostart()
+{
+    toggle();
 }
 
 void RedshiftController::readConfig()
@@ -82,6 +86,16 @@ void RedshiftController::readConfig()
     m_gammaG = RedshiftSettings::gammaG();
     m_gammaB = RedshiftSettings::gammaB();
     m_smooth = RedshiftSettings::smooth();
-    m_autolaunch = RedshiftSettings::autolaunch();    
+    m_autolaunch = RedshiftSettings::autolaunch();
+    QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7")
+                            .arg(m_latitude,0,'f',1)
+                            .arg(m_longitude,0,'f',1)
+                            .arg(m_dayTemp).arg(m_nightTemp)
+                            .arg(m_gammaR,0,'f',2)
+                            .arg(m_gammaG,0,'f',2)
+                            .arg(m_gammaB,0,'f',2);
+    if(!m_smooth)
+        command.append(" -r");
+    m_process->setShellCommand(command);
 }
 

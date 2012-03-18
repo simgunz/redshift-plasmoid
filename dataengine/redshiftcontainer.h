@@ -25,14 +25,14 @@
 
 class RedshiftContainer : public Plasma::DataContainer
 {
-    Q_OBJECT
+    Q_OBJECT    
 
 public:
     explicit RedshiftContainer(QObject* parent = 0);
     ~RedshiftContainer();
     Plasma::Service* service(QObject* parent = 0);
 public slots:
-    void updateStatus(int status);
+    void updateStatus(bool state);
 
 private:
     RedshiftController *m_controller;

@@ -24,12 +24,10 @@ RedshiftService::RedshiftService(QObject *parent, RedshiftController *controller
         : m_redshiftController(controller)
 {
     setName("redshift");
-    qDebug() << "srvc";
 }
 
 RedshiftService::~RedshiftService()
 {
-    qDebug() << "srvc dead";
 }
 
 ServiceJob *RedshiftService::createJob(const QString &operation, QMap<QString, QVariant> &parameters)

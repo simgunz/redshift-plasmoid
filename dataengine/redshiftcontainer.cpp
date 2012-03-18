@@ -20,14 +20,18 @@
 #include "redshiftcontainer.h"
 #include "redshiftservice.h"
 
-#include <KDebug>
+#include <QDebug>
 
 RedshiftContainer::RedshiftContainer(QObject* parent)
     : DataContainer(parent)
 {
     setObjectName("Controller");    
     m_controller = new RedshiftController();
-    QObject::connect(m_controller,SIGNAL(statusChanged(int)),this,SLOT(updateStatus(int)));
+    QObject::connect(m_controller,SIGNAL(stateChanged(bool)),this,SLOT(updateStatus(bool)));
+    if(m_controller->autolaunch())
+    {
+        m_controller->autostart();
+    }
     
 }
 
@@ -36,9 +40,9 @@ RedshiftContainer::~RedshiftContainer()
     m_controller->stop(); 
 }
 
-void RedshiftContainer::updateStatus(int status)
-{
-    if(status)
+void RedshiftContainer::updateStatus(bool state)
+{        
+    if(state)
     {
         setData("Status","Running"); 
     }
