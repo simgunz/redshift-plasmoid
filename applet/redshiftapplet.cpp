@@ -82,6 +82,10 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
 
 void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 {     
+    RedshiftSettings::self()->readConfig();
+    const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
+    const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
+    
     QWidget *redshiftInterface = new QWidget(parent);
     m_redshiftUi.setupUi(redshiftInterface);
     parent->addPage(redshiftInterface, RedshiftSettings::self(), i18n("General"), "redshift");
@@ -99,19 +103,28 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         
         Plasma::DataEngine::Data data = activities_engine->query(act);
         QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi.activities);
-        KComboBox *itemCombo = new KComboBox(m_activitiesUi.activities);
+        KComboBox *itemCombo = new KComboBox(m_activitiesUi.activities);        
         listItem->setText(0, data["Name"].toString());
         listItem->setIcon(0, KIcon(data["Icon"].toString()));
         listItem->setFlags(Qt::ItemIsEnabled);
-        listItem->setData(0, Qt::UserRole, data["Name"].toString());
+        listItem->setData(0, Qt::UserRole, act);
 
         itemCombo->addItem(i18nc("Redshift follow global preference", "Auto"));
         itemCombo->addItem(i18nc("Redshift is forced to be active in this activity", "Always Active"));
         itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity", "Always Disabled"));
         
-        itemCombo->setCurrentIndex(0);
+        
+        
+        if(alwaysOnActivities.contains(act)) {
+            itemCombo->setCurrentIndex(1);
+        } else if (alwaysOffActivities.contains(act)){
+            itemCombo->setCurrentIndex(2);
+        } else {
+            itemCombo->setCurrentIndex(0);
+        }
         
         m_activitiesUi.activities->setItemWidget(listItem, 1, itemCombo);
+        connect(itemCombo, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     }   
     parent->addPage(activitiesInterface, i18n("Activities"), "preferences-activities");
         
@@ -124,7 +137,25 @@ void RedshiftApplet::toggle()
 }
 
 void RedshiftApplet::configChanged()
-{    
+{        
+    QStringList alwaysOnActivities;
+    QStringList alwaysOffActivities;
+
+    QTreeWidget *activitiesList = m_activitiesUi.activities;
+    for (int i = 0; i < activitiesList->topLevelItemCount(); ++i) {
+        QTreeWidgetItem *item = activitiesList->topLevelItem(i);
+        KComboBox *itemCombo = static_cast<KComboBox *>(activitiesList->itemWidget(item, 1));
+        const QString act = item->data(0, Qt::UserRole).toString();
+        if (itemCombo->currentIndex() == 1) {            
+            alwaysOnActivities << act;
+        } else if (itemCombo->currentIndex() == 2) {
+            alwaysOffActivities << act;
+        }
+    }   
+    RedshiftSettings::setAlwaysOnActivities(alwaysOnActivities);
+    RedshiftSettings::setAlwaysOffActivities(alwaysOffActivities);
+    RedshiftSettings::self()->writeConfig();
+
     Plasma::Service *service = m_engine->serviceForSource("Controller");
     service->startOperationCall(service->operationDescription("restart"));
 }

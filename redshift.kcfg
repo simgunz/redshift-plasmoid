@@ -43,4 +43,12 @@
       <default>false</default>
     </entry>
   </group>
+  <group name="Activities">
+    <entry name="alwaysOnActivities" type="StringList">
+      <label>Always on activities</label>
+    </entry>
+    <entry name="alwaysOffActivities" type="StringList">
+      <label>Always off activities</label>
+    </entry>
+  </group>
 </kcfg>
