@@ -20,6 +20,8 @@
 #include "redshiftapplet.h"
 
 #include <QGraphicsLinearLayout>
+
+
 //Plasma
 #include <Plasma/Svg>
 #include <Plasma/Theme>
@@ -30,7 +32,7 @@
 //KDE
 #include <KLocale>
 #include <KConfigDialog>
-
+#include <KComboBox>
 
 #include "redshiftsettings.h"
 
@@ -80,9 +82,39 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
 
 void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 {     
-    QWidget *widget = new QWidget(parent);
-    configDialog.setupUi(widget);
-    parent->addPage(widget, RedshiftSettings::self(), i18n("General"), "redshift");    
+    QWidget *redshiftInterface = new QWidget(parent);
+    m_redshiftUi.setupUi(redshiftInterface);
+    parent->addPage(redshiftInterface, RedshiftSettings::self(), i18n("General"), "redshift");
+    
+    QWidget *activitiesInterface = new QWidget(parent);
+    m_activitiesUi.setupUi(activitiesInterface);
+    
+    Plasma::DataEngine *activities_engine = dataEngine("org.kde.activities");    
+    QStringList activities = activities_engine->sources();
+    activities.removeLast();
+    
+    QString act;
+    foreach(act,activities)
+    {
+        
+        Plasma::DataEngine::Data data = activities_engine->query(act);
+        QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi.activities);
+        KComboBox *itemCombo = new KComboBox(m_activitiesUi.activities);
+        listItem->setText(0, data["Name"].toString());
+        listItem->setIcon(0, KIcon(data["Icon"].toString()));
+        listItem->setFlags(Qt::ItemIsEnabled);
+        listItem->setData(0, Qt::UserRole, data["Name"].toString());
+
+        itemCombo->addItem(i18nc("Redshift follow global preference", "Auto"));
+        itemCombo->addItem(i18nc("Redshift is forced to be active in this activity", "Always Active"));
+        itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity", "Always Disabled"));
+        
+        itemCombo->setCurrentIndex(0);
+        
+        m_activitiesUi.activities->setItemWidget(listItem, 1, itemCombo);
+    }   
+    parent->addPage(activitiesInterface, i18n("Activities"), "preferences-activities");
+        
 }
 
 void RedshiftApplet::toggle()

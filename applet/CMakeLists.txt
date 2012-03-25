@@ -1,5 +1,6 @@
 set(redshiftapplet_SRCS redshiftapplet.cpp)
-kde4_add_ui_files(redshiftapplet_SRCS redshiftConfig.ui)
+kde4_add_ui_files(redshiftapplet_SRCS redshift.ui)
+kde4_add_ui_files(redshiftapplet_SRCS activities.ui)
 kde4_add_kcfg_files(redshiftapplet_SRCS ../redshiftsettings.kcfgc)
 
 kde4_add_plugin(plasma_applet_redshift ${redshiftapplet_SRCS})

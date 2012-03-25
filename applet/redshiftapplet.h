@@ -28,7 +28,8 @@
 #include <Plasma/IconWidget>
 #include <QGraphicsGridLayout>
 
-#include "ui_redshiftConfig.h"
+#include "ui_redshift.h"
+#include "ui_activities.h"
 
 class RedshiftApplet : public Plasma::Applet
 {
@@ -49,7 +50,8 @@ private:
     Plasma::ToolTipContent m_tooltip;
     Plasma::IconWidget *m_button;
     QGraphicsGridLayout *m_layout;
-    Ui::redshiftDialog configDialog;
+    Ui::RedshiftConfig m_redshiftUi;
+    Ui::ActivitiesConfig m_activitiesUi;
     Plasma::DataEngine *m_engine;
 };
 
