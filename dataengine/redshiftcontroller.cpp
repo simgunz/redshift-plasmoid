@@ -23,10 +23,14 @@
 #include <QThread>
 #include <QDebug>
 
-RedshiftController::RedshiftController() : m_state(Stopped)
+#include <Plasma/DataEngineManager>
+
+RedshiftController::RedshiftController() : m_state(Stopped),m_autoState(Stopped),m_forceType(0)
 {
-    m_process = new KProcess();    
+    m_process = new KProcess(); 
     readConfig();
+    Plasma::DataEngine *activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
+    activitiesEngine->connectSource("Status",this);    
 }
 
 RedshiftController::~RedshiftController()
@@ -34,39 +38,72 @@ RedshiftController::~RedshiftController()
     stop();
 }
 
+void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+{
+    m_forceType = 0;
+    RedshiftSettings::self()->readConfig();
+    const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
+    const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
+    QString currentActivity = data["Current"].toString();
+    if(alwaysOnActivities.contains(currentActivity)) {
+        m_forceType = 1;
+    } else if (alwaysOffActivities.contains(currentActivity)){
+        m_forceType = 2;
+    } else if (m_autoState == m_state){
+        qDebug() << m_autoState << "-" << m_state << "-" << m_forceType << "-" << (m_autoState == m_state);
+        qDebug() << "INNER";
+        return;
+    }
+    qDebug() << m_autoState << "-" << m_state << "-" << m_forceType << "-" << (m_autoState == m_state);
+    toggle();
+    qDebug() << m_autoState << "-" << m_state << "-" << m_forceType << "-" << (m_autoState == m_state);
+}
+
 void RedshiftController::start()
 {            
-    m_process->waitForFinished();
-    m_process->start();    
+    if(m_state == Stopped) {    
+        m_state = Running;
+        m_process->waitForFinished();
+        m_process->start();    
+    }
 }
 
 void RedshiftController::stop()
 {
-    m_process->terminate();        
+    if(m_state == Running) { 
+        m_state = Stopped;
+        m_process->terminate();
+    }
 }
 
 void RedshiftController::toggle()
 {
-    if(m_state == Stopped)
-    {
+    if(m_forceType == 1) {        
         start();
-        m_state = Running;
-        emit stateChanged(true);
-    }
-    else
-    {
+    } else if(m_forceType == 2) {
         stop();
-        m_state = Stopped;
+    } else {
+        if(m_state == Running) {    
+            stop();            
+        } else {
+            start();
+        }
+        m_autoState = m_state;
+    }
+    if(m_state == Running) {    
+        emit stateChanged(true);
+    } else {
         emit stateChanged(false);
-    }    
-    
+    }                
 }
 
 void RedshiftController::restart()
 {
     readConfig();
+    //ERRdataUpdated();
+    RedshiftState temp = m_state;
     stop();
-    if(m_state == Running)
+    if(temp == Running)
         start();
 }
 

@@ -23,15 +23,17 @@
 #include <KProcess>
 #include <QThread>
 
+#include <Plasma/DataEngine>
+
 class RedshiftController : public QThread
 {
     Q_OBJECT
     Q_ENUMS(RedshiftState)    
     
     public:
-        enum RedshiftState {
-        Running,
-        Stopped
+        enum RedshiftState {        
+        Stopped,
+        Running
         };        
         RedshiftController();
         ~RedshiftController();
@@ -42,9 +44,13 @@ class RedshiftController : public QThread
         void readConfig();
         bool autolaunch() {return m_autolaunch;}
         void autostart();
-    private:
+    public Q_SLOTS:
+        void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    private:        
         KProcess *m_process;
         RedshiftState m_state;
+        RedshiftState m_autoState;
+        int m_forceType;
         float m_latitude;
         float m_longitude;
         int m_dayTemp;
