@@ -27,12 +27,7 @@ RedshiftContainer::RedshiftContainer(QObject* parent)
 {
     setObjectName("Controller");    
     m_controller = new RedshiftController();
-    QObject::connect(m_controller,SIGNAL(stateChanged(bool)),this,SLOT(updateStatus(bool)));
-    if(m_controller->autolaunch())
-    {
-        m_controller->autostart();
-    }
-    
+    QObject::connect(m_controller,SIGNAL(stateChanged(bool)),this,SLOT(updateStatus(bool)));    
 }
 
 RedshiftContainer::~RedshiftContainer()

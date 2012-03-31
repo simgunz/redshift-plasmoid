@@ -42,9 +42,7 @@ class RedshiftController : public QThread
         void stop();
         void restart();
         void readConfig();
-        bool autolaunch() {return m_autolaunch;}
-        void autostart();
-    public Q_SLOTS:
+    private Q_SLOTS:
         void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     private:        
         KProcess *m_process;
@@ -58,8 +56,8 @@ class RedshiftController : public QThread
         float m_gammaR;
         float m_gammaG;
         float m_gammaB;
-        bool m_smooth;
-        bool m_autolaunch;
+        //bool m_smooth;
+        //bool m_autolaunch;        
         
     signals:
         void stateChanged(bool state);

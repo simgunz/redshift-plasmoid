@@ -81,7 +81,7 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
 }
 
 void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
-{     
+{             
     RedshiftSettings::self()->readConfig();
     const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
     const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
@@ -112,9 +112,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         itemCombo->addItem(i18nc("Redshift follow global preference", "Auto"));
         itemCombo->addItem(i18nc("Redshift is forced to be active in this activity", "Always Active"));
         itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity", "Always Disabled"));
-        
-        
-        
+                        
         if(alwaysOnActivities.contains(act)) {
             itemCombo->setCurrentIndex(1);
         } else if (alwaysOffActivities.contains(act)){
@@ -126,6 +124,11 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         m_activitiesUi.activities->setItemWidget(listItem, 1, itemCombo);
         connect(itemCombo, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     }   
+    m_activitiesUi.activities->resizeColumnToContents(0);
+    
+    connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
+    connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
+        
     parent->addPage(activitiesInterface, i18n("Activities"), "preferences-activities");
         
 }
@@ -136,8 +139,8 @@ void RedshiftApplet::toggle()
     service->startOperationCall(service->operationDescription("toggle"));
 }
 
-void RedshiftApplet::configChanged()
-{        
+void RedshiftApplet::configAccepted()
+{               
     QStringList alwaysOnActivities;
     QStringList alwaysOffActivities;
 
@@ -155,7 +158,10 @@ void RedshiftApplet::configChanged()
     RedshiftSettings::setAlwaysOnActivities(alwaysOnActivities);
     RedshiftSettings::setAlwaysOffActivities(alwaysOffActivities);
     RedshiftSettings::self()->writeConfig();
+}
 
+void RedshiftApplet::configChanged()
+{            
     Plasma::Service *service = m_engine->serviceForSource("Controller");
     service->startOperationCall(service->operationDescription("restart"));
 }

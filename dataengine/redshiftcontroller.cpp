@@ -27,10 +27,10 @@
 
 RedshiftController::RedshiftController() : m_state(Stopped),m_autoState(Stopped),m_forceType(0)
 {
-    m_process = new KProcess(); 
+    m_process = new KProcess();    
     readConfig();
     Plasma::DataEngine *activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
-    activitiesEngine->connectSource("Status",this);    
+    activitiesEngine->connectSource("Status",this);
 }
 
 RedshiftController::~RedshiftController()
@@ -50,17 +50,13 @@ void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::Da
     } else if (alwaysOffActivities.contains(currentActivity)){
         m_forceType = 2;
     } else if (m_autoState == m_state){
-        qDebug() << m_autoState << "-" << m_state << "-" << m_forceType << "-" << (m_autoState == m_state);
-        qDebug() << "INNER";
         return;
-    }
-    qDebug() << m_autoState << "-" << m_state << "-" << m_forceType << "-" << (m_autoState == m_state);
+    }    
     toggle();
-    qDebug() << m_autoState << "-" << m_state << "-" << m_forceType << "-" << (m_autoState == m_state);
 }
 
 void RedshiftController::start()
-{            
+{   
     if(m_state == Stopped) {    
         m_state = Running;
         m_process->waitForFinished();
@@ -77,8 +73,8 @@ void RedshiftController::stop()
 }
 
 void RedshiftController::toggle()
-{
-    if(m_forceType == 1) {        
+{    
+    if(m_forceType == 1) {
         start();
     } else if(m_forceType == 2) {
         stop();
@@ -100,20 +96,14 @@ void RedshiftController::toggle()
 void RedshiftController::restart()
 {
     readConfig();
-    //ERRdataUpdated();
     RedshiftState temp = m_state;
     stop();
     if(temp == Running)
         start();
 }
 
-void RedshiftController::autostart()
-{
-    toggle();
-}
-
 void RedshiftController::readConfig()
-{
+{    
     RedshiftSettings::self()->readConfig();
     m_latitude = RedshiftSettings::latitude();
     m_longitude = RedshiftSettings::longitude();
@@ -122,8 +112,8 @@ void RedshiftController::readConfig()
     m_gammaR = RedshiftSettings::gammaR();
     m_gammaG = RedshiftSettings::gammaG();
     m_gammaB = RedshiftSettings::gammaB();
-    m_smooth = RedshiftSettings::smooth();
-    m_autolaunch = RedshiftSettings::autolaunch();
+    //m_smooth = RedshiftSettings::smooth();
+    //m_autolaunch = RedshiftSettings::autolaunch();
     QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7")
                             .arg(m_latitude,0,'f',1)
                             .arg(m_longitude,0,'f',1)
@@ -131,7 +121,7 @@ void RedshiftController::readConfig()
                             .arg(m_gammaR,0,'f',2)
                             .arg(m_gammaG,0,'f',2)
                             .arg(m_gammaB,0,'f',2);
-    if(!m_smooth)
+    //if(!m_smooth)
         command.append(" -r");
     m_process->setShellCommand(command);
 }
