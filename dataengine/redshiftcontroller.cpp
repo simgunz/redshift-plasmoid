@@ -55,6 +55,10 @@ void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::Da
     toggle();
 }
 
+bool RedshiftController::state()
+{
+    return static_cast<bool>(m_state);
+}
 void RedshiftController::start()
 {   
     if(m_state == Stopped) {    

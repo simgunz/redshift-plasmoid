@@ -42,6 +42,7 @@ class RedshiftController : public QThread
         void stop();
         void restart();
         void readConfig();
+        bool state();
     private Q_SLOTS:
         void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     private:        
