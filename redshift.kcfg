@@ -34,6 +34,10 @@
       <label>Blue gamma correction</label>
       <default>1.00</default>
     </entry>
+    <entry name="smooth" type="Bool">
+      <label>Smooth color transition flag</label>
+      <default>true</default>
+    </entry>
   </group>
   <group name="Activities">
     <entry name="alwaysOnActivities" type="StringList">

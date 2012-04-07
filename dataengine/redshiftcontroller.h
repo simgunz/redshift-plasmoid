@@ -47,6 +47,7 @@ class RedshiftController : public QThread
         void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     private:
         KProcess *m_process;
+        KProcess *m_sigusr1;
         RedshiftState m_state;
         RedshiftState m_autoState;
         int m_forceType;
@@ -57,7 +58,7 @@ class RedshiftController : public QThread
         float m_gammaR;
         float m_gammaG;
         float m_gammaB;
-        //bool m_smooth;
+        bool m_smooth;
         //bool m_autolaunch;
 
     signals:
