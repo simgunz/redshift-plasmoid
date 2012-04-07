@@ -36,16 +36,16 @@ class RedshiftApplet : public Plasma::Applet
     Q_OBJECT
 public:
     RedshiftApplet(QObject *parent, const QVariantList &args);
-    void init();    
+    void init();
 public Q_SLOTS:
     void toggle();
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
-protected:    
+protected:
     void createConfigurationInterface(KConfigDialog *parent);
     void configChanged();
 private Q_SLOTS:
     void configAccepted();
-private:    
+private:
     KIcon m_icon;
     Plasma::Svg m_theme;
     Plasma::ToolTipContent m_tooltip;

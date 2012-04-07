@@ -25,7 +25,7 @@
 
 class RedshiftContainer : public Plasma::DataContainer
 {
-    Q_OBJECT    
+    Q_OBJECT
 
 public:
     explicit RedshiftContainer(QObject* parent = 0);

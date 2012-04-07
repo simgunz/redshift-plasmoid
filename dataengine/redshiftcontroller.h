@@ -28,13 +28,13 @@
 class RedshiftController : public QThread
 {
     Q_OBJECT
-    Q_ENUMS(RedshiftState)    
-    
+    Q_ENUMS(RedshiftState)
+
     public:
-        enum RedshiftState {        
+        enum RedshiftState {
         Stopped,
         Running
-        };        
+        };
         RedshiftController();
         ~RedshiftController();
         void start();
@@ -45,7 +45,7 @@ class RedshiftController : public QThread
         bool state();
     private Q_SLOTS:
         void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
-    private:        
+    private:
         KProcess *m_process;
         RedshiftState m_state;
         RedshiftState m_autoState;
@@ -58,8 +58,8 @@ class RedshiftController : public QThread
         float m_gammaG;
         float m_gammaB;
         //bool m_smooth;
-        //bool m_autolaunch;        
-        
+        //bool m_autolaunch;
+
     signals:
         void stateChanged(bool state);
 };

@@ -25,7 +25,7 @@
 RedshiftContainer::RedshiftContainer(QObject* parent)
     : DataContainer(parent)
 {
-    setObjectName("Controller");    
+    setObjectName("Controller");
     m_controller = new RedshiftController();
     QObject::connect(m_controller,SIGNAL(stateChanged(bool)),this,SLOT(updateStatus(bool)));
     updateStatus(m_controller->state());
@@ -35,7 +35,7 @@ RedshiftContainer::~RedshiftContainer()
     delete m_controller;
 }
 void RedshiftContainer::updateStatus(bool state)
-{        
+{
     if(state)
     {
         setData("Status","Running");
@@ -49,5 +49,5 @@ void RedshiftContainer::updateStatus(bool state)
 
 Plasma::Service* RedshiftContainer::service(QObject* parent)
 {
-    return new RedshiftService(parent, m_controller);    
+    return new RedshiftService(parent, m_controller);
 }

@@ -50,13 +50,13 @@ bool RedshiftEngine::sourceRequestEvent(const QString &name)
 }
 
 bool RedshiftEngine::updateSourceEvent(const QString &name)
-{      
+{
     return true;
 }
 
 Plasma::Service *RedshiftEngine::serviceForSource(const QString &source)
 {
-    RedshiftContainer* container = qobject_cast<RedshiftContainer*>(containerForSource(source));    
+    RedshiftContainer* container = qobject_cast<RedshiftContainer*>(containerForSource(source));
     if(container)
         return container->service();
     else
@@ -64,5 +64,5 @@ Plasma::Service *RedshiftEngine::serviceForSource(const QString &source)
 }
 
 K_EXPORT_PLASMA_DATAENGINE(timekpr,RedshiftEngine)
-  
+
 #include "redshiftengine.moc"

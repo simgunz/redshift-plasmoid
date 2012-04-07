@@ -27,7 +27,7 @@
 
 RedshiftController::RedshiftController() : m_state(Stopped),m_autoState(Stopped),m_forceType(0)
 {
-    m_process = new KProcess();    
+    m_process = new KProcess();
     readConfig();
     Plasma::DataEngine *activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
     activitiesEngine->connectSource("Status",this);
@@ -51,7 +51,7 @@ void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::Da
         m_forceType = 2;
     } else if (m_autoState == m_state){
         return;
-    }    
+    }
     toggle();
 }
 
@@ -60,41 +60,41 @@ bool RedshiftController::state()
     return static_cast<bool>(m_state);
 }
 void RedshiftController::start()
-{   
-    if(m_state == Stopped) {    
+{
+    if(m_state == Stopped) {
         m_state = Running;
         m_process->waitForFinished();
-        m_process->start();    
+        m_process->start();
     }
 }
 
 void RedshiftController::stop()
 {
-    if(m_state == Running) { 
+    if(m_state == Running) {
         m_state = Stopped;
         m_process->terminate();
     }
 }
 
 void RedshiftController::toggle()
-{    
+{
     if(m_forceType == 1) {
         start();
     } else if(m_forceType == 2) {
         stop();
     } else {
-        if(m_state == Running) {    
-            stop();            
+        if(m_state == Running) {
+            stop();
         } else {
             start();
         }
         m_autoState = m_state;
     }
-    if(m_state == Running) {    
+    if(m_state == Running) {
         emit stateChanged(true);
     } else {
         emit stateChanged(false);
-    }                
+    }
 }
 
 void RedshiftController::restart()
@@ -107,7 +107,7 @@ void RedshiftController::restart()
 }
 
 void RedshiftController::readConfig()
-{    
+{
     RedshiftSettings::self()->readConfig();
     m_latitude = RedshiftSettings::latitude();
     m_longitude = RedshiftSettings::longitude();

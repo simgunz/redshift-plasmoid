@@ -46,7 +46,7 @@ class RedshiftEngine : public Plasma::DataEngine
     protected slots:
         bool updateSourceEvent(const QString& source);
     protected:
-        bool sourceRequestEvent(const QString& name);	
+        bool sourceRequestEvent(const QString& name);
 };
 
 #endif //REDSHIFTENGINE_H

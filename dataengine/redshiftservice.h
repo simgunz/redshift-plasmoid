@@ -39,7 +39,7 @@ public:
                           QMap<QString, QVariant> &parameters);
 
 private:
-    RedshiftController *m_redshiftController;   
+    RedshiftController *m_redshiftController;
 };
 
 #endif // REDSHIFTSERVICE_H

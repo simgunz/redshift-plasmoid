@@ -1,4 +1,4 @@
-File=redshift.kcfg 
-ClassName=RedshiftSettings 
+File=redshift.kcfg
+ClassName=RedshiftSettings
 Singleton=true
 Mutators=alwaysOnActivities,alwaysOffActivities
