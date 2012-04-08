@@ -59,7 +59,7 @@ class RedshiftController : public QThread
         float m_gammaG;
         float m_gammaB;
         bool m_smooth;
-        //bool m_autolaunch;
+        bool m_autolaunch;
 
     signals:
         void stateChanged(bool state);

@@ -38,6 +38,10 @@
       <label>Smooth color transition flag</label>
       <default>true</default>
     </entry>
+    <entry name="autolaunch" type="Bool">
+      <label>Autolaunch flag</label>
+      <default>false</default>
+    </entry>
   </group>
   <group name="Activities">
     <entry name="alwaysOnActivities" type="StringList">

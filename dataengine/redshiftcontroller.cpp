@@ -31,6 +31,9 @@ RedshiftController::RedshiftController() : m_state(Stopped),m_autoState(Stopped)
     m_sigusr1 = new KProcess();
     m_sigusr1->setShellCommand("pkill -USR1 redshift");
     readConfig();
+    if(m_autolaunch) {
+        m_autoState = Running;
+    }
     Plasma::DataEngine *activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
     activitiesEngine->connectSource("Status",this);
 }
@@ -123,7 +126,7 @@ void RedshiftController::readConfig()
     m_gammaG = RedshiftSettings::gammaG();
     m_gammaB = RedshiftSettings::gammaB();
     m_smooth = RedshiftSettings::smooth();
-    //m_autolaunch = RedshiftSettings::autolaunch();
+    m_autolaunch = RedshiftSettings::autolaunch();
     QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7")
                             .arg(m_latitude,0,'f',1)
                             .arg(m_longitude,0,'f',1)
