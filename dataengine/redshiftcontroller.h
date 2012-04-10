@@ -38,19 +38,25 @@ class RedshiftController : public QThread
         RedshiftController();
         ~RedshiftController();
         void start();
-        void toggle();
+        void toggle(int from = 0);
         void stop();
         void restart();
         void readConfig();
         bool state();
     private Q_SLOTS:
         void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+        void setReadyForStart();
+        void restartStart();
     private:
+
         KProcess *m_process;
-        KProcess *m_sigusr1;
         RedshiftState m_state;
         RedshiftState m_autoState;
+        QString m_currentActivity;
         int m_forceType;
+        bool m_readyForStart;
+        bool m_restarting;
+        Plasma::DataEngine *m_activitiesEngine;
         float m_latitude;
         float m_longitude;
         int m_dayTemp;

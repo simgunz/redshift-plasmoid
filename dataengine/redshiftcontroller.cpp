@@ -20,22 +20,27 @@
 #include "redshiftsettings.h"
 #include "redshiftcontroller.h"
 
-#include <QThread>
-#include <QDebug>
+#include <signal.h>
 
+#include <QThread>
+#include <QProcess>
+#include <QDebug>
+#include <QDBusConnection>
+#include <QDBusMessage>
 #include <Plasma/DataEngineManager>
 
-RedshiftController::RedshiftController() : m_state(Stopped),m_autoState(Stopped),m_forceType(0)
+RedshiftController::RedshiftController() : m_state(Stopped),m_autoState(Stopped),m_forceType(0),m_readyForStart(0),m_restarting(false)
 {
     m_process = new KProcess();
-    m_sigusr1 = new KProcess();
-    m_sigusr1->setShellCommand("pkill -USR1 redshift");
-    readConfig();
+    //readConfig();
     if(m_autolaunch) {
         m_autoState = Running;
     }
-    Plasma::DataEngine *activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
-    activitiesEngine->connectSource("Status",this);
+    connect(m_process,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(restartStart()));
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
+    m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
+    m_activitiesEngine->connectSource("Status",this);
 }
 
 RedshiftController::~RedshiftController()
@@ -43,27 +48,30 @@ RedshiftController::~RedshiftController()
     m_process->terminate();
 }
 
+void RedshiftController::setReadyForStart()
+{
+    qDebug()<<"READYFORSTARTIN";
+    if(!m_readyForStart) {
+        qDebug()<<"READYFORSTARTINNNER";
+        m_readyForStart = true;
+        if(m_forceType == 2 || m_autolaunch) {
+            toggle();
+        }
+    }
+}
+
 void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    m_forceType = 0;
-    RedshiftSettings::self()->readConfig();
-    const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
-    const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
-    QString currentActivity = data["Current"].toString();
-    if(alwaysOnActivities.contains(currentActivity)) {
-        m_forceType = 1;
-    } else if (alwaysOffActivities.contains(currentActivity)){
-        m_forceType = 2;
-    } else if (m_autoState == m_state){
-        return;
-    }
-    toggle();
+    m_currentActivity = data["Current"].toString();
+    readConfig();
+    toggle(1);
 }
 
 bool RedshiftController::state()
 {
     return static_cast<bool>(m_state);
 }
+
 void RedshiftController::start()
 {
     if(m_state == Stopped) {
@@ -71,7 +79,7 @@ void RedshiftController::start()
         if(!m_process->state()) {
             m_process->start();
         } else {
-            m_sigusr1->start();
+            kill(m_process->pid(),SIGUSR1);
         }
     }
 }
@@ -80,38 +88,64 @@ void RedshiftController::stop()
 {
     if(m_state == Running) {
         m_state = Stopped;
-        m_sigusr1->start();
+        kill(m_process->pid(),SIGUSR1);
     }
 }
 
-void RedshiftController::toggle()
+void RedshiftController::toggle(int from)
 {
-    if(m_forceType == 1) {
-        start();
-    } else if(m_forceType == 2) {
-        stop();
-    } else {
-        if(m_state == Running) {
+    if(m_readyForStart) {
+        qDebug() << "TOGGLEIN";
+        qDebug() << m_restarting;
+        qDebug() << (m_autoState == m_state);
+        qDebug() << (m_forceType);
+        if(m_forceType == 1) {
+            start();
+        } else if(m_forceType == 2) {
             stop();
         } else {
-            start();
+            if(!(m_autoState == m_state && from)) {
+                if(m_state == Running) {
+                    stop();
+                } else {
+                    start();
+                    qDebug()<<"RSTART";
+                }
+                m_autoState = m_state;
+            }
         }
-        m_autoState = m_state;
-    }
-    if(m_state == Running) {
-        emit stateChanged(true);
+        if(m_state == Running) {
+            emit stateChanged(true);
+        } else {
+            emit stateChanged(false);
+        }
     } else {
-        emit stateChanged(false);
+        qDebug() << "TOGGLEELSE";
+        QDBusMessage message = QDBusMessage::createSignal("/", "org.kde.redshift", "readyCheck");
+        QDBusConnection::sessionBus().send(message);
     }
 }
 
 void RedshiftController::restart()
 {
     readConfig();
-    m_process->terminate();
-    if(m_state == Running) {
+    m_state = Stopped;
+    m_restarting = true;
+    if(m_process->state()) {
+        m_process->terminate();
+    } else {
+        restartStart();
+    }
+}
+
+void RedshiftController::restartStart()
+{
+    qDebug()<<"STARTIN";
+    if(m_restarting) {
+        qDebug()<<"STARTINNER";
         m_process->waitForFinished();
-        m_process->start();
+        m_restarting = false;
+        toggle(2);
     }
 }
 
@@ -137,5 +171,14 @@ void RedshiftController::readConfig()
     if(!m_smooth)
         command.append(" -r");
     m_process->setShellCommand(command);
+
+    m_forceType = 0;
+    const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
+    const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
+    if(alwaysOnActivities.contains(m_currentActivity)) {
+        m_forceType = 1;
+    } else if (alwaysOffActivities.contains(m_currentActivity)){
+        m_forceType = 2;
+    }
 }
 
