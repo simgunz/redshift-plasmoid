@@ -32,7 +32,6 @@
 RedshiftController::RedshiftController() : m_state(Stopped),m_autoState(Stopped),m_forceType(0),m_readyForStart(0),m_restarting(false)
 {
     m_process = new KProcess();
-    //readConfig();
     if(m_autolaunch) {
         m_autoState = Running;
     }
@@ -50,9 +49,7 @@ RedshiftController::~RedshiftController()
 
 void RedshiftController::setReadyForStart()
 {
-    qDebug()<<"READYFORSTARTIN";
     if(!m_readyForStart) {
-        qDebug()<<"READYFORSTARTINNNER";
         m_readyForStart = true;
         if(m_forceType == 2 || m_autolaunch) {
             toggle();
@@ -95,10 +92,6 @@ void RedshiftController::stop()
 void RedshiftController::toggle(int from)
 {
     if(m_readyForStart) {
-        qDebug() << "TOGGLEIN";
-        qDebug() << m_restarting;
-        qDebug() << (m_autoState == m_state);
-        qDebug() << (m_forceType);
         if(m_forceType == 1) {
             start();
         } else if(m_forceType == 2) {
@@ -109,7 +102,6 @@ void RedshiftController::toggle(int from)
                     stop();
                 } else {
                     start();
-                    qDebug()<<"RSTART";
                 }
                 m_autoState = m_state;
             }
@@ -120,7 +112,6 @@ void RedshiftController::toggle(int from)
             emit stateChanged(false);
         }
     } else {
-        qDebug() << "TOGGLEELSE";
         QDBusMessage message = QDBusMessage::createSignal("/", "org.kde.redshift", "readyCheck");
         QDBusConnection::sessionBus().send(message);
     }
@@ -140,9 +131,7 @@ void RedshiftController::restart()
 
 void RedshiftController::restartStart()
 {
-    qDebug()<<"STARTIN";
     if(m_restarting) {
-        qDebug()<<"STARTINNER";
         m_process->waitForFinished();
         m_restarting = false;
         toggle(2);
@@ -181,4 +170,3 @@ void RedshiftController::readConfig()
         m_forceType = 2;
     }
 }
-

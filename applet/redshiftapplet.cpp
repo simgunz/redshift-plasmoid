@@ -65,14 +65,11 @@ void RedshiftApplet::init()
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    if(data["Status"].toString() == "Running")
-    {
+    if(data["Status"].toString() == "Running") {
         m_button->setIcon(KIcon("redshift-status-on"));
         m_tooltip.setSubText(i18n("Click to toggle it off"));
         m_tooltip.setImage(KIcon("redshift-status-on"));
-    }
-    else
-    {
+    } else {
         m_button->setIcon(KIcon("redshift-status-off"));
         m_tooltip.setSubText(i18n("Click to toggle it on"));
         m_tooltip.setImage(KIcon("redshift-status-off"));
@@ -98,9 +95,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     activities.removeLast();
 
     QString act;
-    foreach(act,activities)
-    {
-
+    foreach(act,activities) {
         Plasma::DataEngine::Data data = activities_engine->query(act);
         QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi.activities);
         KComboBox *itemCombo = new KComboBox(m_activitiesUi.activities);
@@ -130,7 +125,6 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 
     parent->addPage(activitiesInterface, i18n("Activities"), "preferences-activities");
-
 }
 
 void RedshiftApplet::toggle()

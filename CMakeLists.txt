@@ -6,6 +6,6 @@ include_directories(${QT_INCLUDE} ${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(dataengine)
 add_subdirectory(applet)
-add_subdirectory(signalEmitter)
+add_subdirectory(redshiftAutostartEnabler)
 
 install(FILES redshift.kcfg DESTINATION ${KCFG_INSTALL_DIR})

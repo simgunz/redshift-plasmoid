@@ -27,7 +27,6 @@
 
 using namespace Plasma;
 
-
 class RedshiftService : public Plasma::Service
 {
     Q_OBJECT
