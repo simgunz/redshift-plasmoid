@@ -5,6 +5,6 @@ Icon=redshift
 Type=Application
 Terminal=false
 X-KDE-autostart-after=panel
-OnlyShowIn=KDE
+OnlyShowIn=KDE;
 
 

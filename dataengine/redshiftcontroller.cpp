@@ -17,8 +17,8 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
 **************************************************************************/
 
-#include "redshiftsettings.h"
 #include "redshiftcontroller.h"
+#include "redshiftsettings.h"
 
 #include <signal.h>
 

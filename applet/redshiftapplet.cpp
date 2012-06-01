@@ -85,7 +85,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 
     QWidget *redshiftInterface = new QWidget(parent);
     m_redshiftUi.setupUi(redshiftInterface);
-    parent->addPage(redshiftInterface, RedshiftSettings::self(), i18n("General"), "redshift");
+    parent->addPage(redshiftInterface, RedshiftSettings::self(), i18nc("Redshift main configuration page","General"), "redshift");
 
     QWidget *activitiesInterface = new QWidget(parent);
     m_activitiesUi.setupUi(activitiesInterface);
@@ -104,7 +104,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         listItem->setFlags(Qt::ItemIsEnabled);
         listItem->setData(0, Qt::UserRole, act);
 
-        itemCombo->addItem(i18nc("Redshift follow global preference", "Auto"));
+        itemCombo->addItem(i18nc("Redshift state is set manually in this activity", "Manual"));
         itemCombo->addItem(i18nc("Redshift is forced to be active in this activity", "Always Active"));
         itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity", "Always Disabled"));
 
@@ -124,7 +124,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 
-    parent->addPage(activitiesInterface, i18n("Activities"), "preferences-activities");
+    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page","Activities"), "preferences-activities");
 }
 
 void RedshiftApplet::toggle()

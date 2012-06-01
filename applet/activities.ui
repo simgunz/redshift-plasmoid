@@ -30,12 +30,12 @@
      </attribute>
      <column>
       <property name="text">
-       <string>Activities</string>
+       <string>Activity</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>State</string>
+       <string comment="Redshift operation mode">Mode</string>
       </property>
      </column>
     </widget>
