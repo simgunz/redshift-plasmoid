@@ -17,6 +17,14 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
 **************************************************************************/
 
+/** This application is launched during the autostart phase after the login and
+ * it sends a signal to the redshift controller to enable it. This prevent the
+ * controller to launch redshift too early during the login driving to an error state.
+ * If the controller is launched after the login (e.g. when the plasmoid is placed on
+ * the desktop for the first time), the controller probes this application that will
+ * respond with the enable signal.
+ */
+
 #include <QtCore/QCoreApplication>
 #include <QDBusMessage>
 #include <QDBusConnection>

@@ -26,10 +26,6 @@ RedshiftService::RedshiftService(QObject *parent, RedshiftController *controller
     setName("redshift");
 }
 
-RedshiftService::~RedshiftService()
-{
-}
-
 ServiceJob *RedshiftService::createJob(const QString &operation, QMap<QString, QVariant> &parameters)
 {
     return new RedshiftJob(m_redshiftController, operation, parameters, this);

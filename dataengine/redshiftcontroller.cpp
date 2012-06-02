@@ -29,11 +29,15 @@
 #include <QDBusMessage>
 #include <Plasma/DataEngineManager>
 
-RedshiftController::RedshiftController() : m_state(Stopped), m_autoState(Stopped), m_runMode(Manual), m_readyForStart(0), m_restarting(false)
+RedshiftController::RedshiftController()
+    : m_state(Stopped),
+      m_manualState(Stopped),
+      m_runMode(Manual),
+      m_readyForStart(false)
 {
     m_process = new KProcess();
     if (m_autolaunch) {
-        m_autoState = Running;
+        m_manualState = Running;
     }
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
@@ -44,21 +48,6 @@ RedshiftController::RedshiftController() : m_state(Stopped), m_autoState(Stopped
 RedshiftController::~RedshiftController()
 {
     m_process->terminate();
-}
-
-void RedshiftController::setReadyForStart()
-{
-    if (!m_readyForStart) {
-        m_readyForStart = true;
-        applyChanges();
-    }
-}
-
-void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
-{
-    m_currentActivity = data["Current"].toString();
-    readConfig();
-    applyChanges();
 }
 
 bool RedshiftController::state()
@@ -86,25 +75,24 @@ void RedshiftController::stop()
     }
 }
 
-void RedshiftController::toggle()
-{
-    applyChanges(true);
-}
-
 void RedshiftController::applyChanges(bool toggle)
 {
+    // If m_readyForStart is false the application sends a probe signal to check
+    // if it can be enabled. This prevent to run redshift too early in the login phase.
     if (m_readyForStart) {
         if (m_runMode == AlwaysOn) {
             start();
         } else if (m_runMode == AlwaysOff) {
             stop();
-        } else if (toggle || (m_autoState != m_state)) {
+        // If toggle is true the next section perform a toggle of the state whereas
+        // if toggle is false it realign the real state with the manual state
+        } else if (toggle || (m_manualState != m_state)) {
             if (m_state == Running) {
                 stop();
             } else {
                 start();
             }
-            m_autoState = m_state;
+            m_manualState = m_state;
         }
         if (m_state == Running) {
             emit stateChanged(true);
@@ -117,14 +105,35 @@ void RedshiftController::applyChanges(bool toggle)
     }
 }
 
+void RedshiftController::setReadyForStart()
+{
+    if (!m_readyForStart) {
+        m_readyForStart = true;
+        applyChanges();
+    }
+}
+
+void RedshiftController::toggle()
+{
+    applyChanges(true);
+}
+
 void RedshiftController::restart()
 {
     readConfig();
     m_state = Stopped;
+    // If the process is running it needs to be stopped and launched again with the new parameters
     if (m_process->state()) {
         m_process->terminate();
     }
     m_process->waitForFinished();
+    applyChanges();
+}
+
+void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+{
+    m_currentActivity = data["Current"].toString();
+    readConfig();
     applyChanges();
 }
 

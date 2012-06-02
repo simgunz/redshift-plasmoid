@@ -28,9 +28,8 @@ class RedshiftJob : public Plasma::ServiceJob
     Q_OBJECT
 
 public:
-    RedshiftJob(RedshiftController *controller, const QString &operation, QMap<QString, QVariant> &parameters, QObject *parent = 0);
-    ~RedshiftJob();
-
+    RedshiftJob(RedshiftController *controller, const QString &operation, QMap<QString,
+                QVariant> &parameters,QObject *parent = 0);
 protected:
     void start();
 private:

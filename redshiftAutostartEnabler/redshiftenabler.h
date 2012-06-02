@@ -23,10 +23,6 @@
 #include <QDBusMessage>
 #include <QDBusConnection>
 
-/**
- * Initializes the variables upon construction.
- */
-
 class RedshiftEnabler : public QObject
 {
     Q_OBJECT

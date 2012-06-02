@@ -19,13 +19,10 @@
 
 #include "redshiftjob.h"
 
-RedshiftJob::RedshiftJob(RedshiftController *controller, const QString &operation, QMap<QString, QVariant> &parameters, QObject *parent) :
-    ServiceJob(parent->objectName(), operation, parameters, parent),
-    m_redshiftController(controller)
-{
-}
-
-RedshiftJob::~RedshiftJob()
+RedshiftJob::RedshiftJob(RedshiftController *controller, const QString &operation,
+                         QMap<QString, QVariant> &parameters, QObject *parent)
+    : ServiceJob(parent->objectName(), operation, parameters, parent),
+      m_redshiftController(controller)
 {
 }
 

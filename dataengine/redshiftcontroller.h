@@ -53,12 +53,15 @@ private:
     void stop();
     void readConfig();
     KProcess *m_process;
+    /** Real redshift state */
     RedshiftState m_state;
-    RedshiftState m_autoState;
+    /** Manual mode redshift state, can be different from the real
+     * state if the mode is different from manual
+     */
+    RedshiftState m_manualState;
     QString m_currentActivity;
     int m_runMode;
     bool m_readyForStart;
-    bool m_restarting;
     Plasma::DataEngine *m_activitiesEngine;
     float m_latitude;
     float m_longitude;

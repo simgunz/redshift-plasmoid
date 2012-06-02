@@ -21,15 +21,12 @@
 
 #include <QGraphicsLinearLayout>
 
-
-//Plasma
 #include <Plasma/Svg>
 #include <Plasma/Theme>
 #include <Plasma/DataEngine>
 #include <Plasma/ToolTipContent>
 #include <Plasma/ToolTipManager>
 
-//KDE
 #include <KLocale>
 #include <KConfigDialog>
 #include <KComboBox>
@@ -38,8 +35,8 @@
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
-      m_theme(this),
-      m_icon("redshift")
+      m_icon("redshift"),
+      m_theme(this)
 {
     setBackgroundHints(StandardBackground);
     setAspectRatioMode(Plasma::ConstrainedSquare);
@@ -65,16 +62,18 @@ void RedshiftApplet::init()
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    if (data["Status"].toString() == "Running") {
-        m_button->setIcon(KIcon("redshift-status-on"));
-        m_tooltip.setSubText(i18n("Click to toggle it off"));
-        m_tooltip.setImage(KIcon("redshift-status-on"));
-    } else {
-        m_button->setIcon(KIcon("redshift-status-off"));
-        m_tooltip.setSubText(i18n("Click to toggle it on"));
-        m_tooltip.setImage(KIcon("redshift-status-off"));
+    if (sourceName == "Controller") {
+        if (data["Status"].toString() == "Running") {
+            m_button->setIcon(KIcon("redshift-status-on"));
+            m_tooltip.setSubText(i18n("Click to toggle it off"));
+            m_tooltip.setImage(KIcon("redshift-status-on"));
+        } else {
+            m_button->setIcon(KIcon("redshift-status-off"));
+            m_tooltip.setSubText(i18n("Click to toggle it on"));
+            m_tooltip.setImage(KIcon("redshift-status-off"));
+        }
+        Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
     }
-    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
 }
 
 void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
@@ -85,7 +84,8 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 
     QWidget *redshiftInterface = new QWidget(parent);
     m_redshiftUi.setupUi(redshiftInterface);
-    parent->addPage(redshiftInterface, RedshiftSettings::self(), i18nc("Redshift main configuration page", "General"), "redshift");
+    parent->addPage(redshiftInterface, RedshiftSettings::self(),
+                    i18nc("Redshift main configuration page","General"), "redshift");
 
     QWidget *activitiesInterface = new QWidget(parent);
     m_activitiesUi.setupUi(activitiesInterface);
@@ -124,7 +124,8 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 
-    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page", "Activities"), "preferences-activities");
+    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page", "Activities"),
+                    "preferences-activities");
 }
 
 void RedshiftApplet::toggle()

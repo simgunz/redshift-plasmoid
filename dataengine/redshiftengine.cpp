@@ -26,15 +26,6 @@ RedshiftEngine::RedshiftEngine(QObject* parent, const QVariantList& args)
     Q_UNUSED(args)
 }
 
-RedshiftEngine::~RedshiftEngine()
-{
-}
-
-void RedshiftEngine::init()
-{
-
-}
-
 bool RedshiftEngine::sourceRequestEvent(const QString &name)
 {
     if (name == "Controller") {
@@ -45,11 +36,6 @@ bool RedshiftEngine::sourceRequestEvent(const QString &name)
         return true;
     }
     return false;
-}
-
-bool RedshiftEngine::updateSourceEvent(const QString &name)
-{
-    return true;
 }
 
 Plasma::Service *RedshiftEngine::serviceForSource(const QString &source)

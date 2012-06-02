@@ -20,7 +20,6 @@
 #ifndef REDSHIFTSERVICE_H
 #define REDSHIFTSERVICE_H
 
-
 #include <Plasma/Service>
 #include <Plasma/ServiceJob>
 #include "redshiftcontroller.h"
@@ -33,7 +32,6 @@ class RedshiftService : public Plasma::Service
 
 public:
     RedshiftService(QObject *parent, RedshiftController *controller);
-    ~RedshiftService();
     ServiceJob *createJob(const QString &operation,
                           QMap<QString, QVariant> &parameters);
 
