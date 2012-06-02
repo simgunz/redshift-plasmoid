@@ -21,7 +21,7 @@
 #include "redshiftjob.h"
 
 RedshiftService::RedshiftService(QObject *parent, RedshiftController *controller)
-        : m_redshiftController(controller)
+    : m_redshiftController(controller)
 {
     setName("redshift");
 }

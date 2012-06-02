@@ -38,8 +38,8 @@
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
-    m_theme(this),
-    m_icon("redshift")
+      m_theme(this),
+      m_icon("redshift")
 {
     setBackgroundHints(StandardBackground);
     setAspectRatioMode(Plasma::ConstrainedSquare);
@@ -51,21 +51,21 @@ void RedshiftApplet::init()
     m_tooltip.setMainText(i18n("Redshift"));
     m_tooltip.setSubText(i18n("Click to toggle it on"));
     m_tooltip.setImage(KIcon("redshift-status-off"));
-    Plasma::ToolTipManager::self()->setContent(this,m_tooltip);
+    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
 
     m_button = new Plasma::IconWidget(this);
     m_button->setIcon(KIcon("redshift-status-off"));
     m_layout = new QGraphicsGridLayout(this);
-    m_layout->setContentsMargins(0,0,0,0);
-    m_layout->addItem(m_button,0,0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->addItem(m_button, 0, 0);
     m_engine = dataEngine("redshift");
-    m_engine->connectSource("Controller",this);
-    connect(m_button,SIGNAL(clicked()),this,SLOT(toggle()));
+    m_engine->connectSource("Controller", this);
+    connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
 }
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    if(data["Status"].toString() == "Running") {
+    if (data["Status"].toString() == "Running") {
         m_button->setIcon(KIcon("redshift-status-on"));
         m_tooltip.setSubText(i18n("Click to toggle it off"));
         m_tooltip.setImage(KIcon("redshift-status-on"));
@@ -74,7 +74,7 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
         m_tooltip.setSubText(i18n("Click to toggle it on"));
         m_tooltip.setImage(KIcon("redshift-status-off"));
     }
-    Plasma::ToolTipManager::self()->setContent(this,m_tooltip);
+    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
 }
 
 void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
@@ -85,7 +85,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 
     QWidget *redshiftInterface = new QWidget(parent);
     m_redshiftUi.setupUi(redshiftInterface);
-    parent->addPage(redshiftInterface, RedshiftSettings::self(), i18nc("Redshift main configuration page","General"), "redshift");
+    parent->addPage(redshiftInterface, RedshiftSettings::self(), i18nc("Redshift main configuration page", "General"), "redshift");
 
     QWidget *activitiesInterface = new QWidget(parent);
     m_activitiesUi.setupUi(activitiesInterface);
@@ -95,7 +95,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     activities.removeLast();
 
     QString act;
-    foreach(act,activities) {
+    foreach(act, activities) {
         Plasma::DataEngine::Data data = activities_engine->query(act);
         QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi.activities);
         KComboBox *itemCombo = new KComboBox(m_activitiesUi.activities);
@@ -108,9 +108,9 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         itemCombo->addItem(i18nc("Redshift is forced to be active in this activity", "Always Active"));
         itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity", "Always Disabled"));
 
-        if(alwaysOnActivities.contains(act)) {
+        if (alwaysOnActivities.contains(act)) {
             itemCombo->setCurrentIndex(1);
-        } else if (alwaysOffActivities.contains(act)){
+        } else if (alwaysOffActivities.contains(act)) {
             itemCombo->setCurrentIndex(2);
         } else {
             itemCombo->setCurrentIndex(0);
@@ -124,7 +124,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 
-    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page","Activities"), "preferences-activities");
+    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page", "Activities"), "preferences-activities");
 }
 
 void RedshiftApplet::toggle()

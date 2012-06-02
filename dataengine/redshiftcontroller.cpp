@@ -29,16 +29,16 @@
 #include <QDBusMessage>
 #include <Plasma/DataEngineManager>
 
-RedshiftController::RedshiftController() : m_state(Stopped),m_autoState(Stopped),m_runMode(Manual),m_readyForStart(0),m_restarting(false)
+RedshiftController::RedshiftController() : m_state(Stopped), m_autoState(Stopped), m_runMode(Manual), m_readyForStart(0), m_restarting(false)
 {
     m_process = new KProcess();
-    if(m_autolaunch) {
+    if (m_autolaunch) {
         m_autoState = Running;
     }
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
     m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
-    m_activitiesEngine->connectSource("Status",this);
+    m_activitiesEngine->connectSource("Status", this);
 }
 
 RedshiftController::~RedshiftController()
@@ -48,7 +48,7 @@ RedshiftController::~RedshiftController()
 
 void RedshiftController::setReadyForStart()
 {
-    if(!m_readyForStart) {
+    if (!m_readyForStart) {
         m_readyForStart = true;
         applyChanges();
     }
@@ -68,21 +68,21 @@ bool RedshiftController::state()
 
 void RedshiftController::start()
 {
-    if(m_state == Stopped) {
+    if (m_state == Stopped) {
         m_state = Running;
-        if(!m_process->state()) {
+        if (!m_process->state()) {
             m_process->start();
         } else {
-            kill(m_process->pid(),SIGUSR1);
+            kill(m_process->pid(), SIGUSR1);
         }
     }
 }
 
 void RedshiftController::stop()
 {
-    if(m_state == Running) {
+    if (m_state == Running) {
         m_state = Stopped;
-        kill(m_process->pid(),SIGUSR1);
+        kill(m_process->pid(), SIGUSR1);
     }
 }
 
@@ -93,20 +93,20 @@ void RedshiftController::toggle()
 
 void RedshiftController::applyChanges(bool toggle)
 {
-    if(m_readyForStart) {
-        if(m_runMode == AlwaysOn) {
+    if (m_readyForStart) {
+        if (m_runMode == AlwaysOn) {
             start();
-        } else if(m_runMode == AlwaysOff) {
+        } else if (m_runMode == AlwaysOff) {
             stop();
-        } else if(toggle || (m_autoState != m_state)) {
-            if(m_state == Running) {
+        } else if (toggle || (m_autoState != m_state)) {
+            if (m_state == Running) {
                 stop();
             } else {
                 start();
             }
             m_autoState = m_state;
         }
-        if(m_state == Running) {
+        if (m_state == Running) {
             emit stateChanged(true);
         } else {
             emit stateChanged(false);
@@ -121,7 +121,7 @@ void RedshiftController::restart()
 {
     readConfig();
     m_state = Stopped;
-    if(m_process->state()) {
+    if (m_process->state()) {
         m_process->terminate();
     }
     m_process->waitForFinished();
@@ -141,22 +141,24 @@ void RedshiftController::readConfig()
     m_smooth = RedshiftSettings::smooth();
     m_autolaunch = RedshiftSettings::autolaunch();
     QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7")
-                            .arg(m_latitude,0,'f',1)
-                            .arg(m_longitude,0,'f',1)
-                            .arg(m_dayTemp).arg(m_nightTemp)
-                            .arg(m_gammaR,0,'f',2)
-                            .arg(m_gammaG,0,'f',2)
-                            .arg(m_gammaB,0,'f',2);
-    if(!m_smooth)
+                      .arg(m_latitude, 0, 'f', 1)
+                      .arg(m_longitude, 0, 'f', 1)
+                      .arg(m_dayTemp).arg(m_nightTemp)
+                      .arg(m_gammaR, 0, 'f', 2)
+                      .arg(m_gammaG, 0, 'f', 2)
+                      .arg(m_gammaB, 0, 'f', 2);
+    if (!m_smooth) {
         command.append(" -r");
+    }
+
     m_process->setShellCommand(command);
 
     m_runMode = Manual;
     const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
     const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
-    if(alwaysOnActivities.contains(m_currentActivity)) {
+    if (alwaysOnActivities.contains(m_currentActivity)) {
         m_runMode = AlwaysOn;
-    } else if (alwaysOffActivities.contains(m_currentActivity)){
+    } else if (alwaysOffActivities.contains(m_currentActivity)) {
         m_runMode = AlwaysOff;
     }
 }

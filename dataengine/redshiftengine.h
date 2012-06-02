@@ -38,15 +38,15 @@ class RedshiftEngine : public Plasma::DataEngine
 {
     Q_OBJECT
 
-    public:
-        RedshiftEngine(QObject* parent, const QVariantList& args);
-        ~RedshiftEngine();
-        Plasma::Service *serviceForSource(const QString &source);
-        void init();
-    protected slots:
-        bool updateSourceEvent(const QString& source);
-    protected:
-        bool sourceRequestEvent(const QString& name);
+public:
+    RedshiftEngine(QObject* parent, const QVariantList& args);
+    ~RedshiftEngine();
+    Plasma::Service *serviceForSource(const QString &source);
+    void init();
+protected slots:
+    bool updateSourceEvent(const QString& source);
+protected:
+    bool sourceRequestEvent(const QString& name);
 };
 
 #endif //REDSHIFTENGINE_H

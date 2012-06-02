@@ -37,11 +37,9 @@ void RedshiftEngine::init()
 
 bool RedshiftEngine::sourceRequestEvent(const QString &name)
 {
-    if(name == "Controller")
-    {
+    if (name == "Controller") {
         Plasma::DataContainer *container = containerForSource("Controller");
-        if(!container)
-        {
+        if (!container) {
             addSource(new RedshiftContainer(this));
         }
         return true;
@@ -57,12 +55,13 @@ bool RedshiftEngine::updateSourceEvent(const QString &name)
 Plasma::Service *RedshiftEngine::serviceForSource(const QString &source)
 {
     RedshiftContainer* container = qobject_cast<RedshiftContainer*>(containerForSource(source));
-    if(container)
+    if (container) {
         return container->service();
-    else
+    } else {
         return DataEngine::serviceForSource(source);
+    }
 }
 
-K_EXPORT_PLASMA_DATAENGINE(timekpr,RedshiftEngine)
+K_EXPORT_PLASMA_DATAENGINE(timekpr, RedshiftEngine)
 
 #include "redshiftengine.moc"
