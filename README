@@ -16,3 +16,6 @@ cd build
 cmake -DCMAKE_INSTALL_PREFIX=$(kde4-config --prefix) ..
 make
 sudo make install
+
+After install, reboot or run redshiftautostart manually
+to start using the plasmoid.
