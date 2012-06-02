@@ -24,21 +24,17 @@
 
 #include <QThread>
 #include <QProcess>
-#include <QDebug>
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <Plasma/DataEngineManager>
 
 RedshiftController::RedshiftController()
     : m_state(Stopped),
-      m_manualState(Stopped),
+      m_manualState(NotSetted),
       m_runMode(Manual),
       m_readyForStart(false)
 {
     m_process = new KProcess();
-    if (m_autolaunch) {
-        m_manualState = Running;
-    }
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
     m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
@@ -169,5 +165,12 @@ void RedshiftController::readConfig()
         m_runMode = AlwaysOn;
     } else if (alwaysOffActivities.contains(m_currentActivity)) {
         m_runMode = AlwaysOff;
+    }
+    if (m_manualState == NotSetted) {
+        if (m_autolaunch) {
+            m_manualState = Running;
+        } else {
+            m_manualState = Stopped;
+        }
     }
 }

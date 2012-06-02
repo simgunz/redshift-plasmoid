@@ -31,13 +31,14 @@ class RedshiftController : public QThread
 
 public:
     enum RedshiftState {
+        NotSetted,
         Stopped,
         Running
     };
     enum RunMode {
         Manual,
         AlwaysOn,
-        AlwaysOff
+        AlwaysOff,
     };
     RedshiftController();
     ~RedshiftController();
