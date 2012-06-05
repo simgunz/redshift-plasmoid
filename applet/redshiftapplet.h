@@ -40,6 +40,7 @@ public:
 public Q_SLOTS:
     void toggle();
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    QList<QAction*> contextualActions();
 protected:
     void createConfigurationInterface(KConfigDialog *parent);
     void configChanged();

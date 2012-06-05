@@ -58,6 +58,13 @@ void RedshiftApplet::init()
     m_engine = dataEngine("redshift");
     m_engine->connectSource("Controller", this);
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
+
+    QAction *action = new QAction(this);
+    //action->setToolTip(i18nc("tooltip on the config button in the popup", "Configure Power Management..."));
+    action->setIcon(KIcon("system-reboot"));
+    action->setText(i18n("Restart Redshift"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(configChanged()));
+    addAction("restart_redshift", action);
 }
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
@@ -159,6 +166,14 @@ void RedshiftApplet::configChanged()
 {
     Plasma::Service *service = m_engine->serviceForSource("Controller");
     service->startOperationCall(service->operationDescription("restart"));
+}
+
+QList<QAction*> RedshiftApplet::contextualActions()
+{
+    QList<QAction *> rv;
+    QAction *act = action("restart_redshift");
+    rv << act;
+    return rv;
 }
 
 K_EXPORT_PLASMA_APPLET(redshift, RedshiftApplet)
