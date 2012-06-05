@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QDBusConnection>
 #include <QDBusMessage>
+
 #include <Plasma/DataEngineManager>
 
 RedshiftController::RedshiftController()
@@ -39,6 +40,7 @@ RedshiftController::RedshiftController()
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
     m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
     m_activitiesEngine->connectSource("Status", this);
+    dataUpdated("Status", m_activitiesEngine->query("Status"));
 }
 
 RedshiftController::~RedshiftController()
