@@ -67,7 +67,9 @@ void RedshiftController::stop()
 {
     if (m_state == Running) {
         m_state = Stopped;
-        kill(m_process->pid(), SIGUSR1);
+        if (m_process->state()) {
+            kill(m_process->pid(), SIGUSR1);
+        }
     }
 }
 
