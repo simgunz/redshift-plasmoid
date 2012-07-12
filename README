@@ -7,7 +7,7 @@ Simone Gaiarin <simgunz AT gmail DOT com>
 Code under GPLv3 license (see COPYING)
 
 Requires:
-KDE SC 4.x
+KDE SC 4.x (kde-workspace-dev package on Kubuntu)
 Redshift
 
 How to install:
