@@ -42,6 +42,10 @@
       <label>Autolaunch flag</label>
       <default>false</default>
     </entry>
+    <entry name="method" type="Int">
+        <label>Color adjustment method</label>
+        <default>0</default>
+    </entry>
   </group>
   <group name="Activities">
     <entry name="alwaysOnActivities" type="StringList">

@@ -73,6 +73,7 @@ private:
     float m_gammaB;
     bool m_smooth;
     bool m_autolaunch;
+    int m_method;
 
 signals:
     void stateChanged(bool state);

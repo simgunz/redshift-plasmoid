@@ -149,6 +149,7 @@ void RedshiftController::readConfig()
     m_gammaB = RedshiftSettings::gammaB();
     m_smooth = RedshiftSettings::smooth();
     m_autolaunch = RedshiftSettings::autolaunch();
+    m_method = RedshiftSettings::method();
     QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7")
                       .arg(m_latitude, 0, 'f', 1)
                       .arg(m_longitude, 0, 'f', 1)
@@ -158,6 +159,12 @@ void RedshiftController::readConfig()
                       .arg(m_gammaB, 0, 'f', 2);
     if (!m_smooth) {
         command.append(" -r");
+    }
+
+    if (m_method == 1) {
+        command.append(" -m randr");
+    } else if (m_method == 2) {
+        command.append(" -m vidmode");
     }
 
     m_process->setShellCommand(command);
