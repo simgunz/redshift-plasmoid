@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>334</width>
-    <height>247</height>
+    <height>248</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,6 +40,9 @@
        <width>1000</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="toolTip">
+      <string/>
      </property>
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::UpDownArrows</enum>
@@ -91,6 +94,9 @@
        <height>16777215</height>
       </size>
      </property>
+     <property name="toolTip">
+      <string/>
+     </property>
      <property name="suffix">
       <string>º</string>
      </property>
@@ -140,7 +146,7 @@
    <item row="3" column="1">
     <widget class="QSpinBox" name="kcfg_dayTemp">
      <property name="toolTip">
-      <string>Day temperature. Neutral is 6500</string>
+      <string>Day color temperature. Neutral is 6500</string>
      </property>
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::PlusMinus</enum>
@@ -169,7 +175,7 @@
    <item row="4" column="1">
     <widget class="QSpinBox" name="kcfg_nightTemp">
      <property name="toolTip">
-      <string>Night temperature. Recommended is 4500 for Redshift and 3400 for F.lux</string>
+      <string>Night color temperature. Recommended is 4500</string>
      </property>
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::PlusMinus</enum>
@@ -295,7 +301,7 @@
    <item row="8" column="1">
     <widget class="QCheckBox" name="kcfg_smooth">
      <property name="toolTip">
-      <string>Check this if you want smooth transitions</string>
+      <string/>
      </property>
      <property name="text">
       <string>Enabled</string>
@@ -318,7 +324,7 @@
    <item row="9" column="1">
     <widget class="QCheckBox" name="kcfg_autolaunch">
      <property name="toolTip">
-      <string>Launch at start-up</string>
+      <string/>
      </property>
      <property name="text">
       <string>Enabled</string>
@@ -340,6 +346,9 @@
    </item>
    <item row="10" column="1">
     <widget class="KComboBox" name="kcfg_method">
+     <property name="toolTip">
+      <string>Redshift color adjustment method. If Auto (randr) doesn't work try vidmode</string>
+     </property>
      <item>
       <property name="text">
        <string>Auto</string>
