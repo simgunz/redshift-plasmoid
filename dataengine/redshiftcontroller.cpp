@@ -145,16 +145,18 @@ void RedshiftController::readConfig()
     m_gammaR = RedshiftSettings::gammaR();
     m_gammaG = RedshiftSettings::gammaG();
     m_gammaB = RedshiftSettings::gammaB();
+    m_brightness = RedshiftSettings::brightness();
     m_smooth = RedshiftSettings::smooth();
     m_autolaunch = RedshiftSettings::autolaunch();
     m_method = RedshiftSettings::method();
-    QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7")
+    QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7 -b %8")
                       .arg(m_latitude, 0, 'f', 1)
                       .arg(m_longitude, 0, 'f', 1)
                       .arg(m_dayTemp).arg(m_nightTemp)
                       .arg(m_gammaR, 0, 'f', 2)
                       .arg(m_gammaG, 0, 'f', 2)
-                      .arg(m_gammaB, 0, 'f', 2);
+                      .arg(m_gammaB, 0, 'f', 2)
+                      .arg(m_brightness, 0, 'f', 2);
     if (!m_smooth) {
         command.append(" -r");
     }

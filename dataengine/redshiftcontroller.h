@@ -69,6 +69,7 @@ private:
     float m_gammaR;
     float m_gammaG;
     float m_gammaB;
+    float m_brightness;
     bool m_smooth;
     bool m_autolaunch;
     int m_method;
