@@ -58,12 +58,13 @@ void RedshiftApplet::init()
     m_engine->connectSource("Controller", this);
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
 
+    /* This action is not needed anymore since it was just a workaround to prevent some bugs
     QAction *action = new QAction(this);
-    //action->setToolTip(i18nc("tooltip on the config button in the popup", "Configure Power Management..."));
     action->setIcon(KIcon("system-reboot"));
     action->setText(i18n("Restart Redshift"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(configChanged()));
     addAction("restart_redshift", action);
+    */
 }
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
