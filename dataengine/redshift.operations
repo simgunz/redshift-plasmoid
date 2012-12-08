@@ -4,4 +4,6 @@
 <kcfg>
     <group name="toggle"> </group>
     <group name="restart"> </group>
+    <group name="increase"> </group>
+    <group name="decrease"> </group>
 </kcfg>

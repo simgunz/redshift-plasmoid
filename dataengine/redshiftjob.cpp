@@ -36,6 +36,14 @@ void RedshiftJob::start()
         m_redshiftController->restart();
         setResult(true);
         return;
+    } else if (operation == "increase") {
+        m_redshiftController->setTemp(true);
+        setResult(true);
+        return;
+    } else if (operation == "decrease") {
+        m_redshiftController->setTemp(false);
+        setResult(true);
+        return;
     }
     setResult(false);
 }

@@ -25,7 +25,7 @@ RedshiftContainer::RedshiftContainer(QObject* parent)
 {
     setObjectName("Controller");
     m_controller = new RedshiftController();
-    QObject::connect(m_controller, SIGNAL(stateChanged(bool)), this, SLOT(updateStatus(bool)));
+    QObject::connect(m_controller, SIGNAL(stateChanged(int)), this, SLOT(updateStatus(int)));
     updateStatus(m_controller->state());
 }
 
@@ -34,12 +34,12 @@ RedshiftContainer::~RedshiftContainer()
     delete m_controller;
 }
 
-void RedshiftContainer::updateStatus(bool state)
+void RedshiftContainer::updateStatus(int state)
 {
-    if (state) {
-        setData("Status", "Running");
-    } else {
-        setData("Status", "Stopped");
+    switch (state) {
+        case 0: setData("Status", "Stopped"); break;
+        case 1: setData("Status", "Running"); break;
+        case 2: setData("Status", "RunningManual"); break;
     }
     checkForUpdate();
 }

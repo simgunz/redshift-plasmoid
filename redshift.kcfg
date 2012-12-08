@@ -15,23 +15,28 @@
       <default code="true">KSystemTimeZones::local().longitude()</default>
     </entry>
     <entry name="dayTemp" type="Int">
-      <label>Day color temperature</label>
+      <label>Day Color Temperature</label>
+      <tooltip>A neutral color temperature is 6500°K.</tooltip>
       <default>5500</default>
     </entry>
     <entry name="nightTemp" type="Int">
-      <label>Night color temperature</label>
+      <label>Night Color Temperature</label>
+      <tooltip>The recommended night color temperature is 4500°K.</tooltip>
       <default>3700</default>
     </entry>
     <entry name="gammaR" type="Double">
-      <label>Red gamma correction</label>
+      <label>Red Gamma Correction</label>
+      <tooltip>Gamma correction (Red)</tooltip>
       <default>1.00</default>
     </entry>
     <entry name="gammaG" type="Double">
-      <label>Green gamma correction</label>
+      <label>Green Gamma Correction</label>
+      <tooltip>Gamma correction (Green)</tooltip>
       <default>1.00</default>
     </entry>
     <entry name="gammaB" type="Double">
-      <label>Blue gamma correction</label>
+      <label>Blue Gamma Correction</label>
+      <tooltip>Gamma correction (Blue)</tooltip>
       <default>1.00</default>
     </entry>
     <entry name="brightness" type="Double">
@@ -39,24 +44,25 @@
       <default>1.00</default>
     </entry>
     <entry name="smooth" type="Bool">
-      <label>Smooth color transition flag</label>
+      <label>Smooth Transition Flag</label>
       <default>true</default>
     </entry>
     <entry name="autolaunch" type="Bool">
-      <label>Autolaunch flag</label>
+      <label>Autostart Flag</label>
       <default>false</default>
     </entry>
     <entry name="method" type="Int">
-        <label>Color adjustment method</label>
+        <label>Color Adjustment Method</label>
+        <tooltip>Redshift color adjustment method. If Auto (randr) doesn't work, try vidmode.</tooltip>
         <default>0</default>
     </entry>
   </group>
   <group name="Activities">
     <entry name="alwaysOnActivities" type="StringList">
-      <label>Always on activities</label>
+      <label>Always On Activities</label>
     </entry>
     <entry name="alwaysOffActivities" type="StringList">
-      <label>Always off activities</label>
+      <label>Always Off Activities</label>
     </entry>
   </group>
 </kcfg>

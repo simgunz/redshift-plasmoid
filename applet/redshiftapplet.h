@@ -25,6 +25,7 @@
 #include <Plasma/ToolTipContent>
 #include <Plasma/IconWidget>
 #include <QGraphicsGridLayout>
+#include <QGraphicsSceneWheelEvent>
 
 #include "ui_redshift.h"
 #include "ui_activities.h"
@@ -42,6 +43,8 @@ public Q_SLOTS:
 protected:
     void createConfigurationInterface(KConfigDialog *parent);
     void configChanged();
+protected slots:
+  virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
 private Q_SLOTS:
     void configAccepted();
 private:

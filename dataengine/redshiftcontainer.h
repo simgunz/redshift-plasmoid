@@ -30,7 +30,7 @@ public:
     ~RedshiftContainer();
     Plasma::Service* service(QObject* parent = 0);
 public slots:
-    void updateStatus(bool state);
+    void updateStatus(int state);
 
 private:
     RedshiftController *m_controller;

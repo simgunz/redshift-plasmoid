@@ -30,7 +30,7 @@
      </attribute>
      <column>
       <property name="text">
-       <string>Activity</string>
+       <string comment="KDE Plasma activity">Activity</string>
       </property>
      </column>
      <column>

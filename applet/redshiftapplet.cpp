@@ -18,6 +18,7 @@
 #include "redshiftapplet.h"
 
 #include <QGraphicsLinearLayout>
+#include <QDebug>
 
 #include <Plasma/Svg>
 #include <Plasma/Theme>
@@ -44,7 +45,7 @@ RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
 void RedshiftApplet::init()
 {
     m_tooltip.setMainText(i18n("Redshift"));
-    m_tooltip.setSubText(i18n("Click to toggle it on"));
+    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on, scroll the mouse wheel to set the color temperature manually"));
     m_tooltip.setImage(KIcon("redshift-status-off"));
     Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
 
@@ -68,14 +69,18 @@ void RedshiftApplet::init()
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     if (sourceName == "Controller") {
-        if (data["Status"].toString() == "Running") {
+        if (data["Status"].toString().indexOf("Running") == 0) {
             m_button->setIcon(KIcon("redshift-status-on"));
-            m_tooltip.setSubText(i18n("Click to toggle it off"));
+            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off, scroll the mouse wheel to set the color temperature manually"));
             m_tooltip.setImage(KIcon("redshift-status-on"));
         } else {
             m_button->setIcon(KIcon("redshift-status-off"));
-            m_tooltip.setSubText(i18n("Click to toggle it on"));
+            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on, scroll the mouse wheel to set the color temperature manually"));
             m_tooltip.setImage(KIcon("redshift-status-off"));
+        }
+        if (data["Status"].toString() == "RunningManual") {
+            m_tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode, scroll the mouse wheel to change the color temperature"));
+            m_button->setIcon(KIcon("redshift-status-manual"));
         }
         Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
     }
@@ -109,8 +114,8 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         listItem->setFlags(Qt::ItemIsEnabled);
         listItem->setData(0, Qt::UserRole, act);
 
-        itemCombo->addItem(i18nc("Redshift state is set manually in this activity", "Manual"));
-        itemCombo->addItem(i18nc("Redshift is forced to be active in this activity", "Always Active"));
+        itemCombo->addItem(i18nc("Redshift state is set auto in this activity", "Auto"));
+        itemCombo->addItem(i18nc("Redshift is forced to be enabled in this activity", "Always Enabled"));
         itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity", "Always Disabled"));
 
         if (alwaysOnActivities.contains(act)) {
@@ -172,6 +177,17 @@ QList<QAction*> RedshiftApplet::contextualActions()
     QAction *act = action("restart_redshift");
     rv << act;
     return rv;
+}
+
+void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
+{
+    Plasma::Service *service = m_engine->serviceForSource("Controller");
+
+    if(e->delta() < 0) {
+        service->startOperationCall(service->operationDescription("decrease"));
+    } else {
+        service->startOperationCall(service->operationDescription("increase"));
+    }
 }
 
 K_EXPORT_PLASMA_APPLET(redshift, RedshiftApplet)

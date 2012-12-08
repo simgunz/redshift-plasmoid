@@ -34,15 +34,16 @@ public:
         Running
     };
     enum RunMode {
-        Manual,
+        Auto,
         AlwaysOn,
-        AlwaysOff,
+        AlwaysOff
     };
     RedshiftController();
     ~RedshiftController();
     void toggle();
     void restart();
     bool state();
+    void setTemp(bool increase);
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     void setReadyForStart();
@@ -54,10 +55,10 @@ private:
     KProcess *m_process;
     /** Real redshift state */
     RedshiftState m_state;
-    /** Manual mode redshift state, can be different from the real
+    /** Auto mode redshift state, can be different from the real
      * state if the mode is different from manual
      */
-    RedshiftState m_manualState;
+    RedshiftState m_autoState;
     QString m_currentActivity;
     int m_runMode;
     bool m_readyForStart;
@@ -73,9 +74,11 @@ private:
     bool m_smooth;
     bool m_autolaunch;
     int m_method;
+    bool m_manualMode;
+    int m_manualTemp;
 
 signals:
-    void stateChanged(bool state);
+    void stateChanged(int state);
 };
 
 #endif // REDSHIFTCONTROLLER_H

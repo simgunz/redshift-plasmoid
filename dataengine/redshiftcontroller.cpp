@@ -24,14 +24,18 @@
 #include <QProcess>
 #include <QDBusConnection>
 #include <QDBusMessage>
+#include <QDebug>
 
 #include <Plasma/DataEngineManager>
 
 RedshiftController::RedshiftController()
     : m_state(Stopped),
-      m_manualState(NotSetted),
-      m_runMode(Manual),
-      m_readyForStart(false)
+      m_autoState(NotSetted),
+      m_runMode(Auto),
+      m_readyForStart(false),
+      m_manualTemp(5000),
+      m_manualMode(false)
+
 {
     m_process = new KProcess();
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -71,6 +75,31 @@ void RedshiftController::stop()
             kill(m_process->pid(), SIGUSR1);
         }
     }
+    m_manualTemp = 5000;
+}
+
+void RedshiftController::setTemp(bool increase)
+{
+    if (m_readyForStart && (m_runMode != AlwaysOff)) {
+        m_manualMode = true;
+        if (increase) {
+            m_manualTemp += 100;
+        } else {
+            m_manualTemp -= 100;
+        }
+        //Bound the possible temperature
+        //TODO:Set them as constants
+        m_manualTemp = std::min(std::max(m_manualTemp,1000),9900);
+        readConfig();
+        m_state = Stopped;
+        if (m_process->state()) {
+            m_process->kill();
+        }
+        m_process->waitForFinished();
+        applyChanges(true);
+        //m_process->start();
+        m_state = Stopped;
+    }
 }
 
 void RedshiftController::applyChanges(bool toggle)
@@ -83,20 +112,25 @@ void RedshiftController::applyChanges(bool toggle)
         } else if (m_runMode == AlwaysOff) {
             stop();
         // If toggle is true the next section perform a toggle of the state whereas
-        // if toggle is false it realign the real state with the manual state
-        } else if (toggle || (m_manualState != m_state)) {
+        // if toggle is false it realign the real state with the auto state
+        } else if (toggle || (m_autoState != m_state)) {
             if (m_state == Running) {
                 stop();
             } else {
                 start();
             }
-            m_manualState = m_state;
+            m_autoState = m_state;
         }
-        if (m_state == Running) {
-            emit stateChanged(true);
+        if (m_manualMode) {
+            emit stateChanged(2);
         } else {
-            emit stateChanged(false);
+            if (m_state == Running) {
+                emit stateChanged(1);
+            } else {
+                emit stateChanged(0);
+            }
         }
+
     } else {
         QDBusMessage message = QDBusMessage::createSignal("/", "org.kde.redshift", "readyCheck");
         QDBusConnection::sessionBus().send(message);
@@ -113,6 +147,11 @@ void RedshiftController::setReadyForStart()
 
 void RedshiftController::toggle()
 {
+    if (m_manualMode) {
+        m_manualMode = false;
+        readConfig();
+        KProcess::execute("redshift",QStringList("-x"));
+    }
     applyChanges(true);
 }
 
@@ -167,9 +206,14 @@ void RedshiftController::readConfig()
         command.append(" -m vidmode");
     }
 
+    if (m_manualMode) {
+        command.append(" -O ");
+        command.append(QString("%1").arg(m_manualTemp));
+    }
+
     m_process->setShellCommand(command);
 
-    m_runMode = Manual;
+    m_runMode = Auto;
     const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
     const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
     if (alwaysOnActivities.contains(m_currentActivity)) {
@@ -177,11 +221,11 @@ void RedshiftController::readConfig()
     } else if (alwaysOffActivities.contains(m_currentActivity)) {
         m_runMode = AlwaysOff;
     }
-    if (m_manualState == NotSetted) {
+    if (m_autoState == NotSetted) {
         if (m_autolaunch) {
-            m_manualState = Running;
+            m_autoState = Running;
         } else {
-            m_manualState = Stopped;
+            m_autoState = Stopped;
         }
     }
 }

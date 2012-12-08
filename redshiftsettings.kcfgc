@@ -2,3 +2,4 @@ File=redshift.kcfg
 ClassName=RedshiftSettings
 Singleton=true
 Mutators=alwaysOnActivities,alwaysOffActivities
+SetUserTexts=true
