@@ -5,14 +5,15 @@
 #
 # Automatically generated, 2012.
 # Pierre Buard <pierre.buard@gmail.com>, 2012.
+# Simone Gaiarin <simgunz@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-08 22:28+0100\n"
-"PO-Revision-Date: 2012-12-10 12:14+0100\n"
-"Last-Translator: Pierre Buard <pierre.buard@gmail.com>\n"
-"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2012-12-10 17:09+0100\n"
+"PO-Revision-Date: 2012-12-10 17:13+0100\n"
+"Last-Translator: Simone Gaiarin <simgunz@gmail.com>\n"
+"Language-Team: French <>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +25,7 @@ msgstr ""
 msgid "Redshift"
 msgstr "Redshift"
 
-#: applet/redshiftapplet.cpp:48 applet/redshiftapplet.cpp:78
+#: applet/redshiftapplet.cpp:48 applet/redshiftapplet.cpp:79
 msgctxt "Action the user can perform"
 msgid ""
 "Click to toggle on, scroll the mouse wheel to set the color temperature "
@@ -33,11 +34,7 @@ msgstr ""
 "Cliquez pour activer et utilisez la molette de la souris pour définir "
 "manuellement une température de couleur."
 
-#: applet/redshiftapplet.cpp:64
-msgid "Restart Redshift"
-msgstr "Redémarrer Redshift"
-
-#: applet/redshiftapplet.cpp:74
+#: applet/redshiftapplet.cpp:75
 msgctxt "Action the user can perform"
 msgid ""
 "Click to toggle off, scroll the mouse wheel to set the color temperature "
@@ -46,7 +43,7 @@ msgstr ""
 "Cliquez pour désactiver et utilisez la molette de la souris pour définir "
 "manuellement une température de couleur."
 
-#: applet/redshiftapplet.cpp:82
+#: applet/redshiftapplet.cpp:83
 msgctxt "Action the user can perform"
 msgid ""
 "Click to switch to auto mode, scroll the mouse wheel to change the color "
@@ -55,27 +52,27 @@ msgstr ""
 "Cliquez pour passer au mode automatique et utilisez la molette de la souris "
 "pour choisir une température de couleur."
 
-#: applet/redshiftapplet.cpp:98
+#: applet/redshiftapplet.cpp:99
 msgctxt "Redshift main configuration page"
 msgid "General"
 msgstr "Général"
 
-#: applet/redshiftapplet.cpp:117
+#: applet/redshiftapplet.cpp:118
 msgctxt "Redshift state is set auto in this activity"
 msgid "Auto"
 msgstr "Auto"
 
-#: applet/redshiftapplet.cpp:118
+#: applet/redshiftapplet.cpp:119
 msgctxt "Redshift is forced to be enabled in this activity"
 msgid "Always Enabled"
 msgstr "Toujours activé"
 
-#: applet/redshiftapplet.cpp:119
+#: applet/redshiftapplet.cpp:120
 msgctxt "Redshift is forced to be disabled in this activity"
 msgid "Always Disabled"
 msgstr "Toujours désactivé"
 
-#: applet/redshiftapplet.cpp:137
+#: applet/redshiftapplet.cpp:138
 msgctxt "Redshift activities behaviour configuration page"
 msgid "Activities"
 msgstr "Activités"
@@ -98,7 +95,7 @@ msgstr "Mode"
 #. i18n: ectx: property (text), widget (QLabel, lbLatitude)
 #: po/rc.cpp:9 rc.cpp:9
 msgid "Latitude:"
-msgstr "Latitude :"
+msgstr "Latitude:"
 
 #. i18n: file: applet/redshift.ui:57
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, kcfg_latitude)
@@ -117,14 +114,14 @@ msgstr "°"
 #. i18n: ectx: property (text), widget (QLabel, lbLongitude)
 #: po/rc.cpp:15 rc.cpp:15
 msgid "Longitude:"
-msgstr "Longitude :"
+msgstr "Longitude:"
 
 #. i18n: file: applet/redshift.ui:142
 #. i18n: ectx: property (text), widget (QLabel, lbDayTemp)
 #: po/rc.cpp:21 rc.cpp:21
 msgctxt "The desired color temperature during the day"
 msgid "Day Color Temperature:"
-msgstr "Température des couleurs diurnes :"
+msgstr "Température des couleurs diurnes:"
 
 #. i18n: file: applet/redshift.ui:158
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_dayTemp)
@@ -144,7 +141,7 @@ msgstr "°K"
 #: po/rc.cpp:27 rc.cpp:27
 msgctxt "The desired color temperature during the night"
 msgid "Night Color Temperature:"
-msgstr "Température des couleurs nocturnes :"
+msgstr "Température des couleurs nocturnes:"
 
 #. i18n: file: applet/redshift.ui:213
 #. i18n: ectx: property (toolTip), widget (QLabel, lbGamma)
@@ -157,21 +154,21 @@ msgstr "Correction gamma additionnelle (1:1:1 par défaut)."
 #: po/rc.cpp:36 rc.cpp:36
 msgctxt "The screen gamma channels, red, green, blue"
 msgid "Gamma (RGB):"
-msgstr "Gamma (RGB) :"
+msgstr "Gamma (RGB):"
 
 #. i18n: file: applet/redshift.ui:297
 #. i18n: ectx: property (text), widget (QLabel, lbSmooth)
 #: po/rc.cpp:39 rc.cpp:39
 msgctxt "Enable smooth transition when the program start and stop"
 msgid "Smooth Transition:"
-msgstr "Transition douce :"
+msgstr "Transition douce:"
 
 #. i18n: file: applet/redshift.ui:310
 #. i18n: ectx: property (text), widget (QLabel, lbAutostart)
 #: po/rc.cpp:42 rc.cpp:42
 msgctxt "Launch the program on startup"
 msgid "Autostart:"
-msgstr "Démarrage automatique :"
+msgstr "Démarrage automatique:"
 
 #. i18n: file: applet/redshift.ui:323
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_autolaunch)
@@ -190,7 +187,7 @@ msgstr "Activé"
 #: po/rc.cpp:48 rc.cpp:48
 msgctxt "The method used to set the color temperature"
 msgid "Adjust Method:"
-msgstr "Méthode d'ajustement :"
+msgstr "Méthode d'ajustement:"
 
 #. i18n: file: applet/redshift.ui:360
 #. i18n: ectx: property (text), item, widget (KComboBox, kcfg_method)
@@ -203,109 +200,124 @@ msgstr "Auto"
 #. i18n: ectx: property (text), widget (QLabel, lbBrightness)
 #: po/rc.cpp:57 rc.cpp:57
 msgid "Brightness:"
-msgstr "Luminosité :"
+msgstr "Luminosité:"
 
 #. i18n: file: redshift.kcfg:10
 #. i18n: ectx: label, entry (latitude), group (General)
 #: po/rc.cpp:60 rc.cpp:60
+msgctxt "@label"
 msgid "Latitude"
 msgstr "Latitude"
 
 #. i18n: file: redshift.kcfg:14
 #. i18n: ectx: label, entry (longitude), group (General)
 #: po/rc.cpp:63 rc.cpp:63
+msgctxt "@label"
 msgid "Longitude"
 msgstr "Longitude"
 
 #. i18n: file: redshift.kcfg:18
 #. i18n: ectx: label, entry (dayTemp), group (General)
 #: po/rc.cpp:66 rc.cpp:66
+msgctxt "@label"
 msgid "Day Color Temperature"
 msgstr "Température des couleurs diurnes"
 
 #. i18n: file: redshift.kcfg:19
 #. i18n: ectx: tooltip, entry (dayTemp), group (General)
 #: po/rc.cpp:69 rc.cpp:69
+msgctxt "@info:tooltip"
 msgid "A neutral color temperature is 6500°K."
 msgstr "6500°K correspond à une température de couleur neutre."
 
 #. i18n: file: redshift.kcfg:23
 #. i18n: ectx: label, entry (nightTemp), group (General)
 #: po/rc.cpp:72 rc.cpp:72
+msgctxt "@label"
 msgid "Night Color Temperature"
 msgstr "Température des couleurs nocturnes"
 
 #. i18n: file: redshift.kcfg:24
 #. i18n: ectx: tooltip, entry (nightTemp), group (General)
 #: po/rc.cpp:75 rc.cpp:75
+msgctxt "@info:tooltip"
 msgid "The recommended night color temperature is 4500°K."
 msgstr "La température recommandée pour les couleurs nocturnes est de 4500°K."
 
 #. i18n: file: redshift.kcfg:28
 #. i18n: ectx: label, entry (gammaR), group (General)
 #: po/rc.cpp:78 rc.cpp:78
+msgctxt "@label"
 msgid "Red Gamma Correction"
 msgstr "Correction gamma du rouge"
 
 #. i18n: file: redshift.kcfg:29
 #. i18n: ectx: tooltip, entry (gammaR), group (General)
 #: po/rc.cpp:81 rc.cpp:81
+msgctxt "@info:tooltip"
 msgid "Gamma correction (Red)"
 msgstr "Correction gamma (rouge)"
 
 #. i18n: file: redshift.kcfg:33
 #. i18n: ectx: label, entry (gammaG), group (General)
 #: po/rc.cpp:84 rc.cpp:84
+msgctxt "@label"
 msgid "Green Gamma Correction"
 msgstr "Correction gamma du vert"
 
 #. i18n: file: redshift.kcfg:34
 #. i18n: ectx: tooltip, entry (gammaG), group (General)
 #: po/rc.cpp:87 rc.cpp:87
+msgctxt "@info:tooltip"
 msgid "Gamma correction (Green)"
 msgstr "Correction gamma (vert)"
 
 #. i18n: file: redshift.kcfg:38
 #. i18n: ectx: label, entry (gammaB), group (General)
 #: po/rc.cpp:90 rc.cpp:90
+msgctxt "@label"
 msgid "Blue Gamma Correction"
 msgstr "Correction gamma du bleu"
 
 #. i18n: file: redshift.kcfg:39
 #. i18n: ectx: tooltip, entry (gammaB), group (General)
 #: po/rc.cpp:93 rc.cpp:93
+msgctxt "@info:tooltip"
 msgid "Gamma correction (Blue)"
 msgstr "Correction gamma (bleu)"
 
 #. i18n: file: redshift.kcfg:43
 #. i18n: ectx: label, entry (brightness), group (General)
 #: po/rc.cpp:96 rc.cpp:96
+msgctxt "@label"
 msgid "Brightness"
 msgstr "Luminosité"
 
 #. i18n: file: redshift.kcfg:47
 #. i18n: ectx: label, entry (smooth), group (General)
 #: po/rc.cpp:99 rc.cpp:99
-#, fuzzy
+msgctxt "@label"
 msgid "Smooth Transition Flag"
 msgstr "Drapeau pour la transition douce"
 
 #. i18n: file: redshift.kcfg:51
 #. i18n: ectx: label, entry (autolaunch), group (General)
 #: po/rc.cpp:102 rc.cpp:102
-#, fuzzy
+msgctxt "@label"
 msgid "Autostart Flag"
 msgstr "Drapeau pour le démarrage automatique"
 
 #. i18n: file: redshift.kcfg:55
 #. i18n: ectx: label, entry (method), group (General)
 #: po/rc.cpp:105 rc.cpp:105
+msgctxt "@label"
 msgid "Color Adjustment Method"
 msgstr "Méthode d'ajustement des couleurs"
 
 #. i18n: file: redshift.kcfg:56
 #. i18n: ectx: tooltip, entry (method), group (General)
 #: po/rc.cpp:108 rc.cpp:108
+msgctxt "@info:tooltip"
 msgid ""
 "Redshift color adjustment method. If Auto (randr) doesn't work, try vidmode."
 msgstr ""
@@ -315,14 +327,14 @@ msgstr ""
 #. i18n: file: redshift.kcfg:62
 #. i18n: ectx: label, entry (alwaysOnActivities), group (Activities)
 #: po/rc.cpp:111 rc.cpp:111
-#, fuzzy
+msgctxt "@label"
 msgid "Always On Activities"
 msgstr "Activités toujours actives"
 
 #. i18n: file: redshift.kcfg:65
 #. i18n: ectx: label, entry (alwaysOffActivities), group (Activities)
 #: po/rc.cpp:114 rc.cpp:114
-#, fuzzy
+msgctxt "@label"
 msgid "Always Off Activities"
 msgstr "Activités toujours désactivées"
 
@@ -335,3 +347,6 @@ msgstr "Pierre Buard"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "pierre.buard@gmail.com"
+
+#~ msgid "Restart Redshift"
+#~ msgstr "Redémarrer Redshift"
