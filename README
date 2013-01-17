@@ -7,6 +7,7 @@ Simone Gaiarin <simgunz AT gmail DOT com>
 Code under GPLv3 license (see COPYING)
 
 Requires:
+Essential build tools (gcc, cmake, and so on - build-essential package on Kubuntu)
 KDE SC 4.x (kde-workspace-dev package on Kubuntu)
 Redshift
 
