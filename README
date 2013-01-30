@@ -7,16 +7,22 @@ Simone Gaiarin <simgunz AT gmail DOT com>
 Code under GPLv3 license (see COPYING)
 
 Requires:
-Essential build tools (gcc, cmake, and so on - build-essential package on Kubuntu)
-KDE SC 4.x (kde-workspace-dev package on Kubuntu)
+Essential build tools (gcc, cmake, and so on)
+KDE SC 4.x
 Redshift
+
+Packages for Debian like distributions:
+build-essential
+cmake
+kde-workspace-dev
+redshift
 
 How to install:
 mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=$(kde4-config --prefix) ..
 make
-sudo make install
+sudo make install (alternatively su -c 'make install')
 
 After install, reboot or run redshiftautostart manually
 to start using the plasmoid.
