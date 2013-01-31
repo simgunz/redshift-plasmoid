@@ -43,6 +43,7 @@ public:
     void toggle();
     void restart();
     bool state();
+    int currentTemperature();
     void setTemp(bool increase);
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
@@ -78,7 +79,7 @@ private:
     int m_manualTemp;
 
 signals:
-    void stateChanged(int state);
+    void stateChanged(int state, int temperature);
 };
 
 #endif // REDSHIFTCONTROLLER_H

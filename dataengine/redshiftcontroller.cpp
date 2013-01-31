@@ -55,6 +55,15 @@ bool RedshiftController::state()
     return static_cast<bool>(m_state);
 }
 
+int RedshiftController::currentTemperature()
+{
+    if(m_manualMode) {
+        return m_manualTemp;
+    } else {
+        return 0;
+    }
+}
+
 void RedshiftController::start()
 {
     if (m_state == Stopped) {
@@ -121,13 +130,14 @@ void RedshiftController::applyChanges(bool toggle)
             }
             m_autoState = m_state;
         }
+        //TODO: Explain what the states are
         if (m_manualMode) {
-            emit stateChanged(2);
+            emit stateChanged(2, currentTemperature());
         } else {
             if (m_state == Running) {
-                emit stateChanged(1);
+                emit stateChanged(1, currentTemperature());
             } else {
-                emit stateChanged(0);
+                emit stateChanged(0, currentTemperature());
             }
         }
 

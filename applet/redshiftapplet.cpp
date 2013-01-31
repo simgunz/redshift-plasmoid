@@ -17,8 +17,12 @@
 
 #include "redshiftapplet.h"
 
+#include "redshiftsettings.h"
+#include "redshiftosdwidget.h"
+
 #include <QGraphicsLinearLayout>
 #include <QDebug>
+#include <QtGui/QDesktopWidget>
 
 #include <Plasma/Svg>
 #include <Plasma/Theme>
@@ -29,8 +33,8 @@
 #include <KLocale>
 #include <KConfigDialog>
 #include <KComboBox>
+#include <KApplication>
 
-#include "redshiftsettings.h"
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
@@ -84,6 +88,10 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
             m_button->setIcon(KIcon("redshift-status-manual"));
         }
         Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
+    }
+    int temperature = data["Temperature"].toInt();
+    if(temperature) {
+        showRedshiftOSD(temperature);
     }
 }
 
@@ -141,6 +149,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 
 void RedshiftApplet::toggle()
 {
+    m_redshiftOSD.data()->hide();
     Plasma::Service *service = m_engine->serviceForSource("Controller");
     service->startOperationCall(service->operationDescription("toggle"));
 }
@@ -182,6 +191,7 @@ QList<QAction*> RedshiftApplet::contextualActions()
 
 void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
 {
+    Plasma::ToolTipManager::self()->hide(this);
     Plasma::Service *service = m_engine->serviceForSource("Controller");
 
     if(e->delta() < 0) {
@@ -189,6 +199,25 @@ void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
     } else {
         service->startOperationCall(service->operationDescription("increase"));
     }
+}
+
+void RedshiftApplet::showRedshiftOSD(int temperature)
+{
+    // code adapted from KMix
+    if (m_redshiftOSD.isNull()) {
+        m_redshiftOSD = new RedshiftOSDWidget();
+    }
+
+    m_redshiftOSD.data()->setCurrentTemperature(temperature);
+    m_redshiftOSD.data()->show();
+    m_redshiftOSD.data()->activateOSD(); //Enable the hide timer
+
+    //Center the OSD
+    QRect rect = KApplication::kApplication()->desktop()->screenGeometry(QCursor::pos());
+    QSize size = m_redshiftOSD.data()->sizeHint();
+    int posX = rect.x() + (rect.width() - size.width()) / 2;
+    int posY = rect.y() + 4 * rect.height() / 5;
+    m_redshiftOSD.data()->setGeometry(posX, posY, size.width(), size.height());
 }
 
 K_EXPORT_PLASMA_APPLET(redshift, RedshiftApplet)

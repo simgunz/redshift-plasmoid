@@ -1,4 +1,4 @@
-set(redshiftapplet_SRCS redshiftapplet.cpp)
+set(redshiftapplet_SRCS redshiftapplet.cpp redshiftosdwidget.cpp)
 kde4_add_ui_files(redshiftapplet_SRCS redshift.ui)
 kde4_add_ui_files(redshiftapplet_SRCS activities.ui)
 kde4_add_kcfg_files(redshiftapplet_SRCS ../redshiftsettings.kcfgc)

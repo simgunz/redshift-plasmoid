@@ -25,8 +25,8 @@ RedshiftContainer::RedshiftContainer(QObject* parent)
 {
     setObjectName("Controller");
     m_controller = new RedshiftController();
-    QObject::connect(m_controller, SIGNAL(stateChanged(int)), this, SLOT(updateStatus(int)));
-    updateStatus(m_controller->state());
+    QObject::connect(m_controller, SIGNAL(stateChanged(int, int)), this, SLOT(updateStatus(int, int)));
+    updateStatus(m_controller->state(), m_controller->currentTemperature());
 }
 
 RedshiftContainer::~RedshiftContainer()
@@ -34,13 +34,14 @@ RedshiftContainer::~RedshiftContainer()
     delete m_controller;
 }
 
-void RedshiftContainer::updateStatus(int state)
+void RedshiftContainer::updateStatus(int state, int temp)
 {
     switch (state) {
         case 0: setData("Status", "Stopped"); break;
         case 1: setData("Status", "Running"); break;
         case 2: setData("Status", "RunningManual"); break;
     }
+    setData("Temperature", temp);
     checkForUpdate();
 }
 

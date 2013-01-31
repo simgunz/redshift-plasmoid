@@ -30,6 +30,8 @@
 #include "ui_redshift.h"
 #include "ui_activities.h"
 
+class RedshiftOSDWidget;
+
 class RedshiftApplet : public Plasma::Applet
 {
     Q_OBJECT
@@ -40,6 +42,7 @@ public Q_SLOTS:
     void toggle();
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     QList<QAction*> contextualActions();
+    void showRedshiftOSD(int brightness);
 protected:
     void createConfigurationInterface(KConfigDialog *parent);
     void configChanged();
@@ -56,6 +59,7 @@ private:
     Ui::RedshiftConfig m_redshiftUi;
     Ui::ActivitiesConfig m_activitiesUi;
     Plasma::DataEngine *m_engine;
+    QWeakPointer< RedshiftOSDWidget > m_redshiftOSD;
 };
 
 #endif
