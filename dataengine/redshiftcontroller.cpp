@@ -47,7 +47,11 @@ RedshiftController::RedshiftController()
 
 RedshiftController::~RedshiftController()
 {
-    m_process->terminate();
+    if (m_manualMode) {
+        KProcess::execute("redshift",QStringList("-x"));
+    } else {
+        m_process->terminate();
+    }
 }
 
 bool RedshiftController::state()
