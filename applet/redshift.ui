@@ -34,7 +34,7 @@
     <widget class="QDoubleSpinBox" name="kcfg_latitude">
      <property name="minimumSize">
       <size>
-       <width>67</width>
+       <width>69</width>
        <height>0</height>
       </size>
      </property>
@@ -87,7 +87,7 @@
     <widget class="QDoubleSpinBox" name="kcfg_longitude">
      <property name="minimumSize">
       <size>
-       <width>67</width>
+       <width>69</width>
        <height>0</height>
       </size>
      </property>
@@ -148,6 +148,12 @@
    </item>
    <item row="3" column="1">
     <widget class="QSpinBox" name="kcfg_dayTemp">
+     <property name="minimumSize">
+      <size>
+       <width>69</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="toolTip">
       <string/>
      </property>
@@ -155,7 +161,7 @@
       <enum>QAbstractSpinBox::PlusMinus</enum>
      </property>
      <property name="suffix">
-      <string comment="Kelvin degrees">ºK</string>
+      <string comment="Kelvin degrees (There's a space before the K)"> K</string>
      </property>
      <property name="maximum">
       <number>9999</number>
@@ -177,6 +183,12 @@
    </item>
    <item row="4" column="1">
     <widget class="QSpinBox" name="kcfg_nightTemp">
+     <property name="minimumSize">
+      <size>
+       <width>69</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="toolTip">
       <string/>
      </property>
@@ -184,7 +196,7 @@
       <enum>QAbstractSpinBox::PlusMinus</enum>
      </property>
      <property name="suffix">
-      <string comment="Kelvin degrees">ºK</string>
+      <string comment="Kelvin degrees (There's a space before the K)"> K</string>
      </property>
      <property name="maximum">
       <number>9999</number>
@@ -383,7 +395,7 @@
     <widget class="QDoubleSpinBox" name="kcfg_brightness">
      <property name="minimumSize">
       <size>
-       <width>67</width>
+       <width>69</width>
        <height>0</height>
       </size>
      </property>

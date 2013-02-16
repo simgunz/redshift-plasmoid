@@ -5,13 +5,13 @@
 #
 # Automatically generated, 2012.
 # Pierre Buard <pierre.buard@gmail.com>, 2012.
-# Simone Gaiarin <simgunz@gmail.com>, 2012.
+# Simone Gaiarin <simgunz@gmail.com>, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-10 17:09+0100\n"
-"PO-Revision-Date: 2012-12-10 17:13+0100\n"
+"POT-Creation-Date: 2013-02-16 16:55+0100\n"
+"PO-Revision-Date: 2013-02-16 16:56+0100\n"
 "Last-Translator: Simone Gaiarin <simgunz@gmail.com>\n"
 "Language-Team: French <>\n"
 "Language: fr\n"
@@ -123,80 +123,80 @@ msgctxt "The desired color temperature during the day"
 msgid "Day Color Temperature:"
 msgstr "Température des couleurs diurnes:"
 
-#. i18n: file: applet/redshift.ui:158
+#. i18n: file: applet/redshift.ui:164
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_dayTemp)
-#. i18n: file: applet/redshift.ui:187
+#. i18n: file: applet/redshift.ui:199
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_nightTemp)
-#. i18n: file: applet/redshift.ui:158
+#. i18n: file: applet/redshift.ui:164
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_dayTemp)
-#. i18n: file: applet/redshift.ui:187
+#. i18n: file: applet/redshift.ui:199
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_nightTemp)
 #: po/rc.cpp:24 po/rc.cpp:30 rc.cpp:24 rc.cpp:30
-msgctxt "Kelvin degrees"
-msgid "ºK"
-msgstr "°K"
+msgctxt "Kelvin degrees (There's a space before the K)"
+msgid " K"
+msgstr " K"
 
-#. i18n: file: applet/redshift.ui:171
+#. i18n: file: applet/redshift.ui:177
 #. i18n: ectx: property (text), widget (QLabel, lbNightTemp)
 #: po/rc.cpp:27 rc.cpp:27
 msgctxt "The desired color temperature during the night"
 msgid "Night Color Temperature:"
 msgstr "Température des couleurs nocturnes:"
 
-#. i18n: file: applet/redshift.ui:213
+#. i18n: file: applet/redshift.ui:225
 #. i18n: ectx: property (toolTip), widget (QLabel, lbGamma)
 #: po/rc.cpp:33 rc.cpp:33
 msgid "Additional gamma correction (default is 1:1:1)."
 msgstr "Correction gamma additionnelle (1:1:1 par défaut)."
 
-#. i18n: file: applet/redshift.ui:216
+#. i18n: file: applet/redshift.ui:228
 #. i18n: ectx: property (text), widget (QLabel, lbGamma)
 #: po/rc.cpp:36 rc.cpp:36
 msgctxt "The screen gamma channels, red, green, blue"
 msgid "Gamma (RGB):"
 msgstr "Gamma (RGB):"
 
-#. i18n: file: applet/redshift.ui:297
+#. i18n: file: applet/redshift.ui:309
 #. i18n: ectx: property (text), widget (QLabel, lbSmooth)
 #: po/rc.cpp:39 rc.cpp:39
 msgctxt "Enable smooth transition when the program start and stop"
 msgid "Smooth Transition:"
 msgstr "Transition douce:"
 
-#. i18n: file: applet/redshift.ui:310
+#. i18n: file: applet/redshift.ui:322
 #. i18n: ectx: property (text), widget (QLabel, lbAutostart)
 #: po/rc.cpp:42 rc.cpp:42
 msgctxt "Launch the program on startup"
 msgid "Autostart:"
 msgstr "Démarrage automatique:"
 
-#. i18n: file: applet/redshift.ui:323
+#. i18n: file: applet/redshift.ui:335
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_autolaunch)
-#. i18n: file: applet/redshift.ui:346
+#. i18n: file: applet/redshift.ui:358
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_smooth)
-#. i18n: file: applet/redshift.ui:323
+#. i18n: file: applet/redshift.ui:335
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_autolaunch)
-#. i18n: file: applet/redshift.ui:346
+#. i18n: file: applet/redshift.ui:358
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_smooth)
 #: po/rc.cpp:45 po/rc.cpp:51 rc.cpp:45 rc.cpp:51
 msgid "Enabled"
 msgstr "Activé"
 
-#. i18n: file: applet/redshift.ui:333
+#. i18n: file: applet/redshift.ui:345
 #. i18n: ectx: property (text), widget (QLabel, lbMethod)
 #: po/rc.cpp:48 rc.cpp:48
 msgctxt "The method used to set the color temperature"
 msgid "Adjust Method:"
 msgstr "Méthode d'ajustement:"
 
-#. i18n: file: applet/redshift.ui:360
+#. i18n: file: applet/redshift.ui:372
 #. i18n: ectx: property (text), item, widget (KComboBox, kcfg_method)
 #: po/rc.cpp:54 rc.cpp:54
 msgctxt "Automatic adjust method"
 msgid "Auto"
 msgstr "Auto"
 
-#. i18n: file: applet/redshift.ui:378
+#. i18n: file: applet/redshift.ui:390
 #. i18n: ectx: property (text), widget (QLabel, lbBrightness)
 #: po/rc.cpp:57 rc.cpp:57
 msgid "Brightness:"
@@ -347,6 +347,10 @@ msgstr "Pierre Buard"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "pierre.buard@gmail.com"
+
+#~ msgctxt "Kelvin degrees"
+#~ msgid "ºK"
+#~ msgstr "°K"
 
 #~ msgid "Restart Redshift"
 #~ msgstr "Redémarrer Redshift"
