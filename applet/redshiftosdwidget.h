@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
+ *   Adapted from kdemultimedia/kmix/osdwidget.h                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,51 +16,33 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
  **************************************************************************/
 
-#ifndef REDSHIFTAPPLET_H
-#define REDSHIFTAPPLET_H
+#ifndef REDSHIFTOSDWIDGET__H
+#define REDSHIFTOSDWIDGET__H
 
-#include <Plasma/PopupApplet>
-#include <Plasma/DataEngine>
-#include <Plasma/Svg>
-#include <KIcon>
-#include <Plasma/ToolTipContent>
-#include <Plasma/IconWidget>
-#include <QGraphicsGridLayout>
-#include <QGraphicsSceneWheelEvent>
+#include <Plasma/Dialog>
 
-#include "ui_redshift.h"
-#include "ui_activities.h"
+class QTimer;
+class QPixmap;
 
-class RedshiftOSDWidget;
-
-class RedshiftApplet : public Plasma::Applet
+namespace Plasma
 {
-    Q_OBJECT
+class Label;
+}
+
+class RedshiftOSDWidget : public Plasma::Dialog
+{
+Q_OBJECT
 public:
-    RedshiftApplet(QObject *parent, const QVariantList &args);
-    void init();
-public Q_SLOTS:
-    void toggle();
-    void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
-    QList<QAction*> contextualActions();
-    void showRedshiftOSD(int brightness);
-protected:
-    void createConfigurationInterface(KConfigDialog *parent);
-    void configChanged();
-protected slots:
-  virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
-private Q_SLOTS:
-    void configAccepted();
+    RedshiftOSDWidget(QWidget * parent = 0);
+    void setCurrentTemperature(int temperature);
+    void activateOSD();
+    virtual QSize sizeHint() const;
+
 private:
-    KIcon m_icon;
-    Plasma::Svg m_theme;
-    Plasma::ToolTipContent m_tooltip;
-    Plasma::IconWidget *m_button;
-    QGraphicsGridLayout *m_layout;
-    Ui::RedshiftConfig m_redshiftUi;
-    Ui::ActivitiesConfig m_activitiesUi;
-    Plasma::DataEngine *m_engine;
-    QWeakPointer< RedshiftOSDWidget > m_redshiftOSD;
+    Plasma::Label *m_iconLabel;
+    Plasma::Label *m_temperatureLabel;
+    QTimer *m_hideTimer;
+    QPixmap m_redshiftPixmap;
 };
 
 #endif
