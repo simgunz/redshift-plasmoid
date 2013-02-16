@@ -21,8 +21,8 @@
 #include "redshiftosdwidget.h"
 
 #include <QGraphicsLinearLayout>
-#include <QDebug>
 #include <QtGui/QDesktopWidget>
+#include <QDebug>
 
 #include <Plasma/Svg>
 #include <Plasma/Theme>
@@ -39,7 +39,8 @@
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
       m_icon("redshift"),
-      m_theme(this)
+      m_theme(this),
+      m_redshiftOSD(new RedshiftOSDWidget())
 {
     setBackgroundHints(StandardBackground);
     setAspectRatioMode(Plasma::ConstrainedSquare);
@@ -61,7 +62,6 @@ void RedshiftApplet::init()
     m_engine = dataEngine("redshift");
     m_engine->connectSource("Controller", this);
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
-
     /* This action is not needed anymore since it was just a workaround to prevent some bugs
     QAction *action = new QAction(this);
     action->setIcon(KIcon("system-reboot"));
@@ -203,14 +203,8 @@ void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
 
 void RedshiftApplet::showRedshiftOSD(int temperature)
 {
-    // code adapted from KMix
-    if (m_redshiftOSD.isNull()) {
-        m_redshiftOSD = new RedshiftOSDWidget();
-    }
-
     m_redshiftOSD.data()->setCurrentTemperature(temperature);
-    m_redshiftOSD.data()->show();
-    m_redshiftOSD.data()->activateOSD(); //Enable the hide timer
+    m_redshiftOSD.data()->activateOSD(); //Show and enable the hide timer
 
     //Center the OSD
     QRect rect = KApplication::kApplication()->desktop()->screenGeometry(QCursor::pos());

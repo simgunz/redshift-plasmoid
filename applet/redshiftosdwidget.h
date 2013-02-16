@@ -1,63 +1,44 @@
-/*******************************************************************
-* redshiftosdwidget.h
-* adapted from kdemultimedia/kmix/osdwidget.h
-* Copyright  2009    Aurélien Gâteau <agateau@kde.org>
-* Copyright  2009    Dario Andres Rodriguez <andresbajotierra@gmail.com>
-* Copyright  2009    Christian Esken <christian.esken@arcor.de>
-* Copyright  2010    Felix Geyer <debfx-kde@fobos.de>
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
-******************************************************************/
+/***************************************************************************
+ *   Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
+ *   Adapted from kdemultimedia/kmix/osdwidget.h                           *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
+ **************************************************************************/
 
 #ifndef REDSHIFTOSDWIDGET__H
 #define REDSHIFTOSDWIDGET__H
 
-#include <QGraphicsView>
-
-#include <QPixmap>
+#include <Plasma/Dialog>
 
 class QTimer;
-class QGraphicsWidget;
+class QPixmap;
 
 namespace Plasma
 {
-class FrameSvg;
 class Label;
-class Meter;
 }
 
-class RedshiftOSDWidget : public QGraphicsView
+class RedshiftOSDWidget : public Plasma::Dialog
 {
 Q_OBJECT
 public:
     RedshiftOSDWidget(QWidget * parent = 0);
-
     void setCurrentTemperature(int temperature);
     void activateOSD();
-
     virtual QSize sizeHint() const;
 
-protected:
-    virtual void drawBackground(QPainter *painter, const QRectF &rectF);
-    virtual void resizeEvent(QResizeEvent *);
-    void showEvent(QShowEvent *event);
-
 private:
-    Plasma::FrameSvg *m_background;
-    QGraphicsScene *m_scene;
-    QGraphicsWidget *m_container;
     Plasma::Label *m_iconLabel;
     Plasma::Label *m_temperatureLabel;
     QTimer *m_hideTimer;
