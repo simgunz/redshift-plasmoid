@@ -37,6 +37,7 @@ class RedshiftApplet : public Plasma::Applet
     Q_OBJECT
 public:
     RedshiftApplet(QObject *parent, const QVariantList &args);
+    ~RedshiftApplet();
     void init();
 public Q_SLOTS:
     void toggle();
@@ -59,7 +60,7 @@ private:
     Ui::RedshiftConfig m_redshiftUi;
     Ui::ActivitiesConfig m_activitiesUi;
     Plasma::DataEngine *m_engine;
-    QWeakPointer< RedshiftOSDWidget > m_redshiftOSD;
+    RedshiftOSDWidget *m_redshiftOSD;
 };
 
 #endif
