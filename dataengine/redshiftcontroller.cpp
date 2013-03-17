@@ -33,9 +33,8 @@ RedshiftController::RedshiftController()
       m_autoState(NotSetted),
       m_runMode(Auto),
       m_readyForStart(false),
-      m_manualTemp(5000),
-      m_manualMode(false)
-
+      m_manualMode(false),
+      m_manualTemp(5000)
 {
     m_process = new KProcess();
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -183,9 +182,11 @@ void RedshiftController::restart()
 
 void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    m_currentActivity = data["Current"].toString();
-    readConfig();
-    applyChanges();
+    if(sourceName == "Status") {
+        m_currentActivity = data["Current"].toString();
+        readConfig();
+        applyChanges();
+    }
 }
 
 void RedshiftController::readConfig()
