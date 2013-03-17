@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-16 16:55+0100\n"
-"PO-Revision-Date: 2013-02-16 16:56+0100\n"
+"POT-Creation-Date: 2013-03-17 21:38+0100\n"
+"PO-Revision-Date: 2013-03-17 21:41+0100\n"
 "Last-Translator: Simone Gaiarin <simgunz@gmail.com>\n"
 "Language-Team: Italian <>\n"
 "Language: it\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: applet/redshiftapplet.cpp:47
+#: applet/redshiftapplet.cpp:57
 msgid "Redshift"
 msgstr "Redshift"
 
-#: applet/redshiftapplet.cpp:48 applet/redshiftapplet.cpp:79
+#: applet/redshiftapplet.cpp:58 applet/redshiftapplet.cpp:88
 msgctxt "Action the user can perform"
 msgid ""
 "Click to toggle on, scroll the mouse wheel to set the color temperature "
@@ -30,7 +30,7 @@ msgstr ""
 "Cliccare per attivare, scorrere rotellina del mouse per impostare "
 "manualmente la temperatura di colore"
 
-#: applet/redshiftapplet.cpp:75
+#: applet/redshiftapplet.cpp:84
 msgctxt "Action the user can perform"
 msgid ""
 "Click to toggle off, scroll the mouse wheel to set the color temperature "
@@ -39,7 +39,7 @@ msgstr ""
 "Cliccare per disattivare, scorrere rotellina del mouse per impostare "
 "manualmente la temperatura di colore"
 
-#: applet/redshiftapplet.cpp:83
+#: applet/redshiftapplet.cpp:92
 msgctxt "Action the user can perform"
 msgid ""
 "Click to switch to auto mode, scroll the mouse wheel to change the color "
@@ -48,27 +48,27 @@ msgstr ""
 "Cliccare per passare in modalità automatica, scorrere la rotellina del mouse "
 "per cambiare la temperatura di colore"
 
-#: applet/redshiftapplet.cpp:99
+#: applet/redshiftapplet.cpp:112
 msgctxt "Redshift main configuration page"
 msgid "General"
 msgstr "Generale "
 
-#: applet/redshiftapplet.cpp:118
+#: applet/redshiftapplet.cpp:131
 msgctxt "Redshift state is set auto in this activity"
 msgid "Auto"
 msgstr "Auto"
 
-#: applet/redshiftapplet.cpp:119
+#: applet/redshiftapplet.cpp:132
 msgctxt "Redshift is forced to be enabled in this activity"
 msgid "Always Enabled"
 msgstr "Sempre Abilitato"
 
-#: applet/redshiftapplet.cpp:120
+#: applet/redshiftapplet.cpp:133
 msgctxt "Redshift is forced to be disabled in this activity"
 msgid "Always Disabled"
 msgstr "Sempre Disabilitato"
 
-#: applet/redshiftapplet.cpp:138
+#: applet/redshiftapplet.cpp:151
 msgctxt "Redshift activities behaviour configuration page"
 msgid "Activities"
 msgstr "Attività"
@@ -201,21 +201,21 @@ msgstr "Luminosità:"
 #. i18n: file: redshift.kcfg:10
 #. i18n: ectx: label, entry (latitude), group (General)
 #: po/rc.cpp:60 rc.cpp:60
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Latitude"
 msgstr "Latitudine"
 
 #. i18n: file: redshift.kcfg:14
 #. i18n: ectx: label, entry (longitude), group (General)
 #: po/rc.cpp:63 rc.cpp:63
-msgctxt "@label"
+msgctxt "@label- KCFG entry name"
 msgid "Longitude"
 msgstr "Longitudine"
 
 #. i18n: file: redshift.kcfg:18
 #. i18n: ectx: label, entry (dayTemp), group (General)
 #: po/rc.cpp:66 rc.cpp:66
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Day Color Temperature"
 msgstr "Temperatura di Colore Diurna"
 
@@ -229,7 +229,7 @@ msgstr "Una temperatura di colore neutrale è 6500°K."
 #. i18n: file: redshift.kcfg:23
 #. i18n: ectx: label, entry (nightTemp), group (General)
 #: po/rc.cpp:72 rc.cpp:72
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Night Color Temperature"
 msgstr "Temperatura di Colore Notturna "
 
@@ -243,7 +243,7 @@ msgstr "La temperatura di colore notturna raccomandata è 4500°K."
 #. i18n: file: redshift.kcfg:28
 #. i18n: ectx: label, entry (gammaR), group (General)
 #: po/rc.cpp:78 rc.cpp:78
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Red Gamma Correction"
 msgstr "Correzione gamma (Rosso)"
 
@@ -257,7 +257,7 @@ msgstr "Correzione gamma (Rosso)"
 #. i18n: file: redshift.kcfg:33
 #. i18n: ectx: label, entry (gammaG), group (General)
 #: po/rc.cpp:84 rc.cpp:84
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Green Gamma Correction"
 msgstr "Correzione gamma (Verde)"
 
@@ -271,7 +271,7 @@ msgstr "Correzione gamma (Verde)"
 #. i18n: file: redshift.kcfg:38
 #. i18n: ectx: label, entry (gammaB), group (General)
 #: po/rc.cpp:90 rc.cpp:90
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Blue Gamma Correction"
 msgstr "Correzione gamma (Blu)"
 
@@ -283,7 +283,7 @@ msgid "Gamma correction (Blue)"
 msgstr "Correzione gamma (Blu)"
 
 #. i18n: file: redshift.kcfg:43
-#. i18n: ectx: label, entry (brightness), group (General)
+#. i18n: ectx: label, entry (brightness - KCFG entry name), group (General)
 #: po/rc.cpp:96 rc.cpp:96
 msgctxt "@label"
 msgid "Brightness"
@@ -292,21 +292,21 @@ msgstr "Luminosità"
 #. i18n: file: redshift.kcfg:47
 #. i18n: ectx: label, entry (smooth), group (General)
 #: po/rc.cpp:99 rc.cpp:99
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Smooth Transition Flag"
 msgstr "Flag Transizione Smooth"
 
 #. i18n: file: redshift.kcfg:51
 #. i18n: ectx: label, entry (autolaunch), group (General)
 #: po/rc.cpp:102 rc.cpp:102
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Autostart Flag"
 msgstr "Flag Avvio Automatico"
 
 #. i18n: file: redshift.kcfg:55
 #. i18n: ectx: label, entry (method), group (General)
 #: po/rc.cpp:105 rc.cpp:105
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Color Adjustment Method"
 msgstr "Metodo di Regolazione del Colore"
 
@@ -323,14 +323,18 @@ msgstr ""
 #. i18n: file: redshift.kcfg:62
 #. i18n: ectx: label, entry (alwaysOnActivities), group (Activities)
 #: po/rc.cpp:111 rc.cpp:111
-msgctxt "@label"
+msgctxt ""
+"@label - KCFG entry name (not visible to the user) - List of the activities "
+"where redshift is always on"
 msgid "Always On Activities"
 msgstr "Attività Sempre Abilitato"
 
 #. i18n: file: redshift.kcfg:65
 #. i18n: ectx: label, entry (alwaysOffActivities), group (Activities)
 #: po/rc.cpp:114 rc.cpp:114
-msgctxt "@label"
+msgctxt ""
+"@label - KCFG entry name (not visible to the user) - List of the activities "
+"where redshift is always off"
 msgid "Always Off Activities"
 msgstr "Attività Sempre Disabilitato"
 

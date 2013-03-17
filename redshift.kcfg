@@ -7,62 +7,62 @@
   <include>KSystemTimeZones</include>
   <group name="General">
     <entry name="latitude" type="Double">
-      <label context="@label">Latitude</label>
+      <label context="@label - KCFG entry name">Latitude</label>
       <default code="true">KSystemTimeZones::local().latitude()</default>
     </entry>
     <entry name="longitude" type="Double">
-      <label context="@label">Longitude</label>
+      <label context="@label- KCFG entry name">Longitude</label>
       <default code="true">KSystemTimeZones::local().longitude()</default>
     </entry>
     <entry name="dayTemp" type="Int">
-      <label context="@label">Day Color Temperature</label>
+      <label context="@label - KCFG entry name">Day Color Temperature</label>
       <tooltip context="@info:tooltip">A neutral color temperature is 6500°K.</tooltip>
       <default>5500</default>
     </entry>
     <entry name="nightTemp" type="Int">
-      <label context="@label">Night Color Temperature</label>
+      <label context="@label - KCFG entry name">Night Color Temperature</label>
       <tooltip context="@info:tooltip">The recommended night color temperature is 4500°K.</tooltip>
       <default>3700</default>
     </entry>
     <entry name="gammaR" type="Double">
-      <label context="@label">Red Gamma Correction</label>
+      <label context="@label - KCFG entry name">Red Gamma Correction</label>
       <tooltip context="@info:tooltip">Gamma correction (Red)</tooltip>
       <default>1.00</default>
     </entry>
     <entry name="gammaG" type="Double">
-      <label context="@label">Green Gamma Correction</label>
+      <label context="@label - KCFG entry name">Green Gamma Correction</label>
       <tooltip context="@info:tooltip">Gamma correction (Green)</tooltip>
       <default>1.00</default>
     </entry>
     <entry name="gammaB" type="Double">
-      <label context="@label">Blue Gamma Correction</label>
+      <label context="@label - KCFG entry name">Blue Gamma Correction</label>
       <tooltip context="@info:tooltip">Gamma correction (Blue)</tooltip>
       <default>1.00</default>
     </entry>
-    <entry name="brightness" type="Double">
+    <entry name="brightness - KCFG entry name" type="Double">
       <label context="@label">Brightness</label>
       <default>1.00</default>
     </entry>
     <entry name="smooth" type="Bool">
-      <label context="@label">Smooth Transition Flag</label>
+      <label context="@label - KCFG entry name">Smooth Transition Flag</label>
       <default>true</default>
     </entry>
     <entry name="autolaunch" type="Bool">
-      <label context="@label">Autostart Flag</label>
+      <label context="@label - KCFG entry name">Autostart Flag</label>
       <default>false</default>
     </entry>
     <entry name="method" type="Int">
-        <label context="@label">Color Adjustment Method</label>
+        <label context="@label - KCFG entry name">Color Adjustment Method</label>
         <tooltip context="@info:tooltip">Redshift color adjustment method. If Auto (randr) doesn't work, try vidmode.</tooltip>
         <default>0</default>
     </entry>
   </group>
   <group name="Activities">
     <entry name="alwaysOnActivities" type="StringList">
-      <label context="@label">Always On Activities</label>
+      <label context="@label - KCFG entry name (not visible to the user) - List of the activities where redshift is always on">Always On Activities</label>
     </entry>
     <entry name="alwaysOffActivities" type="StringList">
-      <label context="@label">Always Off Activities</label>
+      <label context="@label - KCFG entry name (not visible to the user) - List of the activities where redshift is always off">Always Off Activities</label>
     </entry>
   </group>
 </kcfg>
