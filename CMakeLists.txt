@@ -1,8 +1,8 @@
 project(redshift-plasmoid)
 
-find_package(KDE4 REQUIRED QT4 REQUIRED)
+find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
-include_directories(${QT_INCLUDE} ${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${KDE4_INCLUDES})
 
 add_subdirectory(dataengine)
 add_subdirectory(applet)
