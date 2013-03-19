@@ -39,8 +39,8 @@
       <tooltip context="@info:tooltip">Gamma correction (Blue)</tooltip>
       <default>1.00</default>
     </entry>
-    <entry name="brightness - KCFG entry name" type="Double">
-      <label context="@label">Brightness</label>
+    <entry name="brightness" type="Double">
+      <label context="@label - KCFG entry name">Brightness</label>
       <default>1.00</default>
     </entry>
     <entry name="smooth" type="Bool">
