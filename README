@@ -26,3 +26,8 @@ sudo make install (alternatively su -c 'make install')
 
 After install, reboot or run redshiftautostart manually
 to start using the plasmoid.
+
+Troubleshoot:
+If make fails to build (because it try to build it against Qt5), try
+
+cmake -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4 -DCMAKE_INSTALL_PREFIX=$(kde4-config --prefix) ..)
