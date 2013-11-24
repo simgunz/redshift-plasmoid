@@ -16,12 +16,12 @@
     </entry>
     <entry name="dayTemp" type="Int">
       <label context="@label - KCFG entry name">Day Color Temperature</label>
-      <tooltip context="@info:tooltip">A neutral color temperature is 6500°K.</tooltip>
+      <tooltip context="@info:tooltip">A neutral color temperature is 6500 K.</tooltip>
       <default>5500</default>
     </entry>
     <entry name="nightTemp" type="Int">
       <label context="@label - KCFG entry name">Night Color Temperature</label>
-      <tooltip context="@info:tooltip">The recommended night color temperature is 4500°K.</tooltip>
+      <tooltip context="@info:tooltip">The recommended night color temperature is 4500 K.</tooltip>
       <default>3700</default>
     </entry>
     <entry name="gammaR" type="Double">

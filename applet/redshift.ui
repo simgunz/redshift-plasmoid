@@ -161,7 +161,7 @@
       <enum>QAbstractSpinBox::PlusMinus</enum>
      </property>
      <property name="suffix">
-      <string comment="Kelvin degrees (There's a space before the K)"> K</string>
+      <string comment="Kelvin (There's a space before the K)"> K</string>
      </property>
      <property name="maximum">
       <number>9999</number>
@@ -196,7 +196,7 @@
       <enum>QAbstractSpinBox::PlusMinus</enum>
      </property>
      <property name="suffix">
-      <string comment="Kelvin degrees (There's a space before the K)"> K</string>
+      <string comment="Kelvin (There's a space before the K)"> K</string>
      </property>
      <property name="maximum">
       <number>9999</number>

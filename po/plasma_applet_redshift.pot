@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-17 21:38+0100\n"
+"POT-Creation-Date: 2013-11-24 10:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Redshift"
 msgstr ""
 
-#: applet/redshiftapplet.cpp:58 applet/redshiftapplet.cpp:88
+#: applet/redshiftapplet.cpp:58 applet/redshiftapplet.cpp:89
 msgctxt "Action the user can perform"
 msgid ""
 "Click to toggle on, scroll the mouse wheel to set the color temperature "
@@ -35,34 +35,34 @@ msgid ""
 "manually"
 msgstr ""
 
-#: applet/redshiftapplet.cpp:92
+#: applet/redshiftapplet.cpp:94
 msgctxt "Action the user can perform"
 msgid ""
 "Click to switch to auto mode, scroll the mouse wheel to change the color "
 "temperature"
 msgstr ""
 
-#: applet/redshiftapplet.cpp:112
+#: applet/redshiftapplet.cpp:115
 msgctxt "Redshift main configuration page"
 msgid "General"
 msgstr ""
 
-#: applet/redshiftapplet.cpp:131
+#: applet/redshiftapplet.cpp:134
 msgctxt "Redshift state is set auto in this activity"
 msgid "Auto"
 msgstr ""
 
-#: applet/redshiftapplet.cpp:132
+#: applet/redshiftapplet.cpp:135
 msgctxt "Redshift is forced to be enabled in this activity"
 msgid "Always Enabled"
 msgstr ""
 
-#: applet/redshiftapplet.cpp:133
+#: applet/redshiftapplet.cpp:136
 msgctxt "Redshift is forced to be disabled in this activity"
 msgid "Always Disabled"
 msgstr ""
 
-#: applet/redshiftapplet.cpp:151
+#: applet/redshiftapplet.cpp:154
 msgctxt "Redshift activities behaviour configuration page"
 msgid "Activities"
 msgstr ""
@@ -277,9 +277,9 @@ msgid "Gamma correction (Blue)"
 msgstr ""
 
 #. i18n: file: redshift.kcfg:43
-#. i18n: ectx: label, entry (brightness - KCFG entry name), group (General)
+#. i18n: ectx: label, entry (brightness), group (General)
 #: po/rc.cpp:96 rc.cpp:96
-msgctxt "@label"
+msgctxt "@label - KCFG entry name"
 msgid "Brightness"
 msgstr ""
 
