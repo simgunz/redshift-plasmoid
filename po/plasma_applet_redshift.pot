@@ -122,7 +122,7 @@ msgstr ""
 #. i18n: file: applet/redshift.ui:199
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_nightTemp)
 #: po/rc.cpp:24 po/rc.cpp:30 rc.cpp:24 rc.cpp:30
-msgctxt "Kelvin degrees (There's a space before the K)"
+msgctxt "Kelvin (There's a space before the K)"
 msgid " K"
 msgstr ""
 
@@ -217,7 +217,7 @@ msgstr ""
 #. i18n: ectx: tooltip, entry (dayTemp), group (General)
 #: po/rc.cpp:69 rc.cpp:69
 msgctxt "@info:tooltip"
-msgid "A neutral color temperature is 6500°K."
+msgid "A neutral color temperature is 6500 K."
 msgstr ""
 
 #. i18n: file: redshift.kcfg:23
@@ -231,7 +231,7 @@ msgstr ""
 #. i18n: ectx: tooltip, entry (nightTemp), group (General)
 #: po/rc.cpp:75 rc.cpp:75
 msgctxt "@info:tooltip"
-msgid "The recommended night color temperature is 4500°K."
+msgid "The recommended night color temperature is 4500 K."
 msgstr ""
 
 #. i18n: file: redshift.kcfg:28
