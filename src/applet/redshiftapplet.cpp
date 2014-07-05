@@ -1,19 +1,25 @@
-/***************************************************************************
- *   Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
- **************************************************************************/
+/************************************************************************
+* Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
+*                                                                       *
+* This program is free software; you can redistribute it and/or modify  *
+* it under the terms of the GNU General Public License as published by  *
+* the Free Software Foundation; either version 3 of the License, or     *
+* (at your option) any later version.                                   *
+*                                                                       *
+* This program is distributed in the hope that it will be useful,       *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+* GNU General Public License for more details.                          *
+*                                                                       *
+* You should have received a copy of the GNU General Public License     *
+* along with this program; if not, see <http://www.gnu.org/licenses/>.  *
+************************************************************************/
+
+/*!
+ * \file redshiftapplet.cpp
+ *
+ * Contains the implementation of the RedshiftApplet class.
+ */
 
 #include "redshiftapplet.h"
 
@@ -53,18 +59,25 @@ RedshiftApplet::~RedshiftApplet()
 
 void RedshiftApplet::init()
 {
-    m_tooltip.setMainText(i18n("Redshift"));
-    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on, scroll the mouse wheel to set the color temperature manually"));
-    m_tooltip.setImage(KIcon("redshift-status-off"));
-    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
-
+    //Initialize the plasmoid using an IconWidget
     m_button = new Plasma::IconWidget(this);
     m_button->setIcon(KIcon("redshift-status-off"));
     m_layout = new QGraphicsGridLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->addItem(m_button, 0, 0);
+
+    //Set the tooltip
+    m_tooltip.setMainText(i18n("Redshift"));
+    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on, \
+                                scroll the mouse wheel to set the color temperature manually"));
+    m_tooltip.setImage(KIcon("redshift-status-off"));
+    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
+
+    //Connect to the data engine
     m_engine = dataEngine("redshift");
     m_engine->connectSource("Controller", this);
+
+    //Connect signals and slots
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
 }
 
@@ -97,21 +110,25 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
 
 void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 {
-    RedshiftSettings::self()->readConfig();
-    const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
-    const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
-
+    //Create the redshift parameters configuration page
     QWidget *redshiftInterface = new QWidget(parent);
     m_redshiftUi.setupUi(redshiftInterface);
     parent->addPage(redshiftInterface, RedshiftSettings::self(),
                     i18nc("Redshift main configuration page","General"), "redshift");
 
+    //Create the activities configuration page
     QWidget *activitiesInterface = new QWidget(parent);
     m_activitiesUi.setupUi(activitiesInterface);
 
+    //Get the list of KDE activities
     Plasma::DataEngine *activities_engine = dataEngine("org.kde.activities");
     QStringList activities = activities_engine->sources();
     activities.removeLast();
+
+    //Get the redshift-plasmoid activities configuration
+    RedshiftSettings::self()->readConfig();
+    const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
+    const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
 
     QString act;
     foreach(act, activities) {
@@ -139,12 +156,11 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         connect(itemCombo, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     }
     m_activitiesUi.activities->resizeColumnToContents(0);
+    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page", "Activities"),
+                    "preferences-activities");
 
     connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
-
-    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page", "Activities"),
-                    "preferences-activities");
 }
 
 void RedshiftApplet::toggle()
@@ -196,7 +212,7 @@ void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
 void RedshiftApplet::showRedshiftOSD(int temperature)
 {
     m_redshiftOSD->setCurrentTemperature(temperature);
-    m_redshiftOSD->activateOSD(); //Show and enable the hide timer
+    m_redshiftOSD->activateOSD(); //Show the OSD and enable the hide timer
 
     //Center the OSD
     QRect rect = KApplication::kApplication()->desktop()->screenGeometry(QCursor::pos());
