@@ -46,6 +46,19 @@ public:
     RedshiftState state();
     int currentTemperature();
     void setTemperature(bool increase);
+
+    //! Constant defining the minimum allowed screen color temperature.
+    static const int MinTemperature = 1000;
+
+    //! Constant defining the maximum allowed screen color temperature.
+    static const int MaxTemperature = 9900;
+
+    //! Constant defining the default screen color temperature used when redshift switch to manual mode.
+    static const int DefaultManualTemperature = 5000;
+
+    //! Constant defining the temperature step used when increasing/decreasing the screen color temperature in manual mode.
+    static const int TemperatureStep = 100;
+
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     void setReadyForStart();

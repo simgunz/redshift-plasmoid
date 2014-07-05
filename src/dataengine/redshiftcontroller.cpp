@@ -34,7 +34,7 @@ RedshiftController::RedshiftController()
       m_runMode(Auto),
       m_readyForStart(false),
       m_manualMode(false),
-      m_manualTemp(5000)
+      m_manualTemp(RedshiftController::DefaultManualTemperature)
 {
     m_process = new KProcess();
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -90,7 +90,7 @@ void RedshiftController::stop()
             kill(m_process->pid(), SIGUSR1);
         }
     }
-    m_manualTemp = 5000;
+    m_manualTemp = RedshiftController::DefaultManualTemperature;
 }
 
 void RedshiftController::setTemperature(bool increase)
@@ -98,13 +98,12 @@ void RedshiftController::setTemperature(bool increase)
     if (m_readyForStart && (m_runMode != AlwaysOff)) {
         m_manualMode = true;
         if (increase) {
-            m_manualTemp += 100;
+            m_manualTemp += RedshiftController::TemperatureStep;
         } else {
-            m_manualTemp -= 100;
+            m_manualTemp -= RedshiftController::TemperatureStep;
         }
         //Bound the possible temperature
-        //TODO:Set them as constants
-        m_manualTemp = std::min(std::max(m_manualTemp,1000),9900);
+        m_manualTemp = qMin(qMax(m_manualTemp,RedshiftController::MinTemperature),RedshiftController::MaxTemperature);
         readConfig();
         m_state = Stopped;
         if (m_process->state()) {
