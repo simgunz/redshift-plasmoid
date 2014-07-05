@@ -175,7 +175,7 @@ signals:
      */
     void stateChanged(RedshiftController::RedshiftState state, int temperature);
 
-private Q_SLOTS:
+private slots:
 
     /*!
      * Set a flag that enables the controller to execute the redshift process.
@@ -244,7 +244,7 @@ private:
 
     //! Redshift enable flag, if true the redshift process can be executed.
     bool m_readyForStart;
-    
+
     //! Actual redshift state.
     RedshiftState m_state;
 
