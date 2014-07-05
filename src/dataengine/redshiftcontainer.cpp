@@ -41,14 +41,14 @@ RedshiftContainer::~RedshiftContainer()
     delete m_controller;
 }
 
-void RedshiftContainer::updateStatus(int state, int temp)
+void RedshiftContainer::updateStatus(int state, int temperature)
 {
     switch (state) {
         case 0: setData("Status", "Stopped"); break;
         case 1: setData("Status", "Running"); break;
         case 2: setData("Status", "RunningManual"); break;
     }
-    setData("Temperature", temp);
+    setData("Temperature", temperature);
     //Check if any data is actually changed, and, if so, the dataUpdated signal is automatically emitted
     //in order to inform the connected plasmoids of the change.
     checkForUpdate();
