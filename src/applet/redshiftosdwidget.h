@@ -22,8 +22,8 @@
  * Contains the interface of the RedshiftOSDWidget class.
  */
 
-#ifndef REDSHIFTOSDWIDGET__H
-#define REDSHIFTOSDWIDGET__H
+#ifndef REDSHIFTOSDWIDGET_H
+#define REDSHIFTOSDWIDGET_H
 
 #include <Plasma/Dialog>
 
@@ -32,15 +32,14 @@ class QTimer;
 
 namespace Plasma
 {
-class Label;
+    class Label;
 }
-
 
 /*!
  * \class RedshiftOSDWidget
  *
  * The RedshiftOSDWidget class provides an On Screen Display (OSD)
- * dialog showing the current screen color temperature.
+ * dialog showing the screen color temperature.
  */
 class RedshiftOSDWidget : public Plasma::Dialog
 {
@@ -53,24 +52,24 @@ public:
      *
      * \param parent The QWidget this OSD is parented to.
      */
-    RedshiftOSDWidget(QWidget * parent = 0);
+    RedshiftOSDWidget(QWidget *parent = 0);
 
     /*!
      * Recommended widget size as a function of the icon size.
      *
-     * \returns Recommended widget size
+     * \returns Recommended widget size.
      */
     virtual QSize sizeHint() const;
 
     /*!
-     * Show the OSD and automatically hide it after 2 seconds.
+     * Shows the OSD and automatically hides it after 2 seconds.
      */
     void activateOSD();
 
     /*!
-     * Set the color temperature to display.
+     * Sets the color temperature to display.
      *
-     * \param temperature The color temperature in Kelvin
+     * \param temperature The color temperature in Kelvin.
      */
     void setCurrentTemperature(int temperature);
 
@@ -79,10 +78,10 @@ private:
     //! The icon displayed in the OSD.
     Plasma::Label *m_iconLabel;
 
-    //! Display the current color temperature in Kelvin.
+    //! Displays the current color temperature in Kelvin.
     Plasma::Label *m_temperatureLabel;
 
-    //! OSD autohide timer.
+    //! OSD auto-hide timer.
     QTimer *m_autoHideTimer;
 
     //! Redshift pixmap icon.
