@@ -30,9 +30,9 @@ RedshiftEngine::RedshiftEngine(QObject* parent, const QVariantList& args)
     Q_UNUSED(args)
 }
 
-bool RedshiftEngine::sourceRequestEvent(const QString &name)
+bool RedshiftEngine::sourceRequestEvent(const QString &source)
 {
-    if (name == "Controller") {
+    if (source == "Controller") {
         Plasma::DataContainer *container = containerForSource("Controller");
         if (!container) {
             addSource(new RedshiftContainer(this));

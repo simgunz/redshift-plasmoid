@@ -90,7 +90,7 @@ protected:
      *
      * \returns True if a Plasma::DataContainer was set up, false otherwise
      */
-    bool sourceRequestEvent(const QString& name);
+    bool sourceRequestEvent(const QString& source);
 };
 
 #endif //REDSHIFTENGINE_H
