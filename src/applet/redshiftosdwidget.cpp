@@ -82,6 +82,12 @@ RedshiftOSDWidget::RedshiftOSDWidget(QWidget * parent)
     setGraphicsWidget(widget);
 }
 
+QSize RedshiftOSDWidget::sizeHint() const
+{
+    int iconSize = m_iconLabel->nativeWidget()->pixmap()->height();
+    return QSize(iconSize + m_temperatureLabel->nativeWidget()->sizeHint().width(), iconSize);
+}
+
 void RedshiftOSDWidget::activateOSD()
 {
     show();
@@ -91,12 +97,6 @@ void RedshiftOSDWidget::activateOSD()
 void RedshiftOSDWidget::setCurrentTemperature(int temperature)
 {
     m_temperatureLabel->setText(QString::fromUtf8("%1 K").arg(temperature));
-}
-
-QSize RedshiftOSDWidget::sizeHint() const
-{
-    int iconSize = m_iconLabel->nativeWidget()->pixmap()->height();
-    return QSize(iconSize + m_temperatureLabel->nativeWidget()->sizeHint().width(), iconSize);
 }
 
 #include "redshiftosdwidget.moc"

@@ -56,11 +56,11 @@ public:
     RedshiftOSDWidget(QWidget * parent = 0);
 
     /*!
-     * Set the color temperature to display.
+     * Recommended widget size as a function of the icon size.
      *
-     * \param temperature The color temperature in Kelvin
+     * \returns Recommended widget size
      */
-    void setCurrentTemperature(int temperature);
+    virtual QSize sizeHint() const;
 
     /*!
      * Show the OSD and automatically hide it after 2 seconds.
@@ -68,11 +68,11 @@ public:
     void activateOSD();
 
     /*!
-     * Recommended widget size as a function of the icon size.
+     * Set the color temperature to display.
      *
-     * \returns Recommended widget size
+     * \param temperature The color temperature in Kelvin
      */
-    virtual QSize sizeHint() const;
+    void setCurrentTemperature(int temperature);
 
 private:
 
