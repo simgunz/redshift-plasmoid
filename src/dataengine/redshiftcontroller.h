@@ -1,19 +1,25 @@
-/***************************************************************************
- *   Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
- **************************************************************************/
+/************************************************************************
+* Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
+*                                                                       *
+* This program is free software; you can redistribute it and/or modify  *
+* it under the terms of the GNU General Public License as published by  *
+* the Free Software Foundation; either version 3 of the License, or     *
+* (at your option) any later version.                                   *
+*                                                                       *
+* This program is distributed in the hope that it will be useful,       *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+* GNU General Public License for more details.                          *
+*                                                                       *
+* You should have received a copy of the GNU General Public License     *
+* along with this program; if not, see <http://www.gnu.org/licenses/>.  *
+************************************************************************/
+
+/*!
+ * \file redshiftcontroller.h
+ *
+ * Contains the interface of the RedshiftController class.
+ */
 
 #ifndef REDSHIFTCONTROLLER_H
 #define REDSHIFTCONTROLLER_H
@@ -23,28 +29,127 @@
 
 #include <Plasma/DataEngine>
 
+/*!
+ * The RedshiftController class is a wrapper around a redshift KProcess that allows to change all
+ * the redshift parameters while it's running, and makes redshift plasma activity aware.
+ *
+ * RedshiftController is a wrapper around a redshift daemon. The redshift daemon can only be paused/resumed
+ * by sending the SIGUSR1  but doesn't allow to change its parameter once launched. This wrapper add this
+ * kind of functionality. Redshift is launched through a KProcess and every time a parameter needs to be changed,
+ * the KProcess is stopped and relaunched with the new parameters.
+ *
+ * Moreover it provides some wrapper methods to start/stop/pause redshift by sending the SIGUSR1 in a proper way.
+ *
+ * Finally RedshiftController add a Plasma Activity aware functionality to redshift. In particular everytime the user
+ * change activity the controller check the user preference and set redshift to that state.
+ * The allowed states are:
+ * - Auto, redshift can be toggled on/off. The default state at login depends on the Autostart flag.
+ * - Always enabled, redshift is forced to be enabled and can't be turned off (not very useful)
+ * - Always disabled, redshift is forced to be disabled and can't be turned on (useful for activities where redshift
+ * is undesirable, like an activity to watch movie or to do graphic editing)
+ */
+
 class RedshiftController : public QThread
 {
     Q_OBJECT
 
 public:
+
+    /*!
+     * Enumerates the possible states of RedshiftController.
+     *
+     * The possible values of the state are:
+     * - Undefined
+     * - Running, the redshift process is running and is adjusting the screen color temperature continuously
+     * - RunningManual, the redshift process is not running, and the screen color temperature
+     * has been set to a fixed value
+     * - Stopped, the redshift process is not running, and the screen color temperature is the system default one
+     */
     enum RedshiftState {
         Undefined,
         Stopped,
         Running,
         RunningManual
     };
+
+    /*!
+     * Enumerates the modes RedshiftController can operate.
+     */
     enum RunMode {
         Auto,
         AlwaysOn,
         AlwaysOff
     };
+
+    /*!
+     * Default constructor.
+     *
+     * The constructor connects the controller to the dbus object dbus org.kde.redshift in order to receive
+     * the readyForStart signal emitted by redshiftAutostartEnabler, which trigger the setReadyForStart method that
+     * enable all the controller functionalities.
+     * Moreover the controller is connected to the Plasma Activities dataengine 'Status' source so that every time
+     * the user changes activity the dataUpdated method is invoked and the state of redshift can be
+     * changed accordingly to the current activity settings.
+     */
     RedshiftController();
+
+    /*!
+     * Default deconstructor.
+     *
+     * If redshift is in manual mode (so the process isn't running), reset the screen color temperature
+     * to the default value by invoking redshift with the -x parameter. Otherwise terminate the redshift
+     * running process with terminate, so that a the smooth transition is performed (if enabled in the settings).
+     */
     ~RedshiftController();
+
+    /*!
+     * Toggles the state of redshift.
+     *
+     * If redshift is in Auto mode this method toggle the state from Running to NotRunning and vice versa, whilst
+     * if it's in Manual mode (the state is RunningManual) it resets the screen color temperature,
+     * sets the mode to Auto, and execute redshift so that the final state is Running.
+     */
     void toggle();
+
+    /*!
+     * Restart the redshift process to apply the new settings.
+     *
+     * Since the parameters cannot be changed once the redshift process is running, it needs to be
+     * stopped and launched again with the new parameters.
+     */
     void restart();
+
+    /*!
+     * Access method to the current redshift state.
+     *
+     * \returns The current redshift state
+     */
     RedshiftState state();
+
+    /*!
+     * Access method to the manual mode screen color temperature.
+     *
+     * If redshift is in manual mode the temperature (manually set) is returned otherwise the method returns 0
+     * since since redshift 1.7 it was not possible to retrieve the current temperature from the redshift daemon.
+     * From redshift 1.8 it's possible to retrieve the current temperature from the shell by calling redshift with the
+     * -v parameter.
+     *
+     * \returns The current screen color temperature if in manual mode, zero otherwise.
+     */
     int currentTemperature();
+
+    /*!
+     * Switch to manual mode and increase/decrease the screen color temperature by 100 Kelvin.
+     *
+     * If the controller is in Auto mode first brings it in Manual mode and set the screen color temperature to the
+     * DefaultManualTemperature value, then increase/decrease the screen color temperature. If the controller
+     * is already in Manual mode it just increase/decrease the temperature.
+     *
+     * The redshift process is instantly killed if it's running, then the color temperature is set to a fixed value
+     * by launching redshift with the -x parameter. After the temperature has been set the redshift process exit.
+     *
+     * \param increase If true the screen color temperature is increased otherwise it's decreased
+     */
     void setTemperature(bool increase);
 
     //! Constant defining the minimum allowed screen color temperature.
@@ -60,39 +165,132 @@ public:
     static const int TemperatureStep = 100;
 
 private Q_SLOTS:
-    void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
-    void setReadyForStart();
-private:
-    void applyChanges(bool toggle = false);
-    void start();
-    void stop();
-    void readConfig();
-    KProcess *m_process;
-    /** Real redshift state */
-    RedshiftState m_state;
-    /** Auto mode redshift state, can be different from the real
-     * state if the mode is different from manual
+
+    /*!
+     * Invoked when the user changes plasma activity, change the state of redshift accordingly to
+     * the activities settings.
+     *
+     * As an example if the user switch to a plasma activity where the redshift activity setting is AlwaysOff,
+     * the redshift process is suspended.
      */
+    void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+
+    /*!
+     * Set a flag that enables the controller to execute the redshift process.
+     *
+     * Triggered when the dbus readyForStart is received.
+     */
+    void setReadyForStart();
+
+private:
+
+    /*!
+     * Core method that switches redshift on/off.
+     *
+     * If toggle is true the next section perform a toggle of the state whereas
+     * if toggle is false it realigns the real state with the auto state. This last option is used to:
+     * - autostart redshift
+     * - restore the Auto mode redshift state, after switching from Manual mode
+     *
+     * \param toggle If toggle is true the next section perform a toggle of the state,
+     * whereas if toggle is false it realign the real state with the auto state
+     */
+    void applyChanges(bool toggle = false);
+
+    /*!
+     * Enables redshift screen color management (the screen becomes red).
+     *
+     * If the redshift process is not already running it executes it,
+     * otherwise it sends the SIGUSR1 signal to the process to resume it
+     */
+    void start();
+
+    /*!
+     * Disables redshift screen color management (the screen becomes neutral).
+     *
+     * If the redshift process is running it sends the SIGUSR1 signal to the process to suspend it.
+     * It also resets the manual screen color temperature to the default value when redshift switch from
+     * Manual mode to Auto mode.
+     */
+    void stop();
+
+    /*!
+     * Reads the redshift specific parameters and the activities parameters from a KconfigXT configuration.
+     *
+     * If redshift should be auto started on login, m_autoState is set to Running so that once applyChanges is
+     * invoked it executes the redshift process (m_state is aligned to m_autoState).
+     */
+    void readConfig();
+
+    //! The redshift process object
+    KProcess *m_process;
+
+    //! Actual redshift state.
+    RedshiftState m_state;
+
+    //! Stores the redshift Auto mode state, in order to restore it after switching from Manual mode.
     RedshiftState m_autoState;
+
+    //! The activity the user is on.
     QString m_currentActivity;
+
+    //! Current redshift operation mode.
     int m_runMode;
+
+    //! Redshift enable flag, if true the redshift process can be executed.
     bool m_readyForStart;
+
+    //! Plasma activities dataengine.
     Plasma::DataEngine *m_activitiesEngine;
+
+    //! User latitude.
     float m_latitude;
+
+    //! User longitude.
     float m_longitude;
+
+    //! Daytime screen color temperature.
     int m_dayTemp;
+
+    //! Nighttime screen color temperature.
     int m_nightTemp;
+
+    //! Red gamma value.
     float m_gammaR;
+
+    //! Green gamma value.
     float m_gammaG;
+
+    //! Blue gamma value.
     float m_gammaB;
+
+    //! Screen brightness value.
     float m_brightness;
+
+    //! Smooth color transition flag, if true the color transition is performed smoothly.
     bool m_smooth;
+
+    //! Autostart flag, if true redshift is acivated on login.
     bool m_autolaunch;
+
+    //! Color adjstment method, can be randr or vidmode.
     int m_method;
+
+    //! Manual mode flag. If true redshift set a fixed color temperature and won't adjust it anymore.
     bool m_manualMode;
+    
+    //! Manual mode temperature to be set.
     int m_manualTemp;
 
 signals:
+
+    /*!
+     * Emitted every time the state changes or, if in manual mode, the temperature changes.
+     *
+     * This signal is caught by the RedshiftContainer in order to set the source data values.
+     * The state can change if the user bring redshift in manual mode, if he manually toggles redshift on/off,
+     * and if he switches activity. The temperature changes every time the user scroll the wheel over the icon widget.
+     */
     void stateChanged(RedshiftController::RedshiftState state, int temperature);
 };
 

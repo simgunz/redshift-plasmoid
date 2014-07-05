@@ -1,19 +1,25 @@
-/***************************************************************************
- *   Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
- **************************************************************************/
+/************************************************************************
+* Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
+*                                                                       *
+* This program is free software; you can redistribute it and/or modify  *
+* it under the terms of the GNU General Public License as published by  *
+* the Free Software Foundation; either version 3 of the License, or     *
+* (at your option) any later version.                                   *
+*                                                                       *
+* This program is distributed in the hope that it will be useful,       *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+* GNU General Public License for more details.                          *
+*                                                                       *
+* You should have received a copy of the GNU General Public License     *
+* along with this program; if not, see <http://www.gnu.org/licenses/>.  *
+************************************************************************/
+
+/*!
+ * \file redshiftcontroller.cpp
+ *
+ * Contains the implementation of the RedshiftController class.
+ */
 
 #include "redshiftcontroller.h"
 #include "redshiftsettings.h"
@@ -37,10 +43,14 @@ RedshiftController::RedshiftController()
       m_manualTemp(RedshiftController::DefaultManualTemperature)
 {
     m_process = new KProcess();
+    // Connect to dbus to receive the enabler signal readyForStart
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
+    // Connect to the plasma activities dataEngine to monitor if the current activity is changed
     m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
     m_activitiesEngine->connectSource("Status", this);
+    // Call dataUpdated manually to initialize the controller. The controller reads the configuration file,
+    // get the current activity, and run the redshift process.
     dataUpdated("Status", m_activitiesEngine->query("Status"));
 }
 
@@ -102,16 +112,20 @@ void RedshiftController::setTemperature(bool increase)
         } else {
             m_manualTemp -= RedshiftController::TemperatureStep;
         }
-        //Bound the possible temperature
+        // Bound the possible temperatures
         m_manualTemp = qMin(qMax(m_manualTemp,RedshiftController::MinTemperature),RedshiftController::MaxTemperature);
         readConfig();
         m_state = Stopped;
+        // Instantly kill the process without waiting the color transition
         if (m_process->state()) {
             m_process->kill();
         }
         m_process->waitForFinished();
+        // Since the state is Stopped, calling  applyChanges with the toggle flag set will run the redshift
+        // process thus setting the fixed color temperature.
         applyChanges(true);
-        //m_process->start();
+        // The start method has previously set the state to Running, but when redshift is ran with the -x flag
+        // it exits immediately, so the state should be set to Stopped manually.
         m_state = Stopped;
     }
 }
@@ -135,7 +149,6 @@ void RedshiftController::applyChanges(bool toggle)
             }
             m_autoState = m_state;
         }
-        //TODO: Explain what the states are
         if (m_manualMode) {
             emit stateChanged(RunningManual, currentTemperature());
         } else {
@@ -178,6 +191,7 @@ void RedshiftController::restart()
     if (m_process->state()) {
         m_process->terminate();
     }
+    // Wait the end of the color out transition before launching the process again
     m_process->waitForFinished();
     applyChanges();
 }
