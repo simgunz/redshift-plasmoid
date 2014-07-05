@@ -1,26 +1,31 @@
-/***************************************************************************
- *   Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
- **************************************************************************/
+/************************************************************************
+* Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
+*                                                                       *
+* This program is free software; you can redistribute it and/or modify  *
+* it under the terms of the GNU General Public License as published by  *
+* the Free Software Foundation; either version 3 of the License, or     *
+* (at your option) any later version.                                   *
+*                                                                       *
+* This program is distributed in the hope that it will be useful,       *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+* GNU General Public License for more details.                          *
+*                                                                       *
+* You should have received a copy of the GNU General Public License     *
+* along with this program; if not, see <http://www.gnu.org/licenses/>.  *
+************************************************************************/
+
+/*!
+ * \file redshiftcontroller.cpp
+ *
+ * Contains the implementation of the RedshiftController class.
+ */
 
 #include "redshiftcontroller.h"
 #include "redshiftsettings.h"
 
 #include <signal.h>
 
-#include <QThread>
 #include <QProcess>
 #include <QDBusConnection>
 #include <QDBusMessage>
@@ -29,18 +34,22 @@
 #include <Plasma/DataEngineManager>
 
 RedshiftController::RedshiftController()
-    : m_state(Stopped),
-      m_autoState(NotSetted),
+    : m_readyForStart(false),
+      m_state(Stopped),
+      m_autoState(Undefined),
       m_runMode(Auto),
-      m_readyForStart(false),
       m_manualMode(false),
-      m_manualTemp(5000)
+      m_manualTemp(RedshiftController::DefaultManualTemperature)
 {
     m_process = new KProcess();
+    // Connects to dbus to receive the enabler signal readyForStart
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
+    // Connects to the plasma activities dataEngine to monitor if the current activity is changed
     m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
     m_activitiesEngine->connectSource("Status", this);
+    // Calls dataUpdated manually to initialize the controller. The controller reads the configuration file,
+    // gets the current activity, and run the redshift process.
     dataUpdated("Status", m_activitiesEngine->query("Status"));
 }
 
@@ -53,9 +62,12 @@ RedshiftController::~RedshiftController()
     }
 }
 
-bool RedshiftController::state()
+RedshiftController::RedshiftState RedshiftController::state()
 {
-    return static_cast<bool>(m_state);
+    if(m_manualMode) {
+        return RunningManual;
+    }
+    return m_state;
 }
 
 int RedshiftController::currentTemperature()
@@ -64,6 +76,108 @@ int RedshiftController::currentTemperature()
         return m_manualTemp;
     } else {
         return 0;
+    }
+}
+
+void RedshiftController::setTemperature(bool increase)
+{
+    if (m_readyForStart && (m_runMode != AlwaysOff)) {
+        m_manualMode = true;
+        if (increase) {
+            m_manualTemp += RedshiftController::TemperatureStep;
+        } else {
+            m_manualTemp -= RedshiftController::TemperatureStep;
+        }
+        // Bounds the possible temperatures
+        m_manualTemp = qMin(qMax(m_manualTemp,RedshiftController::MinTemperature),RedshiftController::MaxTemperature);
+        readConfig();
+        m_state = Stopped;
+        // Instantly kills the process without waiting the color transition
+        if (m_process->state()) {
+            m_process->kill();
+        }
+        m_process->waitForFinished();
+        // Since the state is Stopped, calling  applyChanges with the toggle flag set will run the redshift
+        // process thus setting the fixed color temperature.
+        applyChanges(true);
+        // The start method has previously set the state to Running, but when redshift is ran with the -x flag
+        // it exits immediately, so the state should be set to Stopped manually.
+        m_state = Stopped;
+    }
+}
+
+void RedshiftController::toggle()
+{
+    if (m_manualMode) {
+        m_manualMode = false;
+        readConfig();
+        KProcess::execute("redshift",QStringList("-x"));
+    }
+    applyChanges(true);
+}
+
+void RedshiftController::restart()
+{
+    readConfig();
+    m_state = Stopped;
+    // If the process is running it needs to be stopped and launched again with the new parameters
+    if (m_process->state()) {
+        m_process->terminate();
+    }
+    // Waits the end of the color out transition before launching the process again
+    m_process->waitForFinished();
+    applyChanges();
+}
+
+void RedshiftController::setReadyForStart()
+{
+    if (!m_readyForStart) {
+        m_readyForStart = true;
+        applyChanges();
+    }
+}
+
+void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+{
+    if(sourceName == "Status") {
+        m_currentActivity = data["Current"].toString();
+        readConfig();
+        applyChanges();
+    }
+}
+
+void RedshiftController::applyChanges(bool toggle)
+{
+    // If m_readyForStart is false the application sends a probe signal to check
+    // if it can be enabled. This prevents to run redshift too early in the login phase.
+    if (m_readyForStart) {
+        if (m_runMode == AlwaysOn) {
+            start();
+        } else if (m_runMode == AlwaysOff) {
+            stop();
+        // If toggle is true the next section performs a toggle of the state whereas
+        // if toggle is false it realigns the real state with the auto state
+        } else if (toggle || (m_autoState != m_state)) {
+            if (m_state == Running) {
+                stop();
+            } else {
+                start();
+            }
+            m_autoState = m_state;
+        }
+        if (m_manualMode) {
+            emit stateChanged(RunningManual, currentTemperature());
+        } else {
+            if (m_state == Running) {
+                emit stateChanged(Running, currentTemperature());
+            } else {
+                emit stateChanged(Stopped, currentTemperature());
+            }
+        }
+
+    } else {
+        QDBusMessage message = QDBusMessage::createSignal("/", "org.kde.redshift", "readyCheck");
+        QDBusConnection::sessionBus().send(message);
     }
 }
 
@@ -87,106 +201,7 @@ void RedshiftController::stop()
             kill(m_process->pid(), SIGUSR1);
         }
     }
-    m_manualTemp = 5000;
-}
-
-void RedshiftController::setTemp(bool increase)
-{
-    if (m_readyForStart && (m_runMode != AlwaysOff)) {
-        m_manualMode = true;
-        if (increase) {
-            m_manualTemp += 100;
-        } else {
-            m_manualTemp -= 100;
-        }
-        //Bound the possible temperature
-        //TODO:Set them as constants
-        m_manualTemp = std::min(std::max(m_manualTemp,1000),9900);
-        readConfig();
-        m_state = Stopped;
-        if (m_process->state()) {
-            m_process->kill();
-        }
-        m_process->waitForFinished();
-        applyChanges(true);
-        //m_process->start();
-        m_state = Stopped;
-    }
-}
-
-void RedshiftController::applyChanges(bool toggle)
-{
-    // If m_readyForStart is false the application sends a probe signal to check
-    // if it can be enabled. This prevent to run redshift too early in the login phase.
-    if (m_readyForStart) {
-        if (m_runMode == AlwaysOn) {
-            start();
-        } else if (m_runMode == AlwaysOff) {
-            stop();
-        // If toggle is true the next section perform a toggle of the state whereas
-        // if toggle is false it realign the real state with the auto state
-        } else if (toggle || (m_autoState != m_state)) {
-            if (m_state == Running) {
-                stop();
-            } else {
-                start();
-            }
-            m_autoState = m_state;
-        }
-        //TODO: Explain what the states are
-        if (m_manualMode) {
-            emit stateChanged(2, currentTemperature());
-        } else {
-            if (m_state == Running) {
-                emit stateChanged(1, currentTemperature());
-            } else {
-                emit stateChanged(0, currentTemperature());
-            }
-        }
-
-    } else {
-        QDBusMessage message = QDBusMessage::createSignal("/", "org.kde.redshift", "readyCheck");
-        QDBusConnection::sessionBus().send(message);
-    }
-}
-
-void RedshiftController::setReadyForStart()
-{
-    if (!m_readyForStart) {
-        m_readyForStart = true;
-        applyChanges();
-    }
-}
-
-void RedshiftController::toggle()
-{
-    if (m_manualMode) {
-        m_manualMode = false;
-        readConfig();
-        KProcess::execute("redshift",QStringList("-x"));
-    }
-    applyChanges(true);
-}
-
-void RedshiftController::restart()
-{
-    readConfig();
-    m_state = Stopped;
-    // If the process is running it needs to be stopped and launched again with the new parameters
-    if (m_process->state()) {
-        m_process->terminate();
-    }
-    m_process->waitForFinished();
-    applyChanges();
-}
-
-void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
-{
-    if(sourceName == "Status") {
-        m_currentActivity = data["Current"].toString();
-        readConfig();
-        applyChanges();
-    }
+    m_manualTemp = RedshiftController::DefaultManualTemperature;
 }
 
 void RedshiftController::readConfig()
@@ -236,7 +251,7 @@ void RedshiftController::readConfig()
     } else if (alwaysOffActivities.contains(m_currentActivity)) {
         m_runMode = AlwaysOff;
     }
-    if (m_autoState == NotSetted) {
+    if (m_autoState == Undefined) {
         if (m_autolaunch) {
             m_autoState = Running;
         } else {

@@ -24,14 +24,12 @@
 #include "redshiftcontainer.h"
 #include "redshiftservice.h"
 
-#include <QDebug>
-
 RedshiftContainer::RedshiftContainer(QObject* parent)
     : DataContainer(parent)
 {
     setObjectName("Controller");
     m_controller = new RedshiftController();
-    QObject::connect(m_controller, SIGNAL(stateChanged(int, int)), this, SLOT(updateStatus(int, int)));
+    QObject::connect(m_controller, SIGNAL(stateChanged(RedshiftController::RedshiftState, int)), this, SLOT(updateStatus(RedshiftController::RedshiftState, int)));
     //Manually set the container data for the first time only
     updateStatus(m_controller->state(), m_controller->currentTemperature());
 }
@@ -41,12 +39,13 @@ RedshiftContainer::~RedshiftContainer()
     delete m_controller;
 }
 
-void RedshiftContainer::updateStatus(int state, int temperature)
+void RedshiftContainer::updateStatus(RedshiftController::RedshiftState state, int temperature)
 {
     switch (state) {
-        case 0: setData("Status", "Stopped"); break;
-        case 1: setData("Status", "Running"); break;
-        case 2: setData("Status", "RunningManual"); break;
+        case RedshiftController::Stopped: setData("Status", "Stopped"); break;
+        case RedshiftController::Running: setData("Status", "Running"); break;
+        case RedshiftController::RunningManual: setData("Status", "RunningManual"); break;
+        default: setData("Status", "Stopped");
     }
     setData("Temperature", temperature);
     //Check if any data is actually changed, and, if so, the dataUpdated signal is automatically emitted
