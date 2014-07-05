@@ -1,45 +1,45 @@
-/***************************************************************************
- *   Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
- **************************************************************************/
+/************************************************************************
+* Copyright (C) 2012 by Simone Gaiarin <simgunz@gmail.com>              *
+*                                                                       *
+* This program is free software; you can redistribute it and/or modify  *
+* it under the terms of the GNU General Public License as published by  *
+* the Free Software Foundation; either version 3 of the License, or     *
+* (at your option) any later version.                                   *
+*                                                                       *
+* This program is distributed in the hope that it will be useful,       *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+* GNU General Public License for more details.                          *
+*                                                                       *
+* You should have received a copy of the GNU General Public License     *
+* along with this program; if not, see <http://www.gnu.org/licenses/>.  *
+************************************************************************/
+
+/*!
+ * \file redshiftapplet.cpp
+ *
+ * Contains the implementation of the RedshiftApplet class.
+ */
 
 #include "redshiftapplet.h"
 
 #include "redshiftsettings.h"
 #include "redshiftosdwidget.h"
 
-#include <QGraphicsLinearLayout>
 #include <QtGui/QDesktopWidget>
-#include <QDebug>
-
-#include <Plasma/Svg>
-#include <Plasma/Theme>
-#include <Plasma/DataEngine>
-#include <Plasma/ToolTipContent>
-#include <Plasma/ToolTipManager>
 
 #include <KLocale>
 #include <KConfigDialog>
 #include <KComboBox>
 #include <KApplication>
 
+#include <Plasma/DataEngine>
+#include <Plasma/ToolTipContent>
+#include <Plasma/ToolTipManager>
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
       m_icon("redshift"),
-      m_theme(this),
       m_redshiftOSD(new RedshiftOSDWidget())
 {
     setBackgroundHints(StandardBackground);
@@ -54,26 +54,26 @@ RedshiftApplet::~RedshiftApplet()
 
 void RedshiftApplet::init()
 {
-    m_tooltip.setMainText(i18n("Redshift"));
-    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on, scroll the mouse wheel to set the color temperature manually"));
-    m_tooltip.setImage(KIcon("redshift-status-off"));
-    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
-
+    //Initialize the plasmoid using an IconWidget
     m_button = new Plasma::IconWidget(this);
     m_button->setIcon(KIcon("redshift-status-off"));
     m_layout = new QGraphicsGridLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->addItem(m_button, 0, 0);
+
+    //Set the tooltip
+    m_tooltip.setMainText(i18n("Redshift"));
+    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. \
+                                Scroll the mouse wheel to set the color temperature manually."));
+    m_tooltip.setImage(KIcon("redshift-status-off"));
+    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
+
+    //Connect to the data engine
     m_engine = dataEngine("redshift");
     m_engine->connectSource("Controller", this);
+
+    //Connect signals and slots
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
-    /* This action is not needed anymore since it was just a workaround to prevent some bugs
-    QAction *action = new QAction(this);
-    action->setIcon(KIcon("system-reboot"));
-    action->setText(i18n("Restart Redshift"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(configChanged()));
-    addAction("restart_redshift", action);
-    */
 }
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
@@ -81,17 +81,20 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
     if (sourceName == "Controller") {
         if (data["Status"].toString().indexOf("Running") == 0) {
             m_button->setIcon(KIcon("redshift-status-on"));
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off, scroll the mouse wheel to set the color temperature manually"));
+            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off, \
+                                       scroll the mouse wheel to set the color temperature manually"));
             m_tooltip.setImage(KIcon("redshift-status-on"));
             setStatus(Plasma::PassiveStatus);
         } else {
             m_button->setIcon(KIcon("redshift-status-off"));
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on, scroll the mouse wheel to set the color temperature manually"));
+            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on, \
+                                        scroll the mouse wheel to set the color temperature manually"));
             m_tooltip.setImage(KIcon("redshift-status-off"));
             setStatus(Plasma::PassiveStatus);
         }
         if (data["Status"].toString() == "RunningManual") {
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode, scroll the mouse wheel to change the color temperature"));
+            m_tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode, \
+                                        scroll the mouse wheel to change the color temperature"));
             m_button->setIcon(KIcon("redshift-status-manual"));
             setStatus(Plasma::ActiveStatus);
         }
@@ -103,23 +106,47 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
     }
 }
 
+void RedshiftApplet::toggle()
+{
+    m_redshiftOSD->hide();
+    Plasma::Service *service = m_engine->serviceForSource("Controller");
+    service->startOperationCall(service->operationDescription("toggle"));
+}
+
+void RedshiftApplet::showRedshiftOSD(int temperature)
+{
+    m_redshiftOSD->setCurrentTemperature(temperature);
+    m_redshiftOSD->activateOSD(); //Show the OSD and enable the hide timer
+
+    //Center the OSD
+    QRect rect = KApplication::kApplication()->desktop()->screenGeometry(QCursor::pos());
+    QSize size = m_redshiftOSD->sizeHint();
+    int posX = rect.x() + (rect.width() - size.width()) / 2;
+    int posY = rect.y() + 4 * rect.height() / 5;
+    m_redshiftOSD->setGeometry(posX, posY, size.width(), size.height());
+}
+
 void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 {
-    RedshiftSettings::self()->readConfig();
-    const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
-    const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
-
+    //Create the redshift parameters configuration page
     QWidget *redshiftInterface = new QWidget(parent);
     m_redshiftUi.setupUi(redshiftInterface);
     parent->addPage(redshiftInterface, RedshiftSettings::self(),
-                    i18nc("Redshift main configuration page","General"), "redshift");
+                    i18nc("Redshift main configuration page. Title Capitalization.","General"), "redshift");
 
+    //Create the activities configuration page
     QWidget *activitiesInterface = new QWidget(parent);
     m_activitiesUi.setupUi(activitiesInterface);
 
+    //Get the list of KDE activities
     Plasma::DataEngine *activities_engine = dataEngine("org.kde.activities");
     QStringList activities = activities_engine->sources();
     activities.removeLast();
+
+    //Get the redshift-plasmoid activities configuration
+    RedshiftSettings::self()->readConfig();
+    const QStringList alwaysOnActivities = RedshiftSettings::alwaysOnActivities();
+    const QStringList alwaysOffActivities = RedshiftSettings::alwaysOffActivities();
 
     QString act;
     foreach(act, activities) {
@@ -131,9 +158,9 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         listItem->setFlags(Qt::ItemIsEnabled);
         listItem->setData(0, Qt::UserRole, act);
 
-        itemCombo->addItem(i18nc("Redshift state is set auto in this activity", "Auto"));
-        itemCombo->addItem(i18nc("Redshift is forced to be enabled in this activity", "Always Enabled"));
-        itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity", "Always Disabled"));
+        itemCombo->addItem(i18nc("Redshift state is set to «Auto» mode in this activity. Title Capitalization.", "Auto"));
+        itemCombo->addItem(i18nc("Redshift is forced to be enabled in this activity. Title Capitalization.", "Always Enabled"));
+        itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity. Title Capitalization.", "Always Disabled"));
 
         if (alwaysOnActivities.contains(act)) {
             itemCombo->setCurrentIndex(1);
@@ -147,19 +174,29 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         connect(itemCombo, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     }
     m_activitiesUi.activities->resizeColumnToContents(0);
+    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page. Title Capitalization.", "Activities"),
+                    "preferences-activities");
 
     connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
-
-    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page", "Activities"),
-                    "preferences-activities");
 }
 
-void RedshiftApplet::toggle()
+void RedshiftApplet::configChanged()
 {
-    m_redshiftOSD->hide();
     Plasma::Service *service = m_engine->serviceForSource("Controller");
-    service->startOperationCall(service->operationDescription("toggle"));
+    service->startOperationCall(service->operationDescription("restart"));
+}
+
+void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
+{
+    Plasma::ToolTipManager::self()->hide(this);
+    Plasma::Service *service = m_engine->serviceForSource("Controller");
+
+    if(e->delta() < 0) {
+        service->startOperationCall(service->operationDescription("decrease"));
+    } else {
+        service->startOperationCall(service->operationDescription("increase"));
+    }
 }
 
 void RedshiftApplet::configAccepted()
@@ -181,45 +218,6 @@ void RedshiftApplet::configAccepted()
     RedshiftSettings::setAlwaysOnActivities(alwaysOnActivities);
     RedshiftSettings::setAlwaysOffActivities(alwaysOffActivities);
     RedshiftSettings::self()->writeConfig();
-}
-
-void RedshiftApplet::configChanged()
-{
-    Plasma::Service *service = m_engine->serviceForSource("Controller");
-    service->startOperationCall(service->operationDescription("restart"));
-}
-
-QList<QAction*> RedshiftApplet::contextualActions()
-{
-    QList<QAction *> rv;
-    QAction *act = action("restart_redshift");
-    rv << act;
-    return rv;
-}
-
-void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
-{
-    Plasma::ToolTipManager::self()->hide(this);
-    Plasma::Service *service = m_engine->serviceForSource("Controller");
-
-    if(e->delta() < 0) {
-        service->startOperationCall(service->operationDescription("decrease"));
-    } else {
-        service->startOperationCall(service->operationDescription("increase"));
-    }
-}
-
-void RedshiftApplet::showRedshiftOSD(int temperature)
-{
-    m_redshiftOSD->setCurrentTemperature(temperature);
-    m_redshiftOSD->activateOSD(); //Show and enable the hide timer
-
-    //Center the OSD
-    QRect rect = KApplication::kApplication()->desktop()->screenGeometry(QCursor::pos());
-    QSize size = m_redshiftOSD->sizeHint();
-    int posX = rect.x() + (rect.width() - size.width()) / 2;
-    int posY = rect.y() + 4 * rect.height() / 5;
-    m_redshiftOSD->setGeometry(posX, posY, size.width(), size.height());
 }
 
 K_EXPORT_PLASMA_APPLET(redshift, RedshiftApplet)
