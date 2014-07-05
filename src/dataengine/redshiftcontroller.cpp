@@ -35,10 +35,10 @@
 #include <Plasma/DataEngineManager>
 
 RedshiftController::RedshiftController()
-    : m_state(Stopped),
+    : m_readyForStart(false),
+      m_state(Stopped),
       m_autoState(Undefined),
       m_runMode(Auto),
-      m_readyForStart(false),
       m_manualMode(false),
       m_manualTemp(RedshiftController::DefaultManualTemperature)
 {
@@ -80,29 +80,6 @@ int RedshiftController::currentTemperature()
     }
 }
 
-void RedshiftController::start()
-{
-    if (m_state == Stopped) {
-        m_state = Running;
-        if (!m_process->state()) {
-            m_process->start();
-        } else {
-            kill(m_process->pid(), SIGUSR1);
-        }
-    }
-}
-
-void RedshiftController::stop()
-{
-    if (m_state == Running) {
-        m_state = Stopped;
-        if (m_process->state()) {
-            kill(m_process->pid(), SIGUSR1);
-        }
-    }
-    m_manualTemp = RedshiftController::DefaultManualTemperature;
-}
-
 void RedshiftController::setTemperature(bool increase)
 {
     if (m_readyForStart && (m_runMode != AlwaysOff)) {
@@ -127,6 +104,46 @@ void RedshiftController::setTemperature(bool increase)
         // The start method has previously set the state to Running, but when redshift is ran with the -x flag
         // it exits immediately, so the state should be set to Stopped manually.
         m_state = Stopped;
+    }
+}
+
+void RedshiftController::toggle()
+{
+    if (m_manualMode) {
+        m_manualMode = false;
+        readConfig();
+        KProcess::execute("redshift",QStringList("-x"));
+    }
+    applyChanges(true);
+}
+
+void RedshiftController::restart()
+{
+    readConfig();
+    m_state = Stopped;
+    // If the process is running it needs to be stopped and launched again with the new parameters
+    if (m_process->state()) {
+        m_process->terminate();
+    }
+    // Wait the end of the color out transition before launching the process again
+    m_process->waitForFinished();
+    applyChanges();
+}
+
+void RedshiftController::setReadyForStart()
+{
+    if (!m_readyForStart) {
+        m_readyForStart = true;
+        applyChanges();
+    }
+}
+
+void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+{
+    if(sourceName == "Status") {
+        m_currentActivity = data["Current"].toString();
+        readConfig();
+        applyChanges();
     }
 }
 
@@ -165,44 +182,27 @@ void RedshiftController::applyChanges(bool toggle)
     }
 }
 
-void RedshiftController::setReadyForStart()
+void RedshiftController::start()
 {
-    if (!m_readyForStart) {
-        m_readyForStart = true;
-        applyChanges();
+    if (m_state == Stopped) {
+        m_state = Running;
+        if (!m_process->state()) {
+            m_process->start();
+        } else {
+            kill(m_process->pid(), SIGUSR1);
+        }
     }
 }
 
-void RedshiftController::toggle()
+void RedshiftController::stop()
 {
-    if (m_manualMode) {
-        m_manualMode = false;
-        readConfig();
-        KProcess::execute("redshift",QStringList("-x"));
+    if (m_state == Running) {
+        m_state = Stopped;
+        if (m_process->state()) {
+            kill(m_process->pid(), SIGUSR1);
+        }
     }
-    applyChanges(true);
-}
-
-void RedshiftController::restart()
-{
-    readConfig();
-    m_state = Stopped;
-    // If the process is running it needs to be stopped and launched again with the new parameters
-    if (m_process->state()) {
-        m_process->terminate();
-    }
-    // Wait the end of the color out transition before launching the process again
-    m_process->waitForFinished();
-    applyChanges();
-}
-
-void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
-{
-    if(sourceName == "Status") {
-        m_currentActivity = data["Current"].toString();
-        readConfig();
-        applyChanges();
-    }
+    m_manualTemp = RedshiftController::DefaultManualTemperature;
 }
 
 void RedshiftController::readConfig()
