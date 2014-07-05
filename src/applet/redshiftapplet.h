@@ -42,7 +42,6 @@ public:
 public Q_SLOTS:
     void toggle();
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
-    QList<QAction*> contextualActions();
     void showRedshiftOSD(int brightness);
 protected:
     void createConfigurationInterface(KConfigDialog *parent);
@@ -53,7 +52,6 @@ private Q_SLOTS:
     void configAccepted();
 private:
     KIcon m_icon;
-    Plasma::Svg m_theme;
     Plasma::ToolTipContent m_tooltip;
     Plasma::IconWidget *m_button;
     QGraphicsGridLayout *m_layout;

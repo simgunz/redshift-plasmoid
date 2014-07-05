@@ -39,7 +39,6 @@
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
       m_icon("redshift"),
-      m_theme(this),
       m_redshiftOSD(new RedshiftOSDWidget())
 {
     setBackgroundHints(StandardBackground);
@@ -67,13 +66,6 @@ void RedshiftApplet::init()
     m_engine = dataEngine("redshift");
     m_engine->connectSource("Controller", this);
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
-    /* This action is not needed anymore since it was just a workaround to prevent some bugs
-    QAction *action = new QAction(this);
-    action->setIcon(KIcon("system-reboot"));
-    action->setText(i18n("Restart Redshift"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(configChanged()));
-    addAction("restart_redshift", action);
-    */
 }
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
@@ -187,14 +179,6 @@ void RedshiftApplet::configChanged()
 {
     Plasma::Service *service = m_engine->serviceForSource("Controller");
     service->startOperationCall(service->operationDescription("restart"));
-}
-
-QList<QAction*> RedshiftApplet::contextualActions()
-{
-    QList<QAction *> rv;
-    QAction *act = action("restart_redshift");
-    rv << act;
-    return rv;
 }
 
 void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
