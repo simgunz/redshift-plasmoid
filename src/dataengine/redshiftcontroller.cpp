@@ -42,14 +42,14 @@ RedshiftController::RedshiftController()
       m_manualTemp(RedshiftController::DefaultManualTemperature)
 {
     m_process = new KProcess();
-    // Connect to dbus to receive the enabler signal readyForStart
+    // Connects to dbus to receive the enabler signal readyForStart
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
-    // Connect to the plasma activities dataEngine to monitor if the current activity is changed
+    // Connects to the plasma activities dataEngine to monitor if the current activity is changed
     m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
     m_activitiesEngine->connectSource("Status", this);
-    // Call dataUpdated manually to initialize the controller. The controller reads the configuration file,
-    // get the current activity, and run the redshift process.
+    // Calls dataUpdated manually to initialize the controller. The controller reads the configuration file,
+    // gets the current activity, and run the redshift process.
     dataUpdated("Status", m_activitiesEngine->query("Status"));
 }
 
@@ -88,11 +88,11 @@ void RedshiftController::setTemperature(bool increase)
         } else {
             m_manualTemp -= RedshiftController::TemperatureStep;
         }
-        // Bound the possible temperatures
+        // Bounds the possible temperatures
         m_manualTemp = qMin(qMax(m_manualTemp,RedshiftController::MinTemperature),RedshiftController::MaxTemperature);
         readConfig();
         m_state = Stopped;
-        // Instantly kill the process without waiting the color transition
+        // Instantly kills the process without waiting the color transition
         if (m_process->state()) {
             m_process->kill();
         }
@@ -124,7 +124,7 @@ void RedshiftController::restart()
     if (m_process->state()) {
         m_process->terminate();
     }
-    // Wait the end of the color out transition before launching the process again
+    // Waits the end of the color out transition before launching the process again
     m_process->waitForFinished();
     applyChanges();
 }
@@ -149,14 +149,14 @@ void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::Da
 void RedshiftController::applyChanges(bool toggle)
 {
     // If m_readyForStart is false the application sends a probe signal to check
-    // if it can be enabled. This prevent to run redshift too early in the login phase.
+    // if it can be enabled. This prevents to run redshift too early in the login phase.
     if (m_readyForStart) {
         if (m_runMode == AlwaysOn) {
             start();
         } else if (m_runMode == AlwaysOff) {
             stop();
-        // If toggle is true the next section perform a toggle of the state whereas
-        // if toggle is false it realign the real state with the auto state
+        // If toggle is true the next section performs a toggle of the state whereas
+        // if toggle is false it realigns the real state with the auto state
         } else if (toggle || (m_autoState != m_state)) {
             if (m_state == Running) {
                 stop();
