@@ -82,11 +82,6 @@ public:
 
 public slots:
 
-	/*!
-     * Makes a call to the redshift dataEnginge service to toggle redshift on/off.
-     */
-    void toggle();
-
     /*!
      * Called when the dataEngine reports some changes in its state.
      *
@@ -99,6 +94,11 @@ public slots:
      * \param data A QVariantMap containing the data the source passed to the method
      */
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+
+    /*!
+     * Makes a call to the redshift dataEnginge service to toggle redshift on/off.
+     */
+    void toggle();
 
     /*!
      * Show an OSD showing the current temperature.
@@ -155,14 +155,14 @@ private slots:
 
 private:
 
+    //! The button that constitute the body of the widget.
+    Plasma::IconWidget *m_button;
+
     //! The button icon.
     KIcon m_icon;
 
     //! The widget tooltip.
     Plasma::ToolTipContent m_tooltip;
-
-    //! The button that constitute the body of the widget.
-    Plasma::IconWidget *m_button;
 
     //! The main layout of the widget
     QGraphicsGridLayout *m_layout;

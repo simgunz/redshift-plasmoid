@@ -106,6 +106,26 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
     }
 }
 
+void RedshiftApplet::toggle()
+{
+    m_redshiftOSD->hide();
+    Plasma::Service *service = m_engine->serviceForSource("Controller");
+    service->startOperationCall(service->operationDescription("toggle"));
+}
+
+void RedshiftApplet::showRedshiftOSD(int temperature)
+{
+    m_redshiftOSD->setCurrentTemperature(temperature);
+    m_redshiftOSD->activateOSD(); //Show the OSD and enable the hide timer
+
+    //Center the OSD
+    QRect rect = KApplication::kApplication()->desktop()->screenGeometry(QCursor::pos());
+    QSize size = m_redshiftOSD->sizeHint();
+    int posX = rect.x() + (rect.width() - size.width()) / 2;
+    int posY = rect.y() + 4 * rect.height() / 5;
+    m_redshiftOSD->setGeometry(posX, posY, size.width(), size.height());
+}
+
 void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     //Create the redshift parameters configuration page
@@ -161,11 +181,22 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 }
 
-void RedshiftApplet::toggle()
+void RedshiftApplet::configChanged()
 {
-    m_redshiftOSD->hide();
     Plasma::Service *service = m_engine->serviceForSource("Controller");
-    service->startOperationCall(service->operationDescription("toggle"));
+    service->startOperationCall(service->operationDescription("restart"));
+}
+
+void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
+{
+    Plasma::ToolTipManager::self()->hide(this);
+    Plasma::Service *service = m_engine->serviceForSource("Controller");
+
+    if(e->delta() < 0) {
+        service->startOperationCall(service->operationDescription("decrease"));
+    } else {
+        service->startOperationCall(service->operationDescription("increase"));
+    }
 }
 
 void RedshiftApplet::configAccepted()
@@ -187,37 +218,6 @@ void RedshiftApplet::configAccepted()
     RedshiftSettings::setAlwaysOnActivities(alwaysOnActivities);
     RedshiftSettings::setAlwaysOffActivities(alwaysOffActivities);
     RedshiftSettings::self()->writeConfig();
-}
-
-void RedshiftApplet::configChanged()
-{
-    Plasma::Service *service = m_engine->serviceForSource("Controller");
-    service->startOperationCall(service->operationDescription("restart"));
-}
-
-void RedshiftApplet::wheelEvent(QGraphicsSceneWheelEvent *e)
-{
-    Plasma::ToolTipManager::self()->hide(this);
-    Plasma::Service *service = m_engine->serviceForSource("Controller");
-
-    if(e->delta() < 0) {
-        service->startOperationCall(service->operationDescription("decrease"));
-    } else {
-        service->startOperationCall(service->operationDescription("increase"));
-    }
-}
-
-void RedshiftApplet::showRedshiftOSD(int temperature)
-{
-    m_redshiftOSD->setCurrentTemperature(temperature);
-    m_redshiftOSD->activateOSD(); //Show the OSD and enable the hide timer
-
-    //Center the OSD
-    QRect rect = KApplication::kApplication()->desktop()->screenGeometry(QCursor::pos());
-    QSize size = m_redshiftOSD->sizeHint();
-    int posX = rect.x() + (rect.width() - size.width()) / 2;
-    int posY = rect.y() + 4 * rect.height() / 5;
-    m_redshiftOSD->setGeometry(posX, posY, size.width(), size.height());
 }
 
 K_EXPORT_PLASMA_APPLET(redshift, RedshiftApplet)
