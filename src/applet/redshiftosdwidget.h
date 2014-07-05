@@ -83,7 +83,7 @@ private:
     Plasma::Label *m_temperatureLabel;
 
     //! OSD autohide timer.
-    QTimer *m_hideTimer;
+    QTimer *m_autoHideTimer;
 
     //! Redshift pixmap icon.
     QPixmap m_redshiftPixmap;

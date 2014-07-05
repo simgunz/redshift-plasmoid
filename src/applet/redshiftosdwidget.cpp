@@ -43,7 +43,7 @@ RedshiftOSDWidget::RedshiftOSDWidget(QWidget * parent)
     : Plasma::Dialog(parent, Qt::ToolTip),
       m_iconLabel(new Plasma::Label),
       m_temperatureLabel(new Plasma::Label),
-      m_hideTimer(new QTimer(this))
+      m_autoHideTimer(new QTimer(this))
 {
     //Setup the window properties
     KWindowSystem::setState(winId(), NET::KeepAbove);
@@ -51,9 +51,9 @@ RedshiftOSDWidget::RedshiftOSDWidget(QWidget * parent)
     setAttribute(Qt::WA_X11NetWmWindowTypeToolTip, true);
 
     //Setup the auto-hide timer
-    m_hideTimer->setInterval(2000);
-    m_hideTimer->setSingleShot(true);
-    connect(m_hideTimer, SIGNAL(timeout()), this, SLOT(hide()));
+    m_autoHideTimer->setInterval(2000);
+    m_autoHideTimer->setSingleShot(true);
+    connect(m_autoHideTimer, SIGNAL(timeout()), this, SLOT(hide()));
 
     //Cache the icon pixmaps
     QSize iconSize = QSize(KIconLoader::SizeLarge, KIconLoader::SizeLarge);
@@ -91,7 +91,7 @@ QSize RedshiftOSDWidget::sizeHint() const
 void RedshiftOSDWidget::activateOSD()
 {
     show();
-    m_hideTimer->start();
+    m_autoHideTimer->start();
 }
 
 void RedshiftOSDWidget::setCurrentTemperature(int temperature)
