@@ -80,7 +80,7 @@ public:
      */
     void init();
 
-public Q_SLOTS:
+public slots:
 
 	/*!
      * Makes a call to the redshift dataEnginge service to toggle redshift on/off.
@@ -142,7 +142,7 @@ protected slots:
     */
   virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
 
-private Q_SLOTS:
+private slots:
 
     /*!
      * Saves the redshift behavior for each activities in the configuration file
