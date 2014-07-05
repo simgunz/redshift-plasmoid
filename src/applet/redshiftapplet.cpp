@@ -82,19 +82,19 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
         if (data["Status"].toString().indexOf("Running") == 0) {
             m_button->setIcon(KIcon("redshift-status-on"));
             m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off. "
-                                       "Scroll the mouse wheel to set the color temperature manually"));
+                                       "Scroll the mouse wheel to set the color temperature manually."));
             m_tooltip.setImage(KIcon("redshift-status-on"));
             setStatus(Plasma::PassiveStatus);
         } else {
             m_button->setIcon(KIcon("redshift-status-off"));
             m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
-                                        "Scroll the mouse wheel to set the color temperature manually"));
+                                        "Scroll the mouse wheel to set the color temperature manually."));
             m_tooltip.setImage(KIcon("redshift-status-off"));
             setStatus(Plasma::PassiveStatus);
         }
         if (data["Status"].toString() == "RunningManual") {
             m_tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode. "
-                                        "Scroll the mouse wheel to change the color temperature"));
+                                        "Scroll the mouse wheel to change the color temperature."));
             m_button->setIcon(KIcon("redshift-status-manual"));
             setStatus(Plasma::ActiveStatus);
         }
