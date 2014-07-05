@@ -30,7 +30,7 @@
 
 RedshiftController::RedshiftController()
     : m_state(Stopped),
-      m_autoState(NotSetted),
+      m_autoState(Undefined),
       m_runMode(Auto),
       m_readyForStart(false),
       m_manualMode(false),
@@ -53,9 +53,12 @@ RedshiftController::~RedshiftController()
     }
 }
 
-bool RedshiftController::state()
+RedshiftController::RedshiftState RedshiftController::state()
 {
-    return static_cast<bool>(m_state);
+    if(m_manualMode) {
+        return RunningManual;
+    }
+    return m_state;
 }
 
 int RedshiftController::currentTemperature()
@@ -135,12 +138,12 @@ void RedshiftController::applyChanges(bool toggle)
         }
         //TODO: Explain what the states are
         if (m_manualMode) {
-            emit stateChanged(2, currentTemperature());
+            emit stateChanged(RunningManual, currentTemperature());
         } else {
             if (m_state == Running) {
-                emit stateChanged(1, currentTemperature());
+                emit stateChanged(Running, currentTemperature());
             } else {
-                emit stateChanged(0, currentTemperature());
+                emit stateChanged(Stopped, currentTemperature());
             }
         }
 
@@ -236,7 +239,7 @@ void RedshiftController::readConfig()
     } else if (alwaysOffActivities.contains(m_currentActivity)) {
         m_runMode = AlwaysOff;
     }
-    if (m_autoState == NotSetted) {
+    if (m_autoState == Undefined) {
         if (m_autolaunch) {
             m_autoState = Running;
         } else {

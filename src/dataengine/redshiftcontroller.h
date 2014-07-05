@@ -29,9 +29,10 @@ class RedshiftController : public QThread
 
 public:
     enum RedshiftState {
-        NotSetted,
+        Undefined,
         Stopped,
-        Running
+        Running,
+        RunningManual
     };
     enum RunMode {
         Auto,
@@ -42,7 +43,7 @@ public:
     ~RedshiftController();
     void toggle();
     void restart();
-    bool state();
+    RedshiftState state();
     int currentTemperature();
     void setTemperature(bool increase);
 private Q_SLOTS:
@@ -79,7 +80,7 @@ private:
     int m_manualTemp;
 
 signals:
-    void stateChanged(int state, int temperature);
+    void stateChanged(RedshiftController::RedshiftState state, int temperature);
 };
 
 #endif // REDSHIFTCONTROLLER_H

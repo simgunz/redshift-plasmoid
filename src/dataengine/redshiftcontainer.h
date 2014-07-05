@@ -74,7 +74,7 @@ public slots:
     * \param state An integer representing the state of the redshift process. Can be 0 = Stopped, 1 = Running, 2 = RunningManual
     * \param temperature An integer representing the screen color temperature in Kelvin, when redshift is in manual mode
     */
-    void updateStatus(int state, int temperature);
+    void updateStatus(RedshiftController::RedshiftState state, int temperature);
 
 private:
 
