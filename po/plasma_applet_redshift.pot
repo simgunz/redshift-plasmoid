@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-05 23:42+0200\n"
+"POT-Creation-Date: 2014-07-06 00:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,7 +306,7 @@ msgstr ""
 msgid "Redshift"
 msgstr ""
 
-#: src/applet/redshiftapplet.cpp:66
+#: src/applet/redshiftapplet.cpp:66 src/applet/redshiftapplet.cpp:90
 msgctxt "Action the user can perform"
 msgid ""
 "Click to toggle on. Scroll the mouse wheel to set the color temperature "
@@ -317,21 +317,14 @@ msgstr ""
 msgctxt "Action the user can perform"
 msgid ""
 "Click to toggle off. Scroll the mouse wheel to set the color temperature "
-"manually"
-msgstr ""
-
-#: src/applet/redshiftapplet.cpp:90
-msgctxt "Action the user can perform"
-msgid ""
-"Click to toggle on. Scroll the mouse wheel to set the color temperature "
-"manually"
+"manually."
 msgstr ""
 
 #: src/applet/redshiftapplet.cpp:96
 msgctxt "Action the user can perform"
 msgid ""
 "Click to switch to auto mode. Scroll the mouse wheel to change the color "
-"temperature"
+"temperature."
 msgstr ""
 
 #: src/applet/redshiftapplet.cpp:135
