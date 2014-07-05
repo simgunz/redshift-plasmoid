@@ -1,0 +1,423 @@
+# Copyright (C) 2013 Matthias Mailänder
+# This file is distributed under the same license as the redshift-plasmoid package.
+#
+# Pavel Fric <pavelfric@seznam.cz>, 2014.
+# Simone Gaiarin <simgunz@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-05 23:26+0200\n"
+"PO-Revision-Date: 2014-07-06 00:05+0200\n"
+"Last-Translator: Simone Gaiarin <simgunz@gmail.com>\n"
+"Language-Team: German <>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. i18n: file: src/applet/activities.ui:33
+#. i18n: ectx: property (text), widget (QTreeWidget, activities)
+#: po/rc.cpp:3 rc.cpp:3
+msgctxt "KDE Plasma activity. Title Capitalization."
+msgid "Activity"
+msgstr "Činnost"
+
+#. i18n: file: src/applet/activities.ui:38
+#. i18n: ectx: property (text), widget (QTreeWidget, activities)
+#: po/rc.cpp:6 rc.cpp:6
+msgctxt "Redshift operation mode. Title Capitalization."
+msgid "Mode"
+msgstr "Režim"
+
+#. i18n: file: src/applet/redshift.ui:26
+#. i18n: ectx: property (text), widget (QLabel, lbLatitude)
+#: po/rc.cpp:9 rc.cpp:9
+msgctxt "Sentence capitalization."
+msgid "Latitude:"
+msgstr "Zeměpisná šířka:"
+
+#. i18n: file: src/applet/redshift.ui:57
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, kcfg_latitude)
+#. i18n: file: src/applet/redshift.ui:104
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, kcfg_longitude)
+#. i18n: file: src/applet/redshift.ui:57
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, kcfg_latitude)
+#. i18n: file: src/applet/redshift.ui:104
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, kcfg_longitude)
+#: po/rc.cpp:12 po/rc.cpp:18 rc.cpp:12 rc.cpp:18
+msgctxt "Degrees"
+msgid "º"
+msgstr "°"
+
+#. i18n: file: src/applet/redshift.ui:79
+#. i18n: ectx: property (text), widget (QLabel, lbLongitude)
+#: po/rc.cpp:15 rc.cpp:15
+msgctxt "Sentence capitalization."
+msgid "Longitude:"
+msgstr "Zeměpisná délka:"
+
+#. i18n: file: src/applet/redshift.ui:142
+#. i18n: ectx: property (text), widget (QLabel, lbDayTemp)
+#: po/rc.cpp:21 rc.cpp:21
+msgctxt ""
+"The desired color temperature during the day. Sentence capitalization."
+msgid "Day color temperature:"
+msgstr "Teplota barvy přes den:"
+
+#. i18n: file: src/applet/redshift.ui:164
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_dayTemp)
+#. i18n: file: src/applet/redshift.ui:199
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_nightTemp)
+#. i18n: file: src/applet/redshift.ui:164
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_dayTemp)
+#. i18n: file: src/applet/redshift.ui:199
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_nightTemp)
+#: po/rc.cpp:24 po/rc.cpp:30 rc.cpp:24 rc.cpp:30
+msgctxt ""
+"Kelvin SI unit of measurement for temperature. (There's a space before the "
+"K)."
+msgid " K"
+msgstr " K"
+
+#. i18n: file: src/applet/redshift.ui:177
+#. i18n: ectx: property (text), widget (QLabel, lbNightTemp)
+#: po/rc.cpp:27 rc.cpp:27
+msgctxt ""
+"The desired color temperature during the night. Sentence capitalization."
+msgid "Night color temperature:"
+msgstr "Teplota barvy v noci:"
+
+#. i18n: file: src/applet/redshift.ui:225
+#. i18n: ectx: property (toolTip), widget (QLabel, lbGamma)
+#: po/rc.cpp:33 rc.cpp:33
+msgid "Additional gamma correction (Default is 1:1:1)."
+msgstr "Dodatečná oprava gamy (Výchozí je 1:1:1)."
+
+#. i18n: file: src/applet/redshift.ui:228
+#. i18n: ectx: property (text), widget (QLabel, lbGamma)
+#: po/rc.cpp:36 rc.cpp:36
+msgctxt "The screen gamma channels, red, green, blue. Sentence capitalization."
+msgid "Gamma (RGB):"
+msgstr "Gama (RGB):"
+
+#. i18n: file: src/applet/redshift.ui:309
+#. i18n: ectx: property (text), widget (QLabel, lbSmooth)
+#: po/rc.cpp:39 rc.cpp:39
+msgctxt ""
+"Enable smooth transition when the program start and stop. Sentence "
+"capitalization."
+msgid "Smooth transition:"
+msgstr "Plynulý přechod:"
+
+#. i18n: file: src/applet/redshift.ui:322
+#. i18n: ectx: property (text), widget (QLabel, lbAutostart)
+#: po/rc.cpp:42 rc.cpp:42
+msgctxt "Launch the program on startup. Sentence capitalization."
+msgid "Autostart:"
+msgstr "Automaticky spustit:"
+
+#. i18n: file: src/applet/redshift.ui:335
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_autolaunch)
+#. i18n: file: src/applet/redshift.ui:358
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_smooth)
+#. i18n: file: src/applet/redshift.ui:335
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_autolaunch)
+#. i18n: file: src/applet/redshift.ui:358
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_smooth)
+#: po/rc.cpp:45 po/rc.cpp:51 rc.cpp:45 rc.cpp:51
+msgctxt "Sentence capitalization."
+msgid "Enabled"
+msgstr "Povoleno"
+
+#. i18n: file: src/applet/redshift.ui:345
+#. i18n: ectx: property (text), widget (QLabel, lbMethod)
+#: po/rc.cpp:48 rc.cpp:48
+msgctxt ""
+"The method used to set the color temperature. Sentence capitalization."
+msgid "Adjust method:"
+msgstr "Způsob úpravy:"
+
+#. i18n: file: src/applet/redshift.ui:372
+#. i18n: ectx: property (text), item, widget (KComboBox, kcfg_method)
+#: po/rc.cpp:54 rc.cpp:54
+msgctxt "Automatic adjust method. Title Capitalization."
+msgid "Auto"
+msgstr "Automaticky "
+
+#. i18n: file: src/applet/redshift.ui:390
+#. i18n: ectx: property (text), widget (QLabel, lbBrightness)
+#: po/rc.cpp:57 rc.cpp:57
+msgctxt "Sentence capitalization."
+msgid "Brightness:"
+msgstr "Jas:"
+
+#. i18n: file: src/redshift.kcfg:10
+#. i18n: ectx: label, entry (latitude), group (General)
+#: po/rc.cpp:60 rc.cpp:60
+msgctxt "@label - KCFG entry name"
+msgid "Latitude"
+msgstr "Zeměpisná šířka"
+
+#. i18n: file: src/redshift.kcfg:14
+#. i18n: ectx: label, entry (longitude), group (General)
+#: po/rc.cpp:63 rc.cpp:63
+msgctxt "@label- KCFG entry name"
+msgid "Longitude"
+msgstr "Zeměpisná délka"
+
+#. i18n: file: src/redshift.kcfg:18
+#. i18n: ectx: label, entry (dayTemp), group (General)
+#: po/rc.cpp:66 rc.cpp:66
+msgctxt "@label - KCFG entry name"
+msgid "Day color temperature"
+msgstr "Teplota barvy přes den"
+
+#. i18n: file: src/redshift.kcfg:19
+#. i18n: ectx: tooltip, entry (dayTemp), group (General)
+#: po/rc.cpp:69 rc.cpp:69
+msgctxt "@info:tooltip"
+msgid "A neutral color temperature is 6500 K."
+msgstr "Neutrální teplota barvy je 6500 K."
+
+#. i18n: file: src/redshift.kcfg:23
+#. i18n: ectx: label, entry (nightTemp), group (General)
+#: po/rc.cpp:72 rc.cpp:72
+msgctxt "@label - KCFG entry name"
+msgid "Night color temperature"
+msgstr "Teplota barvy v noci"
+
+#. i18n: file: src/redshift.kcfg:24
+#. i18n: ectx: tooltip, entry (nightTemp), group (General)
+#: po/rc.cpp:75 rc.cpp:75
+msgctxt "@info:tooltip"
+msgid "The recommended night color temperature is 4500 K."
+msgstr "Doporučená teplota barvy v noci je 4500 K."
+
+#. i18n: file: src/redshift.kcfg:28
+#. i18n: ectx: label, entry (gammaR), group (General)
+#: po/rc.cpp:78 rc.cpp:78
+msgctxt "@label - KCFG entry name"
+msgid "Red gamma correction"
+msgstr "Oprava gamy červené"
+
+#. i18n: file: src/redshift.kcfg:29
+#. i18n: ectx: tooltip, entry (gammaR), group (General)
+#: po/rc.cpp:81 rc.cpp:81
+msgctxt "@info:tooltip"
+msgid "Gamma correction (Red)"
+msgstr "Oprava gamy (Červená)"
+
+#. i18n: file: src/redshift.kcfg:33
+#. i18n: ectx: label, entry (gammaG), group (General)
+#: po/rc.cpp:84 rc.cpp:84
+msgctxt "@label - KCFG entry name"
+msgid "Green gamma correction"
+msgstr "Oprava gamy zelené"
+
+#. i18n: file: src/redshift.kcfg:34
+#. i18n: ectx: tooltip, entry (gammaG), group (General)
+#: po/rc.cpp:87 rc.cpp:87
+msgctxt "@info:tooltip"
+msgid "Gamma correction (Green)"
+msgstr "Oprava gamy (Zelená)"
+
+#. i18n: file: src/redshift.kcfg:38
+#. i18n: ectx: label, entry (gammaB), group (General)
+#: po/rc.cpp:90 rc.cpp:90
+msgctxt "@label - KCFG entry name"
+msgid "Blue gamma correction"
+msgstr "Oprava gamy modré"
+
+#. i18n: file: src/redshift.kcfg:39
+#. i18n: ectx: tooltip, entry (gammaB), group (General)
+#: po/rc.cpp:93 rc.cpp:93
+msgctxt "@info:tooltip"
+msgid "Gamma correction (Blue)"
+msgstr "Oprava gamy (Modrá)"
+
+#. i18n: file: src/redshift.kcfg:43
+#. i18n: ectx: label, entry (brightness), group (General)
+#: po/rc.cpp:96 rc.cpp:96
+msgctxt "@label - KCFG entry name"
+msgid "Brightness"
+msgstr "Jas"
+
+#. i18n: file: src/redshift.kcfg:47
+#. i18n: ectx: label, entry (smooth), group (General)
+#: po/rc.cpp:99 rc.cpp:99
+msgctxt "@label - KCFG entry name"
+msgid "Smooth transition flag"
+msgstr "Spínač bitů pro plynulý přechod"
+
+#. i18n: file: src/redshift.kcfg:51
+#. i18n: ectx: label, entry (autolaunch), group (General)
+#: po/rc.cpp:102 rc.cpp:102
+msgctxt "@label - KCFG entry name"
+msgid "Autostart flag"
+msgstr "Automaticky spustit spínač bitů"
+
+#. i18n: file: src/redshift.kcfg:55
+#. i18n: ectx: label, entry (method), group (General)
+#: po/rc.cpp:105 rc.cpp:105
+msgctxt "@label - KCFG entry name"
+msgid "Color adjustment method"
+msgstr "Metoda upravení barev"
+
+#. i18n: file: src/redshift.kcfg:56
+#. i18n: ectx: tooltip, entry (method), group (General)
+#: po/rc.cpp:108 rc.cpp:108
+msgctxt "@info:tooltip"
+msgid ""
+"Redshift color adjustment method. If «Auto» («randr») doesn't work, try "
+"«vidmode»."
+msgstr ""
+"Metoda upravení barev pro rudý posuv. Pokud «Automatika» («randr») "
+"nepracuje, zkuste «vidmode»."
+
+#. i18n: file: src/redshift.kcfg:62
+#. i18n: ectx: label, entry (alwaysOnActivities), group (Activities)
+#: po/rc.cpp:111 rc.cpp:111
+msgctxt ""
+"@label - KCFG entry name (not visible to the user) - List of the activities "
+"where redshift is always on"
+msgid "Always on activities"
+msgstr "Činnosti vždy zapnuty"
+
+#. i18n: file: src/redshift.kcfg:65
+#. i18n: ectx: label, entry (alwaysOffActivities), group (Activities)
+#: po/rc.cpp:114 rc.cpp:114
+msgctxt ""
+"@label - KCFG entry name (not visible to the user) - List of the activities "
+"where redshift is always off"
+msgid "Always off activities"
+msgstr "Činnosti vždy vypnuty"
+
+#: po/rc.cpp:117 rc.cpp:117
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Pavel Fric"
+
+#: po/rc.cpp:118 rc.cpp:118
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "fripohled.blogspot.com"
+
+#: src/applet/redshiftapplet.cpp:65
+msgid "Redshift"
+msgstr "Rudý posuv"
+
+#: src/applet/redshiftapplet.cpp:66
+msgctxt "Action the user can perform"
+msgid ""
+"Click to toggle on. Scroll the mouse wheel to set the color temperature "
+"manually."
+msgstr ""
+"Klepněte pro zapnutí. Otáčejte kolečkem myši pro ruční nastavení teploty "
+"barvy."
+
+#: src/applet/redshiftapplet.cpp:84
+msgctxt "Action the user can perform"
+msgid ""
+"Click to toggle off. Scroll the mouse wheel to set the color temperature "
+"manually"
+msgstr ""
+"Klepněte pro zapnutí. Otáčejte kolečkem myši pro ruční nastavení teploty "
+"barvy."
+
+#: src/applet/redshiftapplet.cpp:90
+msgctxt "Action the user can perform"
+msgid ""
+"Click to toggle on. Scroll the mouse wheel to set the color temperature "
+"manually"
+msgstr ""
+"Klepněte pro zapnutí. Otáčejte kolečkem myši pro ruční nastavení teploty "
+"barvy."
+
+#: src/applet/redshiftapplet.cpp:96
+msgctxt "Action the user can perform"
+msgid ""
+"Click to switch to auto mode. Scroll the mouse wheel to change the color "
+"temperature"
+msgstr ""
+"Klepněte pro přepnutí do automatického režimu. Otáčejte kolečkem myši pro "
+"ruční nastavení teploty barvy."
+
+#: src/applet/redshiftapplet.cpp:135
+msgctxt "Redshift main configuration page. Title Capitalization."
+msgid "General"
+msgstr "Obecné"
+
+#: src/applet/redshiftapplet.cpp:161
+msgctxt ""
+"Redshift state is set to «Auto» mode in this activity. Title Capitalization."
+msgid "Auto"
+msgstr "Automaticky "
+
+#: src/applet/redshiftapplet.cpp:162
+msgctxt ""
+"Redshift is forced to be enabled in this activity. Title Capitalization."
+msgid "Always Enabled"
+msgstr "Vždy Zapnuto"
+
+#: src/applet/redshiftapplet.cpp:163
+msgctxt ""
+"Redshift is forced to be disabled in this activity. Title Capitalization."
+msgid "Always Disabled"
+msgstr "Vždy Vypnuto"
+
+#: src/applet/redshiftapplet.cpp:177
+msgctxt ""
+"Redshift activities behaviour configuration page. Title Capitalization."
+msgid "Activities"
+msgstr "Činnosti"
+
+#~ msgctxt "Automatic adjust method"
+#~ msgid "Auto"
+#~ msgstr "Automaticky"
+
+#, fuzzy
+#~ msgctxt "Action the user can perform"
+#~ msgid ""
+#~ "Click to toggle on.                                 Scroll the mouse "
+#~ "wheel to set the color temperature manually."
+#~ msgstr ""
+#~ "Klepněte pro zapnutí. Otáčejte kolečkem myši pro ruční nastavení teploty "
+#~ "barvy."
+
+#, fuzzy
+#~ msgctxt "Action the user can perform"
+#~ msgid ""
+#~ "Click to toggle off.                                        Scroll the "
+#~ "mouse wheel to set the color temperature manually"
+#~ msgstr ""
+#~ "Klepněte pro vypnutí. Otáčejte kolečkem myši pro ruční nastavení teploty "
+#~ "barvy."
+
+#, fuzzy
+#~ msgctxt "Action the user can perform"
+#~ msgid ""
+#~ "Click to toggle on.                                         Scroll the "
+#~ "mouse wheel to set the color temperature manually"
+#~ msgstr ""
+#~ "Klepněte pro zapnutí. Otáčejte kolečkem myši pro ruční nastavení teploty "
+#~ "barvy."
+
+#, fuzzy
+#~ msgctxt "Action the user can perform"
+#~ msgid ""
+#~ "Click to switch to auto mode.                                         "
+#~ "Scroll the mouse wheel to change the color temperature"
+#~ msgstr ""
+#~ "Klepněte pro zapnutí. Otáčejte kolečkem myši pro ruční nastavení teploty "
+#~ "barvy."
+
+#~ msgctxt "Kelvin degrees (There's a space before the K)"
+#~ msgid " K"
+#~ msgstr " K"
+
+#~ msgctxt "Kelvin SI unit of measurement for temperature "
+#~ msgid "K"
+#~ msgstr "K"
