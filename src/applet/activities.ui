@@ -30,12 +30,12 @@
      </attribute>
      <column>
       <property name="text">
-       <string comment="KDE Plasma activity">Activity</string>
+       <string comment="KDE Plasma activity. Title Capitalization.">Activity</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string comment="Redshift operation mode">Mode</string>
+       <string comment="Redshift operation mode. Title Capitalization.">Mode</string>
       </property>
      </column>
     </widget>
