@@ -24,14 +24,15 @@
 
 #include "redshiftosdwidget.h"
 
-#include <QGraphicsLinearLayout>
-#include <QTimer>
-#include <QLabel>
 #include <QFont>
+#include <QGraphicsLinearLayout>
+#include <QLabel>
+#include <QTimer>
 
-#include <KIcon>
 #include <KDialog>
+#include <KIcon>
 #include <KWindowSystem>
+
 #include <Plasma/FrameSvg>
 #include <Plasma/Label>
 #include <Plasma/Meter>
