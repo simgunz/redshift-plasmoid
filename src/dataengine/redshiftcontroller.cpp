@@ -26,7 +26,6 @@
 
 #include <signal.h>
 
-#include <QThread>
 #include <QProcess>
 #include <QDBusConnection>
 #include <QDBusMessage>

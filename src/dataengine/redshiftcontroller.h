@@ -25,7 +25,6 @@
 #define REDSHIFTCONTROLLER_H
 
 #include <KProcess>
-#include <QThread>
 
 #include <Plasma/DataEngine>
 
@@ -49,7 +48,7 @@
  * is undesirable, like an activity to watch movie or to do graphic editing)
  */
 
-class RedshiftController : public QThread
+class RedshiftController : public QObject
 {
     Q_OBJECT
 
