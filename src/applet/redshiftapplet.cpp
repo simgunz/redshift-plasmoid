@@ -63,8 +63,8 @@ void RedshiftApplet::init()
 
     //Set the tooltip
     m_tooltip.setMainText(i18n("Redshift"));
-    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on, \
-                                scroll the mouse wheel to set the color temperature manually"));
+    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. \
+                                Scroll the mouse wheel to set the color temperature manually."));
     m_tooltip.setImage(KIcon("redshift-status-off"));
     Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
 
@@ -132,7 +132,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     QWidget *redshiftInterface = new QWidget(parent);
     m_redshiftUi.setupUi(redshiftInterface);
     parent->addPage(redshiftInterface, RedshiftSettings::self(),
-                    i18nc("Redshift main configuration page","General"), "redshift");
+                    i18nc("Redshift main configuration page. Title Capitalization.","General"), "redshift");
 
     //Create the activities configuration page
     QWidget *activitiesInterface = new QWidget(parent);
@@ -158,9 +158,9 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         listItem->setFlags(Qt::ItemIsEnabled);
         listItem->setData(0, Qt::UserRole, act);
 
-        itemCombo->addItem(i18nc("Redshift state is set auto in this activity", "Auto"));
-        itemCombo->addItem(i18nc("Redshift is forced to be enabled in this activity", "Always Enabled"));
-        itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity", "Always Disabled"));
+        itemCombo->addItem(i18nc("Redshift state is set to «Auto» mode in this activity. Title Capitalization.", "Auto"));
+        itemCombo->addItem(i18nc("Redshift is forced to be enabled in this activity. Title Capitalization.", "Always Enabled"));
+        itemCombo->addItem(i18nc("Redshift is forced to be disabled in this activity. Title Capitalization.", "Always Disabled"));
 
         if (alwaysOnActivities.contains(act)) {
             itemCombo->setCurrentIndex(1);
@@ -174,7 +174,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
         connect(itemCombo, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     }
     m_activitiesUi.activities->resizeColumnToContents(0);
-    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page", "Activities"),
+    parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page. Title Capitalization.", "Activities"),
                     "preferences-activities");
 
     connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
