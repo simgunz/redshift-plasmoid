@@ -27,6 +27,7 @@
 RedshiftService::RedshiftService(QObject *parent, RedshiftController *controller)
     : m_redshiftController(controller)
 {
+    Q_UNUSED(parent);
     setName("redshift");
 }
 
