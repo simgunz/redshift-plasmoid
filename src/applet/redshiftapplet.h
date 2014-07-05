@@ -105,7 +105,7 @@ public slots:
      *
      * \param temperature The color temperature in Kelvin
      */
-    void showRedshiftOSD(int brightness);
+    void showRedshiftOSD(int temperature);
 
 protected:
 
