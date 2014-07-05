@@ -90,7 +90,7 @@ void RedshiftController::stop()
     m_manualTemp = 5000;
 }
 
-void RedshiftController::setTemp(bool increase)
+void RedshiftController::setTemperature(bool increase)
 {
     if (m_readyForStart && (m_runMode != AlwaysOff)) {
         m_manualMode = true;

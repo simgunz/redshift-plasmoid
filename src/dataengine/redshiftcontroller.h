@@ -44,7 +44,7 @@ public:
     void restart();
     bool state();
     int currentTemperature();
-    void setTemp(bool increase);
+    void setTemperature(bool increase);
 private Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     void setReadyForStart();
