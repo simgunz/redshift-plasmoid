@@ -26,21 +26,16 @@
 #include "redshiftsettings.h"
 #include "redshiftosdwidget.h"
 
-#include <QGraphicsLinearLayout>
 #include <QtGui/QDesktopWidget>
-#include <QDebug>
-
-#include <Plasma/Svg>
-#include <Plasma/Theme>
-#include <Plasma/DataEngine>
-#include <Plasma/ToolTipContent>
-#include <Plasma/ToolTipManager>
 
 #include <KLocale>
 #include <KConfigDialog>
 #include <KComboBox>
 #include <KApplication>
 
+#include <Plasma/DataEngine>
+#include <Plasma/ToolTipContent>
+#include <Plasma/ToolTipManager>
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),

@@ -24,17 +24,18 @@
 #ifndef REDSHIFTAPPLET_H
 #define REDSHIFTAPPLET_H
 
-#include <Plasma/PopupApplet>
-#include <Plasma/DataEngine>
-#include <Plasma/Svg>
-#include <KIcon>
-#include <Plasma/ToolTipContent>
-#include <Plasma/IconWidget>
+#include "ui_redshift.h"
+#include "ui_activities.h"
+
 #include <QGraphicsGridLayout>
 #include <QGraphicsSceneWheelEvent>
 
-#include "ui_redshift.h"
-#include "ui_activities.h"
+#include <KIcon>
+
+#include <Plasma/Applet>
+#include <Plasma/DataEngine>
+#include <Plasma/IconWidget>
+#include <Plasma/ToolTipContent>
 
 class RedshiftOSDWidget;
 
