@@ -28,7 +28,6 @@
  */
 
 #include <QtCore/QCoreApplication>
-#include <QDBusMessage>
 #include <QDBusConnection>
 
 #include <redshiftenabler.h>

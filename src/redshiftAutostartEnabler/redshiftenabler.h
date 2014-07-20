@@ -24,8 +24,7 @@
 #ifndef REDSHIFTENABLER_H
 #define REDSHIFTENABLER_H
 
-#include <QDBusMessage>
-#include <QDBusConnection>
+#include <QObject>
 
 /*!
  * The RedshiftEnabler class provides a system to send a custom signal over dbus (readyForStart)
@@ -34,7 +33,9 @@
 class RedshiftEnabler : public QObject
 {
     Q_OBJECT
+
 public slots:
+    
     /*!
      * Sends a dbus signal called readyForStart.
      */
