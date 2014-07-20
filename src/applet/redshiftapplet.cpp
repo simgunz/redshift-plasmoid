@@ -28,13 +28,11 @@
 
 #include <QtGui/QDesktopWidget>
 
-#include <KLocale>
 #include <KConfigDialog>
 #include <KComboBox>
 #include <KApplication>
 
 #include <Plasma/DataEngine>
-#include <Plasma/ToolTipContent>
 #include <Plasma/ToolTipManager>
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
