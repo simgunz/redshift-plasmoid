@@ -30,6 +30,16 @@ RedshiftEngine::RedshiftEngine(QObject* parent, const QVariantList& args)
     Q_UNUSED(args)
 }
 
+Plasma::Service *RedshiftEngine::serviceForSource(const QString &source)
+{
+    RedshiftContainer* container = qobject_cast<RedshiftContainer*>(containerForSource(source));
+    if (container) {
+        return container->service();
+    } else {
+        return DataEngine::serviceForSource(source);
+    }
+}
+
 bool RedshiftEngine::sourceRequestEvent(const QString &source)
 {
     if (source == "Controller") {
@@ -40,16 +50,6 @@ bool RedshiftEngine::sourceRequestEvent(const QString &source)
         return true;
     }
     return false;
-}
-
-Plasma::Service *RedshiftEngine::serviceForSource(const QString &source)
-{
-    RedshiftContainer* container = qobject_cast<RedshiftContainer*>(containerForSource(source));
-    if (container) {
-        return container->service();
-    } else {
-        return DataEngine::serviceForSource(source);
-    }
 }
 
 K_EXPORT_PLASMA_DATAENGINE(timekpr, RedshiftEngine)
