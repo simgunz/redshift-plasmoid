@@ -29,6 +29,7 @@
 
 #include <QGraphicsGridLayout>
 #include <QGraphicsSceneWheelEvent>
+#include <QTimer>
 
 #include <KIcon>
 
@@ -75,7 +76,7 @@ public:
      * Applet initialization.
      *
      * This method is called once the applet is loaded. It loads the main icon of the
-     * widget, sets the tooltip, connect the widget to the redshift dataEnginge
+     * widget, sets the tooltip, connects the widget to the redshift dataEnginge
      * and connects all the signals and slots.
      */
     void init();
@@ -90,8 +91,8 @@ public slots:
      * redshift is in "Auto" mode, while is set to active when redshift is
      * in "Manual" mode.
      *
-     * \param sourceName The name of the source that has called the method
-     * \param data A QVariantMap containing the data the source passed to the method
+     * \param sourceName The name of the source that has called the method.
+     * \param data A QVariantMap containing the data the source passed to the method.
      */
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
@@ -101,9 +102,9 @@ public slots:
     void toggle();
 
     /*!
-     * Show an OSD showing the current temperature.
+     * Show an OSD showing the current color temperature.
      *
-     * \param temperature The color temperature in Kelvin
+     * \param temperature The color temperature in Kelvin.
      */
     void showRedshiftOSD(int temperature);
 
@@ -114,12 +115,12 @@ protected:
      *
      * The settings dialog can be accessed from the right click menu.
      *
-     * \param parent The KConfigDialog this config page is parented to
+     * \param parent The KConfigDialog this config page is parented to.
      */
     void createConfigurationInterface(KConfigDialog *parent);
 
     /*!
-     * Called when applet configuration values have changed.
+     * Called when applet configuration values have been changed.
      *
      * Makes a call to the redshift dataEnginge service to restart redshift in
      * order to apply the new settings. The screen color will undergo
@@ -153,31 +154,44 @@ private slots:
      */
     void configAccepted();
 
+    /*!
+     * Set the redshift applet status to change the its visibility in the system tray.
+     *
+     * When the applet is docked in the system tray if the applet status is Active
+     * (redshift in manual mode) the applet is visible in the tray, while when the
+     * status is Passive (redshift in Auto mode) the applet is hidden in the extra
+     * elements menu of the system tray. The status is changed after 3 seconds from
+     * the last user interaction, so that if the user needs to perform a more operations
+     * after the first (like keep scrolling the mouse wheel to change color temperature)
+     * the applet won't move away too soon.
+     */
+    void setAppletStatus();
+
 private:
 
     //! The button that constitute the body of the widget.
     Plasma::IconWidget *m_button;
 
-    //! The button icon.
-    KIcon m_icon;
-
-    //! The widget tooltip.
-    Plasma::ToolTipContent m_tooltip;
-
-    //! The main layout of the widget
+    //! The main layout of the widget.
     QGraphicsGridLayout *m_layout;
 
     //! Redshift parameters configuration ui page.
-    Ui::RedshiftConfig m_redshiftUi;
+    Ui::RedshiftConfig *m_redshiftUi;
 
     //! Redshift activities configuration ui page.
-    Ui::ActivitiesConfig m_activitiesUi;
+    Ui::ActivitiesConfig *m_activitiesUi;
 
     //! Pointer to the Redshift dataengine.
     Plasma::DataEngine *m_engine;
 
     //! Pointer to the Redshift OSD object.
     RedshiftOSDWidget *m_redshiftOSD;
+
+    //! The redshift applet status.
+    Plasma::ItemStatus m_appletStatus;
+
+    //! Wait timer that triggers the apple status change.
+    QTimer *m_setStatusTimer;
 };
 
 #endif

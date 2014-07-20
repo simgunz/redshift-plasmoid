@@ -28,18 +28,15 @@
 
 #include <QtGui/QDesktopWidget>
 
-#include <KLocale>
 #include <KConfigDialog>
 #include <KComboBox>
 #include <KApplication>
 
 #include <Plasma/DataEngine>
-#include <Plasma/ToolTipContent>
 #include <Plasma/ToolTipManager>
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
-      m_icon("redshift"),
       m_redshiftOSD(new RedshiftOSDWidget())
 {
     setBackgroundHints(StandardBackground);
@@ -61,12 +58,13 @@ void RedshiftApplet::init()
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->addItem(m_button, 0, 0);
 
-    //Set the tooltip
-    m_tooltip.setMainText(i18n("Redshift"));
-    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
-                                "Scroll the mouse wheel to set the color temperature manually."));
-    m_tooltip.setImage(KIcon("redshift-status-off"));
-    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
+    //Initialize to 3 seconds the wait timer used to wait before changing the applet status
+    m_setStatusTimer = new QTimer();
+    m_setStatusTimer->setInterval(3000);
+    m_setStatusTimer->setSingleShot(true);
+
+    //Set the default applet status
+    setStatus(Plasma::PassiveStatus);
 
     //Connect to the data engine
     m_engine = dataEngine("redshift");
@@ -74,33 +72,38 @@ void RedshiftApplet::init()
 
     //Connect signals and slots
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
+    connect(m_setStatusTimer, SIGNAL(timeout()), this, SLOT(setAppletStatus()));
 }
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     if (sourceName == "Controller") {
+        Plasma::ToolTipContent tooltip;
         if (data["Status"].toString().indexOf("Running") == 0) {
             m_button->setIcon(KIcon("redshift-status-on"));
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off. "
+            tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off. "
                                        "Scroll the mouse wheel to set the color temperature manually."));
-            m_tooltip.setImage(KIcon("redshift-status-on"));
-            setStatus(Plasma::PassiveStatus);
+            tooltip.setImage(KIcon("redshift-status-on"));
+            m_appletStatus = Plasma::PassiveStatus;
         } else {
             m_button->setIcon(KIcon("redshift-status-off"));
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
+            tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
                                         "Scroll the mouse wheel to set the color temperature manually."));
-            m_tooltip.setImage(KIcon("redshift-status-off"));
-            setStatus(Plasma::PassiveStatus);
+            tooltip.setImage(KIcon("redshift-status-off"));
+            m_appletStatus = Plasma::PassiveStatus;
         }
         if (data["Status"].toString() == "RunningManual") {
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode. "
-                                        "Scroll the mouse wheel to change the color temperature."));
+            tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode. "
+                                       "Scroll the mouse wheel to change the color temperature."));
             m_button->setIcon(KIcon("redshift-status-manual"));
-            setStatus(Plasma::ActiveStatus);
+            m_appletStatus = Plasma::ActiveStatus;
         }
-        Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
+        //Start the timer to change the status, if the timer is already active this will restart it
+        m_setStatusTimer->start();
+        Plasma::ToolTipManager::self()->setContent(this, tooltip);
     }
     int temperature = data["Temperature"].toInt();
+    //Show the OSD only if the temperature is non-zero, i.e., only when redshift is inn "Manual" mode
     if(temperature) {
         showRedshiftOSD(temperature);
     }
@@ -130,17 +133,20 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     //Create the redshift parameters configuration page
     QWidget *redshiftInterface = new QWidget(parent);
-    m_redshiftUi.setupUi(redshiftInterface);
+    m_redshiftUi = new Ui::RedshiftConfig();
+    m_redshiftUi->setupUi(redshiftInterface);
     parent->addPage(redshiftInterface, RedshiftSettings::self(),
                     i18nc("Redshift main configuration page. Title Capitalization.","General"), "redshift");
 
     //Create the activities configuration page
     QWidget *activitiesInterface = new QWidget(parent);
-    m_activitiesUi.setupUi(activitiesInterface);
+    m_activitiesUi = new Ui::ActivitiesConfig();
+    m_activitiesUi->setupUi(activitiesInterface);
 
     //Get the list of KDE activities
     Plasma::DataEngine *activities_engine = dataEngine("org.kde.activities");
     QStringList activities = activities_engine->sources();
+    //The last source is not an activity, but is the Status source
     activities.removeLast();
 
     //Get the redshift-plasmoid activities configuration
@@ -151,8 +157,8 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     QString act;
     foreach(act, activities) {
         Plasma::DataEngine::Data data = activities_engine->query(act);
-        QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi.activities);
-        KComboBox *itemCombo = new KComboBox(m_activitiesUi.activities);
+        QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi->activities);
+        KComboBox *itemCombo = new KComboBox(m_activitiesUi->activities);
         listItem->setText(0, data["Name"].toString());
         listItem->setIcon(0, KIcon(data["Icon"].toString()));
         listItem->setFlags(Qt::ItemIsEnabled);
@@ -170,10 +176,10 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
             itemCombo->setCurrentIndex(0);
         }
 
-        m_activitiesUi.activities->setItemWidget(listItem, 1, itemCombo);
+        m_activitiesUi->activities->setItemWidget(listItem, 1, itemCombo);
         connect(itemCombo, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     }
-    m_activitiesUi.activities->resizeColumnToContents(0);
+    m_activitiesUi->activities->resizeColumnToContents(0);
     parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page. Title Capitalization.", "Activities"),
                     "preferences-activities");
 
@@ -204,7 +210,7 @@ void RedshiftApplet::configAccepted()
     QStringList alwaysOnActivities;
     QStringList alwaysOffActivities;
 
-    QTreeWidget *activitiesList = m_activitiesUi.activities;
+    QTreeWidget *activitiesList = m_activitiesUi->activities;
     for (int i = 0; i < activitiesList->topLevelItemCount(); ++i) {
         QTreeWidgetItem *item = activitiesList->topLevelItem(i);
         KComboBox *itemCombo = static_cast<KComboBox *>(activitiesList->itemWidget(item, 1));
@@ -218,6 +224,11 @@ void RedshiftApplet::configAccepted()
     RedshiftSettings::setAlwaysOnActivities(alwaysOnActivities);
     RedshiftSettings::setAlwaysOffActivities(alwaysOffActivities);
     RedshiftSettings::self()->writeConfig();
+}
+
+void RedshiftApplet::setAppletStatus()
+{
+    setStatus(m_appletStatus);
 }
 
 K_EXPORT_PLASMA_APPLET(redshift, RedshiftApplet)
