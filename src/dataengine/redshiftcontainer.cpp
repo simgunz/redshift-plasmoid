@@ -39,6 +39,11 @@ RedshiftContainer::~RedshiftContainer()
     delete m_controller;
 }
 
+Plasma::Service* RedshiftContainer::service(QObject* parent)
+{
+    return new RedshiftService(parent, m_controller);
+}
+
 void RedshiftContainer::updateStatus(RedshiftController::RedshiftState state, int temperature)
 {
     switch (state) {
@@ -51,9 +56,4 @@ void RedshiftContainer::updateStatus(RedshiftController::RedshiftState state, in
     //Check if any data is actually changed, and, if so, the dataUpdated signal is automatically emitted
     //in order to inform the connected plasmoids of the change.
     checkForUpdate();
-}
-
-Plasma::Service* RedshiftContainer::service(QObject* parent)
-{
-    return new RedshiftService(parent, m_controller);
 }
