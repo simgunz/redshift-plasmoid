@@ -158,10 +158,7 @@ private:
     //! The button that constitute the body of the widget.
     Plasma::IconWidget *m_button;
 
-    //! The widget tooltip.
-    Plasma::ToolTipContent m_tooltip;
-
-    //! The main layout of the widget
+    //! The main layout of the widget.
     QGraphicsGridLayout *m_layout;
 
     //! Redshift parameters configuration ui page.

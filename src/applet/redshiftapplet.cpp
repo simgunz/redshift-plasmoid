@@ -58,13 +58,6 @@ void RedshiftApplet::init()
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->addItem(m_button, 0, 0);
 
-    //Set the tooltip
-    m_tooltip.setMainText(i18n("Redshift"));
-    m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
-                                "Scroll the mouse wheel to set the color temperature manually."));
-    m_tooltip.setImage(KIcon("redshift-status-off"));
-    Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
-
     //Connect to the data engine
     m_engine = dataEngine("redshift");
     m_engine->connectSource("Controller", this);
@@ -76,26 +69,27 @@ void RedshiftApplet::init()
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
     if (sourceName == "Controller") {
+        Plasma::ToolTipContent tooltip;
         if (data["Status"].toString().indexOf("Running") == 0) {
             m_button->setIcon(KIcon("redshift-status-on"));
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off. "
+            tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off. "
                                        "Scroll the mouse wheel to set the color temperature manually."));
-            m_tooltip.setImage(KIcon("redshift-status-on"));
+            tooltip.setImage(KIcon("redshift-status-on"));
             setStatus(Plasma::PassiveStatus);
         } else {
             m_button->setIcon(KIcon("redshift-status-off"));
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
+            tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
                                         "Scroll the mouse wheel to set the color temperature manually."));
-            m_tooltip.setImage(KIcon("redshift-status-off"));
+            tooltip.setImage(KIcon("redshift-status-off"));
             setStatus(Plasma::PassiveStatus);
         }
         if (data["Status"].toString() == "RunningManual") {
-            m_tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode. "
-                                        "Scroll the mouse wheel to change the color temperature."));
+            tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode. "
+                                       "Scroll the mouse wheel to change the color temperature."));
             m_button->setIcon(KIcon("redshift-status-manual"));
             setStatus(Plasma::ActiveStatus);
         }
-        Plasma::ToolTipManager::self()->setContent(this, m_tooltip);
+        Plasma::ToolTipManager::self()->setContent(this, tooltip);
     }
     int temperature = data["Temperature"].toInt();
     if(temperature) {
