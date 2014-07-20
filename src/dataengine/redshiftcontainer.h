@@ -24,8 +24,9 @@
 #ifndef REDSHIFTCONTAINER_H
 #define REDSHIFTCONTAINER_H
 
-#include <Plasma/DataContainer>
 #include "redshiftcontroller.h"
+
+#include <Plasma/DataContainer>
 
 /*!
  * The RedshiftContainer class is a Plasma::DataContainer that wraps a system wide redshift process
