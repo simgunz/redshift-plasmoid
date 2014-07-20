@@ -25,18 +25,6 @@
 #define REDSHIFTENGINE_H
 
 #include <Plasma/DataEngine>
-#include <KSharedConfigPtr>
-#include <KSharedConfig>
-#include <KConfigGroup>
-#include <KProcess>
-
-#include <QStringList>
-#include <QDate>
-#include <QFile>
-#include <QFileSystemWatcher>
-
-#include "redshiftcontroller.h"
-#include "redshiftcontainer.h"
 
 /*!
  * The RedshiftEngine class is a Plasma::DataEngine that manages the redshift process, provides

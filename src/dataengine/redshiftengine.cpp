@@ -22,7 +22,7 @@
  */
 
 #include "redshiftengine.h"
-#include "redshiftservice.h"
+#include "redshiftcontainer.h"
 
 RedshiftEngine::RedshiftEngine(QObject* parent, const QVariantList& args)
     : Plasma::DataEngine(parent, args)
