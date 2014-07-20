@@ -29,6 +29,7 @@
 
 #include <QGraphicsGridLayout>
 #include <QGraphicsSceneWheelEvent>
+#include <QTimer>
 
 #include <KIcon>
 
@@ -153,6 +154,19 @@ private slots:
      */
     void configAccepted();
 
+    /*!
+     * Set the redshift applet status to change the its visibility in the system tray.
+     *
+     * When the applet is docked in the system tray if the applet status is Active
+     * (redshift in manual mode) the applet is visible in the tray, while when the
+     * status is Passive (redshift in Auto mode) the applet is hidden in the extra
+     * elements menu of the system tray. The status is changed after 3 seconds from
+     * the last user interaction, so that if the user needs to perform a more operations
+     * after the first (like keep scrolling the mouse wheel to change color temperature)
+     * the applet won't move away too soon.
+     */
+    void setAppletStatus();
+
 private:
 
     //! The button that constitute the body of the widget.
@@ -172,6 +186,12 @@ private:
 
     //! Pointer to the Redshift OSD object.
     RedshiftOSDWidget *m_redshiftOSD;
+
+    //! The redshift applet status.
+    Plasma::ItemStatus m_appletStatus;
+
+    //! Wait timer that triggers the apple status change.
+    QTimer *m_setStatusTimer;
 };
 
 #endif

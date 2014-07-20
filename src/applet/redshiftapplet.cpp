@@ -58,12 +58,21 @@ void RedshiftApplet::init()
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->addItem(m_button, 0, 0);
 
+    //Initialize to 3 seconds the wait timer used to wait before changing the applet status
+    m_setStatusTimer = new QTimer();
+    m_setStatusTimer->setInterval(3000);
+    m_setStatusTimer->setSingleShot(true);
+
+    //Set the default applet status
+    setStatus(Plasma::PassiveStatus);
+
     //Connect to the data engine
     m_engine = dataEngine("redshift");
     m_engine->connectSource("Controller", this);
 
     //Connect signals and slots
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
+    connect(m_setStatusTimer, SIGNAL(timeout()), this, SLOT(setAppletStatus()));
 }
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
@@ -75,20 +84,22 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
             tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off. "
                                        "Scroll the mouse wheel to set the color temperature manually."));
             tooltip.setImage(KIcon("redshift-status-on"));
-            setStatus(Plasma::PassiveStatus);
+            m_appletStatus = Plasma::PassiveStatus;
         } else {
             m_button->setIcon(KIcon("redshift-status-off"));
             tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
                                         "Scroll the mouse wheel to set the color temperature manually."));
             tooltip.setImage(KIcon("redshift-status-off"));
-            setStatus(Plasma::PassiveStatus);
+            m_appletStatus = Plasma::PassiveStatus;
         }
         if (data["Status"].toString() == "RunningManual") {
             tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode. "
                                        "Scroll the mouse wheel to change the color temperature."));
             m_button->setIcon(KIcon("redshift-status-manual"));
-            setStatus(Plasma::ActiveStatus);
+            m_appletStatus = Plasma::ActiveStatus;
         }
+        //Start the timer to change the status, if the timer is already active this will restart it
+        m_setStatusTimer->start();
         Plasma::ToolTipManager::self()->setContent(this, tooltip);
     }
     int temperature = data["Temperature"].toInt();
@@ -213,6 +224,11 @@ void RedshiftApplet::configAccepted()
     RedshiftSettings::setAlwaysOnActivities(alwaysOnActivities);
     RedshiftSettings::setAlwaysOffActivities(alwaysOffActivities);
     RedshiftSettings::self()->writeConfig();
+}
+
+void RedshiftApplet::setAppletStatus()
+{
+    setStatus(m_appletStatus);
 }
 
 K_EXPORT_PLASMA_APPLET(redshift, RedshiftApplet)
