@@ -24,9 +24,10 @@
 #ifndef REDSHIFTSERVICE_H
 #define REDSHIFTSERVICE_H
 
+#include "redshiftcontroller.h"
+
 #include <Plasma/Service>
 #include <Plasma/ServiceJob>
-#include "redshiftcontroller.h"
 
 using namespace Plasma;
 
