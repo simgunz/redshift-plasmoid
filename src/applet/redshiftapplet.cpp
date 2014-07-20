@@ -92,6 +92,7 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
         Plasma::ToolTipManager::self()->setContent(this, tooltip);
     }
     int temperature = data["Temperature"].toInt();
+    //Show the OSD only if the temperature is non-zero, i.e., only when redshift is inn "Manual" mode
     if(temperature) {
         showRedshiftOSD(temperature);
     }
@@ -134,6 +135,7 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     //Get the list of KDE activities
     Plasma::DataEngine *activities_engine = dataEngine("org.kde.activities");
     QStringList activities = activities_engine->sources();
+    //The last source is not an activity, but is the Status source
     activities.removeLast();
 
     //Get the redshift-plasmoid activities configuration
