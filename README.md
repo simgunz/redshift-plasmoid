@@ -65,9 +65,10 @@ How to use
 
 Basic commands
 --------------
-* Click on the redshift widget to toggle the screen color regulation on/off
+* Click on the redshift widget to toggle the screen color regulation on/off. When in Manual mode
+  clicking brings redshift back in Auto mode.
 * Scroll the mouse wheel over the redshift widget to switch to Manual Mode and keep the screen
-  color temperature constant throughout the day
+  color temperature constant throughout the day.
 
 Configuration pages
 -------------------
