@@ -26,10 +26,8 @@
 
 #include <signal.h>
 
-#include <QProcess>
 #include <QDBusConnection>
 #include <QDBusMessage>
-#include <QDebug>
 
 #include <Plasma/DataEngineManager>
 
