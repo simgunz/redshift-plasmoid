@@ -162,10 +162,10 @@ private:
     QGraphicsGridLayout *m_layout;
 
     //! Redshift parameters configuration ui page.
-    Ui::RedshiftConfig m_redshiftUi;
+    Ui::RedshiftConfig *m_redshiftUi;
 
     //! Redshift activities configuration ui page.
-    Ui::ActivitiesConfig m_activitiesUi;
+    Ui::ActivitiesConfig *m_activitiesUi;
 
     //! Pointer to the Redshift dataengine.
     Plasma::DataEngine *m_engine;

@@ -121,13 +121,15 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     //Create the redshift parameters configuration page
     QWidget *redshiftInterface = new QWidget(parent);
-    m_redshiftUi.setupUi(redshiftInterface);
+    m_redshiftUi = new Ui::RedshiftConfig();
+    m_redshiftUi->setupUi(redshiftInterface);
     parent->addPage(redshiftInterface, RedshiftSettings::self(),
                     i18nc("Redshift main configuration page. Title Capitalization.","General"), "redshift");
 
     //Create the activities configuration page
     QWidget *activitiesInterface = new QWidget(parent);
-    m_activitiesUi.setupUi(activitiesInterface);
+    m_activitiesUi = new Ui::ActivitiesConfig();
+    m_activitiesUi->setupUi(activitiesInterface);
 
     //Get the list of KDE activities
     Plasma::DataEngine *activities_engine = dataEngine("org.kde.activities");
@@ -142,8 +144,8 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     QString act;
     foreach(act, activities) {
         Plasma::DataEngine::Data data = activities_engine->query(act);
-        QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi.activities);
-        KComboBox *itemCombo = new KComboBox(m_activitiesUi.activities);
+        QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi->activities);
+        KComboBox *itemCombo = new KComboBox(m_activitiesUi->activities);
         listItem->setText(0, data["Name"].toString());
         listItem->setIcon(0, KIcon(data["Icon"].toString()));
         listItem->setFlags(Qt::ItemIsEnabled);
@@ -161,10 +163,10 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
             itemCombo->setCurrentIndex(0);
         }
 
-        m_activitiesUi.activities->setItemWidget(listItem, 1, itemCombo);
+        m_activitiesUi->activities->setItemWidget(listItem, 1, itemCombo);
         connect(itemCombo, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     }
-    m_activitiesUi.activities->resizeColumnToContents(0);
+    m_activitiesUi->activities->resizeColumnToContents(0);
     parent->addPage(activitiesInterface, i18nc("Redshift activities behaviour configuration page. Title Capitalization.", "Activities"),
                     "preferences-activities");
 
@@ -195,7 +197,7 @@ void RedshiftApplet::configAccepted()
     QStringList alwaysOnActivities;
     QStringList alwaysOffActivities;
 
-    QTreeWidget *activitiesList = m_activitiesUi.activities;
+    QTreeWidget *activitiesList = m_activitiesUi->activities;
     for (int i = 0; i < activitiesList->topLevelItemCount(); ++i) {
         QTreeWidgetItem *item = activitiesList->topLevelItem(i);
         KComboBox *itemCombo = static_cast<KComboBox *>(activitiesList->itemWidget(item, 1));
