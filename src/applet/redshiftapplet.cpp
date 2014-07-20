@@ -37,7 +37,6 @@
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
-      m_icon("redshift"),
       m_redshiftOSD(new RedshiftOSDWidget())
 {
     setBackgroundHints(StandardBackground);

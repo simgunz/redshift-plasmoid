@@ -158,9 +158,6 @@ private:
     //! The button that constitute the body of the widget.
     Plasma::IconWidget *m_button;
 
-    //! The button icon.
-    KIcon m_icon;
-
     //! The widget tooltip.
     Plasma::ToolTipContent m_tooltip;
 
