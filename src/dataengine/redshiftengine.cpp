@@ -22,12 +22,22 @@
  */
 
 #include "redshiftengine.h"
-#include "redshiftservice.h"
+#include "redshiftcontainer.h"
 
 RedshiftEngine::RedshiftEngine(QObject* parent, const QVariantList& args)
     : Plasma::DataEngine(parent, args)
 {
     Q_UNUSED(args)
+}
+
+Plasma::Service *RedshiftEngine::serviceForSource(const QString &source)
+{
+    RedshiftContainer* container = qobject_cast<RedshiftContainer*>(containerForSource(source));
+    if (container) {
+        return container->service();
+    } else {
+        return DataEngine::serviceForSource(source);
+    }
 }
 
 bool RedshiftEngine::sourceRequestEvent(const QString &source)
@@ -40,16 +50,6 @@ bool RedshiftEngine::sourceRequestEvent(const QString &source)
         return true;
     }
     return false;
-}
-
-Plasma::Service *RedshiftEngine::serviceForSource(const QString &source)
-{
-    RedshiftContainer* container = qobject_cast<RedshiftContainer*>(containerForSource(source));
-    if (container) {
-        return container->service();
-    } else {
-        return DataEngine::serviceForSource(source);
-    }
 }
 
 K_EXPORT_PLASMA_DATAENGINE(timekpr, RedshiftEngine)

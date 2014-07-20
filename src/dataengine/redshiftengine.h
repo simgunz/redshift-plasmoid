@@ -25,18 +25,6 @@
 #define REDSHIFTENGINE_H
 
 #include <Plasma/DataEngine>
-#include <KSharedConfigPtr>
-#include <KSharedConfig>
-#include <KConfigGroup>
-#include <KProcess>
-
-#include <QStringList>
-#include <QDate>
-#include <QFile>
-#include <QFileSystemWatcher>
-
-#include "redshiftcontroller.h"
-#include "redshiftcontainer.h"
 
 /*!
  * The RedshiftEngine class is a Plasma::DataEngine that manages the redshift process, provides
@@ -63,6 +51,7 @@ class RedshiftEngine : public Plasma::DataEngine
     Q_OBJECT
 
 public:
+
     /*!
      * Default constructor.
      */
@@ -71,9 +60,9 @@ public:
     /*!
      * Returns a service targeted to a source when a plasmoid requests it.
      *
-     * \param source The source to target the Service at
+     * \param source The source to target the Service at.
      *
-     * \returns A Plasma::Service that has the source as a destination
+     * \returns A Plasma::Service that has the source as a destination.
      */
     Plasma::Service *serviceForSource(const QString &source);
 
@@ -86,9 +75,9 @@ protected:
      * a new RedshiftContainer otherwise the method just confirms that the requested source exists.
      * If the requested source is not "Controller" the method returns false.
      *
-     * \param source The name of the source that has been requested
+     * \param source The name of the source that has been requested.
      *
-     * \returns True if a Plasma::DataContainer was set up, false otherwise
+     * \returns True if a Plasma::DataContainer was set up, false otherwise.
      */
     bool sourceRequestEvent(const QString& source);
 };
