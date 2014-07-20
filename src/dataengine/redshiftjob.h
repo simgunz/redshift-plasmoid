@@ -24,8 +24,9 @@
 #ifndef REDSHIFTJOB_H
 #define REDSHIFTJOB_H
 
-#include <Plasma/ServiceJob>
 #include "redshiftcontroller.h"
+
+#include <Plasma/ServiceJob>
 
 /*!
  * The RedshiftJob class performs the operation requested by the service in an asynchronous way.
