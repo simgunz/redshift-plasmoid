@@ -24,8 +24,9 @@
 #ifndef REDSHIFTCONTAINER_H
 #define REDSHIFTCONTAINER_H
 
-#include <Plasma/DataContainer>
 #include "redshiftcontroller.h"
+
+#include <Plasma/DataContainer>
 
 /*!
  * The RedshiftContainer class is a Plasma::DataContainer that wraps a system wide redshift process
@@ -35,7 +36,7 @@
  * - Status, the redshift status, which can be either Stopped, Running, RunningManual
  * - Temperature, the current color temperature when redshift is in manual mode
  *
- * It also holds a RedshiftController that manages the systm wide redshift process.
+ * It also holds a RedshiftController that manages the system wide redshift process.
  */
 class RedshiftContainer : public Plasma::DataContainer
 {
@@ -46,7 +47,7 @@ public:
     /*!
     * Default constructor.
     *
-    * \param parent The QObject this applet is parented to
+    * \param parent The QObject this applet is parented to.
     */
     explicit RedshiftContainer(QObject* parent = 0);
 
@@ -58,8 +59,8 @@ public:
     /*!
     * Returns a RedshiftService object.
     *
-    * \param parent The QObject this applet is parented to
-    * \returns A Plasma::Service to interact with the source, i.e., with the redshift process
+    * \param parent The QObject this applet is parented to.
+    * \returns A Plasma::Service to interact with the source, i.e., with the redshift process.
     */
     Plasma::Service* service(QObject* parent = 0);
 
@@ -71,14 +72,14 @@ public slots:
     * This slot must be connected to the RedshiftController stateChanged signal in order to constantly
     * reflect the redshift process state.
     *
-    * \param state An integer representing the state of the redshift process. Can be 0 = Stopped, 1 = Running, 2 = RunningManual
-    * \param temperature An integer representing the screen color temperature in Kelvin, when redshift is in manual mode
+    * \param state The RedshiftController state.
+    * \param temperature The screen color temperature in Kelvin, when redshift is in manual mode.
     */
     void updateStatus(RedshiftController::RedshiftState state, int temperature);
 
 private:
 
-    //! The controller object of the redshift process
+    //! The controller object of the redshift process.
     RedshiftController *m_controller;
 };
 
