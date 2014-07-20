@@ -29,15 +29,12 @@
 #include <QLabel>
 #include <QTimer>
 
-#include <KDialog>
 #include <KIcon>
+#include <KIconLoader>
 #include <KWindowSystem>
 
-#include <Plasma/FrameSvg>
 #include <Plasma/Label>
-#include <Plasma/Meter>
 #include <Plasma/Theme>
-#include <Plasma/WindowEffects>
 
 RedshiftOSDWidget::RedshiftOSDWidget(QWidget * parent)
     : Plasma::Dialog(parent, Qt::ToolTip),
