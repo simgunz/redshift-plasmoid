@@ -23,7 +23,7 @@
       <locale language="English" country="UnitedStates"/>
      </property>
      <property name="text">
-      <string>Latitude:</string>
+      <string comment="Sentence capitalization.">Latitude:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -76,7 +76,7 @@
       <locale language="English" country="UnitedStates"/>
      </property>
      <property name="text">
-      <string>Longitude:</string>
+      <string comment="Sentence capitalization.">Longitude:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -139,7 +139,7 @@
       <locale language="English" country="UnitedStates"/>
      </property>
      <property name="text">
-      <string comment="The desired color temperature during the day">Day Color Temperature:</string>
+      <string comment="The desired color temperature during the day. Sentence capitalization.">Day color temperature:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -161,7 +161,7 @@
       <enum>QAbstractSpinBox::PlusMinus</enum>
      </property>
      <property name="suffix">
-      <string comment="Kelvin (There's a space before the K)"> K</string>
+      <string comment="Kelvin SI unit of measurement for temperature. (There's a space before the K)."> K</string>
      </property>
      <property name="maximum">
       <number>9999</number>
@@ -174,7 +174,7 @@
       <locale language="English" country="UnitedStates"/>
      </property>
      <property name="text">
-      <string comment="The desired color temperature during the night">Night Color Temperature:</string>
+      <string comment="The desired color temperature during the night. Sentence capitalization.">Night color temperature:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -196,7 +196,7 @@
       <enum>QAbstractSpinBox::PlusMinus</enum>
      </property>
      <property name="suffix">
-      <string comment="Kelvin (There's a space before the K)"> K</string>
+      <string comment="Kelvin SI unit of measurement for temperature. (There's a space before the K)."> K</string>
      </property>
      <property name="maximum">
       <number>9999</number>
@@ -222,10 +222,10 @@
    <item row="7" column="0">
     <widget class="QLabel" name="lbGamma">
      <property name="toolTip">
-      <string>Additional gamma correction (default is 1:1:1).</string>
+      <string>Additional gamma correction (Default is 1:1:1).</string>
      </property>
      <property name="text">
-      <string comment="The screen gamma channels, red, green, blue">Gamma (RGB):</string>
+      <string comment="The screen gamma channels, red, green, blue. Sentence capitalization.">Gamma (RGB):</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -306,7 +306,7 @@
       <string/>
      </property>
      <property name="text">
-      <string comment="Enable smooth transition when the program start and stop">Smooth Transition:</string>
+      <string comment="Enable smooth transition when the program start and stop. Sentence capitalization.">Smooth transition:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -319,7 +319,7 @@
       <string/>
      </property>
      <property name="text">
-      <string comment="Launch the program on startup">Autostart:</string>
+      <string comment="Launch the program on startup. Sentence capitalization.">Autostart:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -332,7 +332,7 @@
       <string/>
      </property>
      <property name="text">
-      <string>Enabled</string>
+      <string comment="Sentence capitalization.">Enabled</string>
      </property>
     </widget>
    </item>
@@ -342,7 +342,7 @@
       <string/>
      </property>
      <property name="text">
-      <string comment="The method used to set the color temperature">Adjust Method:</string>
+      <string comment="The method used to set the color temperature. Sentence capitalization.">Adjust method:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -355,7 +355,7 @@
       <string/>
      </property>
      <property name="text">
-      <string>Enabled</string>
+      <string comment="Sentence capitalization.">Enabled</string>
      </property>
     </widget>
    </item>
@@ -369,17 +369,17 @@
      </property>
      <item>
       <property name="text">
-       <string comment="Automatic adjust method">Auto</string>
+       <string comment="Automatic adjust method. Title Capitalization.">Auto</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Randr</string>
+       <string notr="true" comment="Title Capitalization.">Randr</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Vidmode</string>
+       <string notr="true" comment="Title Capitalization.">Vidmode</string>
       </property>
      </item>
     </widget>
@@ -387,7 +387,7 @@
    <item row="6" column="0">
     <widget class="QLabel" name="lbBrightness">
      <property name="text">
-      <string>Brightness:</string>
+      <string comment="Sentence capitalization.">Brightness:</string>
      </property>
     </widget>
    </item>

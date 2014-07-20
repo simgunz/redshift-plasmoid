@@ -1,0 +1,14 @@
+-To translate redshift use the KDE translation software "lokalize", if you can.
+-Strictly translate the original sentence without altering it. (Example: do not substitute a comma with a conjunction,
+ do not add quotes where they are not present).
+ If you think the sentence can be improved, write me and I will update it in the source.
+-Do not add leading or trailing spaces except where explicitly required in the comments.
+-Respect the capitalization style (Title Capitalization or Sentence capitalization). The comment
+ usually should give an hint of the type of capitalization, otherwise look at the original English sentence.
+-If a sentence is ambiguous and the comment can't clarify it, write me.
+-Read the KDE Human Interface Guideline (HIG). In particular the label and capitalization section.
+
+Links:
+http://techbase.kde.org/Projects/Usability/HIG/
+http://techbase.kde.org/Projects/Usability/HIG/Labels
+http://techbase.kde.org/Projects/Usability/HIG/Capitalization
