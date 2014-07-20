@@ -42,14 +42,14 @@ RedshiftController::RedshiftController()
       m_manualTemp(RedshiftController::DefaultManualTemperature)
 {
     m_process = new KProcess();
-    // Connects to dbus to receive the enabler signal readyForStart
+    //Connects to dbus to receive the enabler signal readyForStart
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
-    // Connects to the plasma activities dataEngine to monitor if the current activity is changed
+    //Connects to the plasma activities dataEngine to monitor if the current activity is changed
     m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
     m_activitiesEngine->connectSource("Status", this);
-    // Calls dataUpdated manually to initialize the controller. The controller reads the configuration file,
-    // gets the current activity, and run the redshift process.
+    //Calls dataUpdated manually to initialize the controller. The controller reads the configuration file,
+    //gets the current activity, and run the redshift process.
     dataUpdated("Status", m_activitiesEngine->query("Status"));
 }
 
@@ -88,20 +88,20 @@ void RedshiftController::setTemperature(bool increase)
         } else {
             m_manualTemp -= RedshiftController::TemperatureStep;
         }
-        // Bounds the possible temperatures
+        //Bounds the possible temperatures
         m_manualTemp = qMin(qMax(m_manualTemp,RedshiftController::MinTemperature),RedshiftController::MaxTemperature);
         readConfig();
         m_state = Stopped;
-        // Instantly kills the process without waiting the color transition
+        //Instantly kills the process without waiting the color transition
         if (m_process->state()) {
             m_process->kill();
         }
         m_process->waitForFinished();
-        // Since the state is Stopped, calling  applyChanges with the toggle flag set will run the redshift
-        // process thus setting the fixed color temperature.
+        //Since the state is Stopped, calling  applyChanges with the toggle flag set will run the redshift
+        //process thus setting the fixed color temperature.
         applyChanges(true);
-        // The start method has previously set the state to Running, but when redshift is ran with the -x flag
-        // it exits immediately, so the state should be set to Stopped manually.
+        //The start method has previously set the state to Running, but when redshift is ran with the -x flag
+        //it exits immediately, so the state should be set to Stopped manually.
         m_state = Stopped;
     }
 }
@@ -120,11 +120,11 @@ void RedshiftController::restart()
 {
     readConfig();
     m_state = Stopped;
-    // If the process is running it needs to be stopped and launched again with the new parameters
+    //If the process is running it needs to be stopped and launched again with the new parameters
     if (m_process->state()) {
         m_process->terminate();
     }
-    // Waits the end of the color out transition before launching the process again
+    //Waits the end of the color out transition before launching the process again
     m_process->waitForFinished();
     applyChanges();
 }
@@ -148,15 +148,15 @@ void RedshiftController::dataUpdated(const QString &sourceName, const Plasma::Da
 
 void RedshiftController::applyChanges(bool toggle)
 {
-    // If m_readyForStart is false the application sends a probe signal to check
-    // if it can be enabled. This prevents to run redshift too early in the login phase.
+    //If m_readyForStart is false the application sends a probe signal to check
+    //if it can be enabled. This prevents to run redshift too early in the login phase.
     if (m_readyForStart) {
         if (m_runMode == AlwaysOn) {
             start();
         } else if (m_runMode == AlwaysOff) {
             stop();
-        // If toggle is true the next section performs a toggle of the state whereas
-        // if toggle is false it realigns the real state with the auto state
+        //If toggle is true the next section performs a toggle of the state whereas
+        //if toggle is false it realigns the real state with the auto state
         } else if (toggle || (m_autoState != m_state)) {
             if (m_state == Running) {
                 stop();
