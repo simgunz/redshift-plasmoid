@@ -75,7 +75,7 @@ public:
      * Applet initialization.
      *
      * This method is called once the applet is loaded. It loads the main icon of the
-     * widget, sets the tooltip, connect the widget to the redshift dataEnginge
+     * widget, sets the tooltip, connects the widget to the redshift dataEnginge
      * and connects all the signals and slots.
      */
     void init();
@@ -90,8 +90,8 @@ public slots:
      * redshift is in "Auto" mode, while is set to active when redshift is
      * in "Manual" mode.
      *
-     * \param sourceName The name of the source that has called the method
-     * \param data A QVariantMap containing the data the source passed to the method
+     * \param sourceName The name of the source that has called the method.
+     * \param data A QVariantMap containing the data the source passed to the method.
      */
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
 
@@ -101,9 +101,9 @@ public slots:
     void toggle();
 
     /*!
-     * Show an OSD showing the current temperature.
+     * Show an OSD showing the current color temperature.
      *
-     * \param temperature The color temperature in Kelvin
+     * \param temperature The color temperature in Kelvin.
      */
     void showRedshiftOSD(int temperature);
 
@@ -114,12 +114,12 @@ protected:
      *
      * The settings dialog can be accessed from the right click menu.
      *
-     * \param parent The KConfigDialog this config page is parented to
+     * \param parent The KConfigDialog this config page is parented to.
      */
     void createConfigurationInterface(KConfigDialog *parent);
 
     /*!
-     * Called when applet configuration values have changed.
+     * Called when applet configuration values have been changed.
      *
      * Makes a call to the redshift dataEnginge service to restart redshift in
      * order to apply the new settings. The screen color will undergo
