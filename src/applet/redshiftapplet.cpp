@@ -73,6 +73,9 @@ void RedshiftApplet::init()
     //Connect signals and slots
     connect(m_button, SIGNAL(clicked()), this, SLOT(toggle()));
     connect(m_setStatusTimer, SIGNAL(timeout()), this, SLOT(setAppletStatus()));
+    //The activate signal is emitted whenever the plasmoid get the focus,
+    // i.e, when the user trigger the global shortcut
+    connect(this, SIGNAL(activate()), this, SLOT(toggle()));
 }
 
 void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
