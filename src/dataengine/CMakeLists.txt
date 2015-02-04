@@ -6,12 +6,13 @@ set(redshift_engine_SRCS
     redshiftcontainer.cpp
 )
 
-kde4_add_kcfg_files(redshift_engine_SRCS ../redshiftsettings.kcfgc)
-kde4_add_plugin(plasma_engine_redshift ${redshift_engine_SRCS})
+kconfig_add_kcfg_files(redshift_engine_SRCS ../redshiftsettings.kcfgc)
+add_library(plasma_engine_redshift MODULE ${redshift_engine_SRCS})
+target_link_libraries(plasma_engine_redshift KF5::Plasma)
 
-target_link_libraries(plasma_engine_redshift ${KDE4_PLASMA_LIBS})
+kcoreaddons_desktop_to_json(plasma_engine_redshift plasma-dataengine-redshift.desktop)
 
-install(TARGETS plasma_engine_redshift DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS plasma_engine_redshift DESTINATION ${PLUGIN_INSTALL_DIR}/plasma/dataengine)
 install(FILES plasma-dataengine-redshift.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(FILES redshift.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(FILES redshift.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 
