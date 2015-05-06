@@ -4,15 +4,14 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="redshiftrc"/>
-  <include>KSystemTimeZones</include>
   <group name="General">
     <entry name="latitude" type="Double">
       <label context="@label - KCFG entry name">Latitude</label>
-      <default code="true">KSystemTimeZones::local().latitude()</default>
+      <default code="true">0</default>
     </entry>
     <entry name="longitude" type="Double">
       <label context="@label- KCFG entry name">Longitude</label>
-      <default code="true">KSystemTimeZones::local().longitude()</default>
+      <default code="true">0</default>
     </entry>
     <entry name="dayTemp" type="Int">
       <label context="@label - KCFG entry name">Day color temperature</label>
