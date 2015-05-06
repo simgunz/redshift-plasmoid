@@ -155,16 +155,16 @@ public:
     void restart();
 
     //! Constant defining the minimum allowed screen color temperature.
-    static const int MinTemperature = 1000;
+    static const int MinTemperature;
 
     //! Constant defining the maximum allowed screen color temperature.
-    static const int MaxTemperature = 9900;
+    static const int MaxTemperature;
 
     //! Constant defining the default screen color temperature used when redshift switch to Manual mode.
-    static const int DefaultManualTemperature = 5000;
+    static const int DefaultManualTemperature;
 
     //! Constant defining the temperature step used when increasing/decreasing the screen color temperature in Manual mode.
-    static const int TemperatureStep = 100;
+    static const int TemperatureStep;
 
 signals:
 

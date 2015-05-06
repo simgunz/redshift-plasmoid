@@ -31,6 +31,11 @@
 
 #include <Plasma/DataEngineConsumer>
 
+const int RedshiftController::MinTemperature = 1000;
+const int RedshiftController::MaxTemperature = 9900;
+const int RedshiftController::DefaultManualTemperature = 5000;
+const int RedshiftController::TemperatureStep = 100;
+
 RedshiftController::RedshiftController()
     : m_readyForStart(false),
       m_state(Stopped),
