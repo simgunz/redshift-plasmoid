@@ -26,10 +26,10 @@
 #include "redshiftsettings.h"
 #include "redshiftosdwidget.h"
 
+#include <QComboBox>
 #include <QtGui/QDesktopWidget>
 
 #include <KConfigDialog>
-#include <KComboBox>
 #include <KApplication>
 
 #include <Plasma/DataEngine>
@@ -53,7 +53,7 @@ void RedshiftApplet::init()
 {
     //Initialize the plasmoid using an IconWidget
     m_button = new Plasma::IconWidget(this);
-    m_button->setIcon(KIcon("redshift-status-off"));
+    m_button->setIcon(QIcon::fromTheme("redshift-status-off"));
     m_layout = new QGraphicsGridLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->addItem(m_button, 0, 0);
@@ -83,22 +83,22 @@ void RedshiftApplet::dataUpdated(const QString &sourceName, const Plasma::DataEn
     if (sourceName == "Controller") {
         Plasma::ToolTipContent tooltip;
         if (data["Status"].toString().indexOf("Running") == 0) {
-            m_button->setIcon(KIcon("redshift-status-on"));
+            m_button->setIcon(QIcon::fromTheme("redshift-status-on"));
             tooltip.setSubText(i18nc("Action the user can perform","Click to toggle off. "
                                        "Scroll the mouse wheel to set the color temperature manually."));
-            tooltip.setImage(KIcon("redshift-status-on"));
+            tooltip.setImage(QIcon::fromTheme("redshift-status-on"));
             m_appletStatus = Plasma::PassiveStatus;
         } else {
-            m_button->setIcon(KIcon("redshift-status-off"));
+            m_button->setIcon(QIcon::fromTheme("redshift-status-off"));
             tooltip.setSubText(i18nc("Action the user can perform","Click to toggle on. "
                                         "Scroll the mouse wheel to set the color temperature manually."));
-            tooltip.setImage(KIcon("redshift-status-off"));
+            tooltip.setImage(QIcon::fromTheme("redshift-status-off"));
             m_appletStatus = Plasma::PassiveStatus;
         }
         if (data["Status"].toString() == "RunningManual") {
             tooltip.setSubText(i18nc("Action the user can perform","Click to switch to auto mode. "
                                        "Scroll the mouse wheel to change the color temperature."));
-            m_button->setIcon(KIcon("redshift-status-manual"));
+            m_button->setIcon(QIcon::fromTheme("redshift-status-manual"));
             m_appletStatus = Plasma::ActiveStatus;
         }
         //Start the timer to change the status, if the timer is already active this will restart it
@@ -161,9 +161,9 @@ void RedshiftApplet::createConfigurationInterface(KConfigDialog *parent)
     foreach(act, activities) {
         Plasma::DataEngine::Data data = activities_engine->query(act);
         QTreeWidgetItem *listItem = new QTreeWidgetItem(m_activitiesUi->activities);
-        KComboBox *itemCombo = new KComboBox(m_activitiesUi->activities);
+        QComboBox *itemCombo = new QComboBox(m_activitiesUi->activities);
         listItem->setText(0, data["Name"].toString());
-        listItem->setIcon(0, KIcon(data["Icon"].toString()));
+        listItem->setIcon(0, QIcon::fromTheme(data["Icon"].toString()));
         listItem->setFlags(Qt::ItemIsEnabled);
         listItem->setData(0, Qt::UserRole, act);
 
@@ -216,7 +216,7 @@ void RedshiftApplet::configAccepted()
     QTreeWidget *activitiesList = m_activitiesUi->activities;
     for (int i = 0; i < activitiesList->topLevelItemCount(); ++i) {
         QTreeWidgetItem *item = activitiesList->topLevelItem(i);
-        KComboBox *itemCombo = static_cast<KComboBox *>(activitiesList->itemWidget(item, 1));
+        QComboBox *itemCombo = static_cast<QComboBox *>(activitiesList->itemWidget(item, 1));
         const QString act = item->data(0, Qt::UserRole).toString();
         if (itemCombo->currentIndex() == 1) {
             alwaysOnActivities << act;

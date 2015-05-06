@@ -27,11 +27,10 @@
 #include "ui_redshift.h"
 #include "ui_activities.h"
 
-#include <QGraphicsGridLayout>
-#include <QGraphicsSceneWheelEvent>
+#include <QIcon>
 #include <QTimer>
-
-#include <KIcon>
+#include <QtWidgets/QGraphicsGridLayout>
+#include <QtWidgets/QGraphicsSceneWheelEvent>
 
 #include <Plasma/Applet>
 #include <Plasma/DataEngine>
