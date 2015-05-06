@@ -206,7 +206,8 @@ void RedshiftController::stop()
 
 void RedshiftController::readConfig()
 {
-    RedshiftSettings::self()->readConfig();
+    //FIXME:Should I first call load?
+    RedshiftSettings::self()->read();
     m_latitude = RedshiftSettings::latitude();
     m_longitude = RedshiftSettings::longitude();
     m_dayTemp = RedshiftSettings::dayTemp();
