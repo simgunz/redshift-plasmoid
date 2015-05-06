@@ -47,9 +47,10 @@ RedshiftController::RedshiftController()
     Plasma::DataEngineConsumer dataEngineConsumer = Plasma::DataEngineConsumer();
     m_activitiesEngine = dataEngineConsumer.dataEngine("org.kde.activities");
     m_activitiesEngine->connectSource("Status", this);
+    //FIXME:Unecessary?
     //Calls dataUpdated manually to initialize the controller. The controller reads the configuration file,
     //gets the current activity, and run the redshift process.
-    dataUpdated("Status", m_activitiesEngine->query("Status"));
+    //dataUpdated("Status", m_activitiesEngine->query("Status"));
 }
 
 RedshiftController::~RedshiftController()
