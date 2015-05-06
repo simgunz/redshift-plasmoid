@@ -29,7 +29,7 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 
-#include <Plasma/DataEngineManager>
+#include <Plasma/DataEngineConsumer>
 
 RedshiftController::RedshiftController()
     : m_readyForStart(false),
@@ -44,7 +44,8 @@ RedshiftController::RedshiftController()
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.connect("", "/", "org.kde.redshift", "readyForStart", this, SLOT(setReadyForStart()));
     //Connects to the plasma activities dataEngine to monitor if the current activity is changed
-    m_activitiesEngine = Plasma::DataEngineManager::self()->engine("org.kde.activities");
+    Plasma::DataEngineConsumer dataEngineConsumer = Plasma::DataEngineConsumer();
+    m_activitiesEngine = dataEngineConsumer.dataEngine("org.kde.activities");
     m_activitiesEngine->connectSource("Status", this);
     //Calls dataUpdated manually to initialize the controller. The controller reads the configuration file,
     //gets the current activity, and run the redshift process.
