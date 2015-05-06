@@ -1,0 +1,21 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Redshift
+
+Icon=redshift
+Type=Service
+X-KDE-ServiceTypes=Plasma/GenericPackage
+X-KDE-ParentApp=
+X-Plasma-MainScript=ui/main.qml
+#X-Plasma-NotificationArea=true
+
+X-KDE-PluginInfo-Author=Simone Gaiarin
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Email=simgunz@gmail.com
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=redshift
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=
+#X-KDE-PluginInfo-Website=http://plasma.kde.org/
+#X-KDE-PluginInfo-Category=Windows and Tasks
+#X-KDE-PluginInfo-Depends=
