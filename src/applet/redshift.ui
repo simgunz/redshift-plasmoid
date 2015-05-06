@@ -360,7 +360,7 @@
     </widget>
    </item>
    <item row="11" column="1">
-    <widget class="KComboBox" name="kcfg_method">
+    <widget class="QComboBox" name="kcfg_method">
      <property name="toolTip">
       <string/>
      </property>
@@ -415,13 +415,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
