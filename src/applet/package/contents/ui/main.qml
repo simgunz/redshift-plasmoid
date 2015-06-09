@@ -24,6 +24,6 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 Item {
     id: mainWindow
  
-    Plasmoid.compactRepresentation: CompactRepresentation { }
+    Plasmoid.compactRepresentation: CompactRepresentation {}
     Plasmoid.fullRepresentation: FullRepresentation {}
 }
