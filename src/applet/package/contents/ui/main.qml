@@ -23,9 +23,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: mainWindow
-
-//    Plasmoid.setPopupIconByName: "redshift"
-   
+ 
     Plasmoid.compactRepresentation: CompactRepresentation { }
     Plasmoid.fullRepresentation: FullRepresentation {}
 }

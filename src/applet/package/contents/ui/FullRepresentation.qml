@@ -1,24 +1,22 @@
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
-
+import QtQuick.Controls.Styles 1.3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 FocusScope {
-
-    id: scrollView
-
     anchors {
-	bottom: parent.bottom
-	left: parent.left
-	right: parent.right
+	leftMargin: 10
+	rightMargin: 10
     }
 
 
     ColumnLayout {
 	id: mainLayout
 	spacing: 2
+	
+	anchors.fill: parent
 	
 	Text {
 	    id: header
@@ -29,33 +27,132 @@ FocusScope {
     
 	GridLayout {
 	    id: formGrid
-
 	    columns: 2
-
-	    Text { text: "Latitude"; }
-	    SpinBox { id:"latitude"; decimals: 1; suffix: "°" }
-	    Text { text: "Longitude"; }
-	    SpinBox { id:"longitude"; decimals: 1; suffix: "°" }
-	    Text { text: "Day color temperature"; }
-	    SpinBox { id:"dayTemperature"; decimals: 0; suffix: " K" }
-	    Text { text: "Night color temperature"; }
-	    SpinBox { id:"nightTemperature";  decimals: 0; suffix: " K" }
-	    Text { text: "Brightness"; }
-	    SpinBox { id:"brightness";  decimals: 2; }
-	    Text { text: "Gamma (RGB)"; }
-	    RowLayout {
-	      id: "gammaLayout"
-	      SpinBox { id:"gammaR"; decimals: 2; }
-	      SpinBox { id:"gammaG"; decimals: 2; }
-	      SpinBox { id:"gammaB"; decimals: 2; }
+	    Text {
+		text: "Latitude"
+		Layout.fillWidth: true
 	    }
-	    Text { text: "Smooth transition"; }
-	    Switch { id: "smoothTransition"; }
-	    Text { text: "Autostart"; }
-	    Switch { id: "autostart"; }
-	    Text { text: "Adjust method"; }
-	    ComboBox { id: "methodBox";  model: [ "Auto", "Randr", "Vidmode" ] }
+	    SpinBox {
+		id:"latitudeEdit"
+		decimals: 1
+		suffix: "°"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Text {
+		text: "Longitude"
+		Layout.fillWidth: true
+	    }
+	    SpinBox {
+		id:"longitudeEdit"
+		decimals: 1
+		suffix: "°"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Rectangle {
+		Layout.columnSpan: 2
+		Layout.preferredHeight: longitudeEdit.height*0.5
+	    }
+	    Text {
+		text: "Day color temperature"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    SpinBox {
+		id:"dayTemperatureEdit"
+		decimals: 0
+		suffix: " K" 
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Text {
+		text: "Night color temperature"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    SpinBox {
+		id:"nightTemperatureEdit"
+		decimals: 0
+		suffix: " K"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Rectangle {
+		Layout.columnSpan: 2
+		Layout.preferredHeight: longitudeEdit.height*0.5
+	    }
+	    Text { 
+		text: "Brightness"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    SpinBox { 
+		id:"brightnessEdit"
+		decimals: 2
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Text { 
+		text: "Gamma (RGB)"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    RowLayout {
+		id: "gammaLayout"
+		Layout.preferredWidth: mainLayout.width/2
+		
+		SpinBox { 
+		    id:"gammaREdit"
+		    decimals: 2
+		    Layout.fillWidth: true
+		}
+		SpinBox { 
+		    id:"gammaGEdit"
+		    decimals: 2
+		    Layout.fillWidth: true
+		}
+		SpinBox {
+		    id:"gammaBEdit"
+		    decimals: 2
+		    Layout.fillWidth: true
+		}
+	    }
+	    Rectangle {
+		Layout.columnSpan: 2
+		Layout.preferredHeight: longitudeEdit.height*0.5
+	    }
+	    Text {
+		text: "Smooth transition"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Switch {
+		id: "smoothTransitionSwitch"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Text {
+		text: "Autostart"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Switch {
+		id: "autostartSwitch"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    Text {
+		text: "Adjust method"
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	    ComboBox {
+		id: "methodBox"
+		model: [ "Auto", "Randr", "Vidmode" ] 
+		Layout.preferredWidth: mainLayout.width/2
+	    }
+	}
+	
+	RowLayout {
+	    id: resetSaveLayout
+	    spacing: 5
+	    Layout.alignment: Qt.AlignRight
+	    
+	    Button {
+		id: "resetButton"
+		text: "Reset"
+	    }
+	    Button {
+		id: "saveButton"
+		text: "Save"
+	    }
 	}
     }
-
 }
