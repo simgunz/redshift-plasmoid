@@ -2,8 +2,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
-import QtQuick.Controls.Styles 1.3
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 Item {
     id: configurationPage
@@ -11,7 +9,7 @@ Item {
     height: childrenRect.height
     
     property alias cfg_latitude: latitudeEdit.value
-    property alias cfg_longitude: latitudeEdit.value
+    property alias cfg_longitude: longitudeEdit.value
     property alias cfg_dayTemperature: dayTemperatureEdit.value
     property alias cfg_nightTemperature: nightTemperatureEdit.value
     property alias cfg_brightness: brightnessEdit.value
@@ -20,7 +18,7 @@ Item {
     property alias cfg_gammaB: gammaBEdit.value
     property alias cfg_smoothTransition: smoothTransitionSwitch.checked
     property alias cfg_autostart: autostartSwitch.checked
-    property alias cfg_method: methodBox.currentText
+    property string cfg_method: "Auto"
     
    GridLayout {
 	id: mainLayout
@@ -30,7 +28,8 @@ Item {
 	anchors.rightMargin: 10
     
 	columns: 2
-	Text {
+	rowSpacing: 2
+	Label {
 	    text: "Latitude"
 	    Layout.fillWidth: true
 	}
@@ -42,7 +41,7 @@ Item {
 	    maximumValue: 90
 	    Layout.preferredWidth: mainLayout.width/2
 	}
-	Text {
+	Label {
 	    text: "Longitude"
 	    Layout.fillWidth: true
 	}
@@ -58,7 +57,7 @@ Item {
 	    Layout.columnSpan: 2
 	    Layout.preferredHeight: longitudeEdit.height*0.5
 	}
-	Text {
+	Label {
 	    text: "Day color temperature"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
@@ -70,7 +69,7 @@ Item {
 	    maximumValue: 10000
 	    Layout.preferredWidth: mainLayout.width/2
 	}
-	Text {
+	Label {
 	    text: "Night color temperature"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
@@ -86,7 +85,7 @@ Item {
 	    Layout.columnSpan: 2
 	    Layout.preferredHeight: longitudeEdit.height*0.5
 	}
-	Text { 
+	Label { 
 	    text: "Brightness"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
@@ -98,7 +97,7 @@ Item {
 	    stepSize: 0.05
 	    Layout.preferredWidth: mainLayout.width/2
 	}
-	Text { 
+	Label { 
 	    text: "Gamma (RGB)"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
@@ -135,7 +134,7 @@ Item {
 	    Layout.columnSpan: 2
 	    Layout.preferredHeight: longitudeEdit.height*0.5
 	}
-	Text {
+	Label {
 	    text: "Smooth transition"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
@@ -143,7 +142,7 @@ Item {
 	    id: "smoothTransitionSwitch"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
-	Text {
+	Label {
 	    text: "Autostart"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
@@ -151,14 +150,36 @@ Item {
 	    id: "autostartSwitch"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
-	Text {
+	Label {
 	    text: "Adjust method"
 	    Layout.preferredWidth: mainLayout.width/2
 	}
 	ComboBox {
 	    id: "methodBox"
-	    model: [ "Auto", "Randr", "Vidmode" ] 
 	    Layout.preferredWidth: mainLayout.width/2
+	    textRole: "name"
+	    model: [
+		{
+		    'name': "Auto"
+		},
+		{
+		    'name': "Randr"    
+		}, 
+		{
+		    'name': "Vidmode"
+
+		}
+	    ]
+	    onCurrentIndexChanged: cfg_method = model[currentIndex]["name"]
+	    
+	    Component.onCompleted: {
+		for (var i = 0; i < model.length; i++) {
+		    if (model[i]["name"] == plasmoid.configuration.method) {
+			methodBox.currentIndex = i;
+		    }
+		}
+	    }
+	    
 	}
     }
 }
