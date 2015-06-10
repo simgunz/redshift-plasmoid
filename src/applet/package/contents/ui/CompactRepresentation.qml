@@ -15,14 +15,5 @@ MouseArea {
 
         anchors.fill: parent
         source: "redshift"
-        /*colorGroup: PlasmaCore.ColorScope.colorGroup
-
-        PlasmaComponents.BusyIndicator {
-            id: connectingIndicator
-
-            anchors.fill: parent
-            running: connectionIconProvider.connecting
-            visible: running
-        }*/
     }
 }
