@@ -25,5 +25,8 @@ Item {
     id: mainWindow
  
     Plasmoid.compactRepresentation: CompactRepresentation {}
-    Plasmoid.fullRepresentation: FullRepresentation {}
+    // We don't want anything special on the full representation
+    Plasmoid.fullRepresentation: CompactRepresentation {}
+   
 }
+
