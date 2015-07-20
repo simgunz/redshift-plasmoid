@@ -15,54 +15,18 @@
 *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
 **************************************************************************/
 
-import QtQuick 1.1
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.components 0.1 as PlasmaComponents
-import org.kde.qtextracomponents 0.1
+import QtQuick 2.3
+
+import org.kde.plasma.plasmoid 2.0
+import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
-    id: redshiftapplet
-    property int minimumWidth: 250
-    property int minimumHeight: 10
-
-    PlasmaCore.Theme {
-        id: theme
-    }
-
-    PlasmaCore.DataSource {
-        id: redshiftSource
-        engine: "redshift"
-        onSourceAdded: {
-            connectSources: ["Controller"]
-        }
-    }
-
-    PlasmaComponents.ContextMenu {
-        id: newActivityMenu
-        visualParent: newActivityButton
-        PlasmaComponents.MenuItem {
-            id: templatesItem
-            text: i18n("Templates")
-        }
-        PlasmaComponents.MenuItem {
-            icon: QIcon("user-desktop")
-            text: i18n("Empty Desktop")
-        }
-        PlasmaComponents.MenuItem {
-            icon: QIcon("edit-copy")
-            text: i18n("Clone current activity")
-        }
-    }
-
-    PlasmaComponents.Label {
-        id: header
-        text: "Activity manager QML"
-        anchors { top: parent.top; topMargin: 3; left: parent.left; right: parent.right }
-        horizontalAlignment: Text.AlignHCenter
-    }
-
-
-    Component.onCompleted: {
-        plasmoid.setPopupIconByName("redshift")
-    }
+    id: mainWindow
+ 
+    Plasmoid.compactRepresentation: CompactRepresentation {}
+    // We don't want anything special on the full representation
+    Plasmoid.fullRepresentation: CompactRepresentation {}
+   
 }
+

@@ -26,14 +26,7 @@
 #include "redshiftsettings.h"
 #include "redshiftosdwidget.h"
 
-#include <QComboBox>
-#include <QtGui/QDesktopWidget>
-
-#include <KConfigDialog>
-#include <KApplication>
-
 #include <Plasma/DataEngine>
-#include <Plasma/ToolTipManager>
 
 RedshiftApplet::RedshiftApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
@@ -52,7 +45,7 @@ RedshiftApplet::~RedshiftApplet()
 void RedshiftApplet::init()
 {
     //Initialize the plasmoid using an IconWidget
-    m_button = new Plasma::IconWidget(this);
+    m_button = new QPushButton(this);
     m_button->setIcon(QIcon::fromTheme("redshift-status-off"));
     m_layout = new QGraphicsGridLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);

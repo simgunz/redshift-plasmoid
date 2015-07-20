@@ -25,8 +25,6 @@
 #ifndef REDSHIFTOSDWIDGET_H
 #define REDSHIFTOSDWIDGET_H
 
-#include <Plasma/Dialog>
-
 class QPixmap;
 class QTimer;
 
@@ -41,7 +39,7 @@ namespace Plasma
  * The RedshiftOSDWidget class provides an On Screen Display (OSD)
  * dialog showing the screen color temperature.
  */
-class RedshiftOSDWidget : public Plasma::Dialog
+class RedshiftOSDWidget : public QDialog
 {
     Q_OBJECT
 
@@ -76,10 +74,10 @@ public:
 private:
 
     //! The icon displayed in the OSD.
-    Plasma::Label *m_iconLabel;
+    QLabel *m_iconLabel;
 
     //! Displays the current color temperature in Kelvin.
-    Plasma::Label *m_temperatureLabel;
+    QLabel *m_temperatureLabel;
 
     //! OSD auto-hide timer.
     QTimer *m_autoHideTimer;

@@ -34,8 +34,6 @@
 
 #include <Plasma/Applet>
 #include <Plasma/DataEngine>
-#include <Plasma/IconWidget>
-#include <Plasma/ToolTipContent>
 
 class RedshiftOSDWidget;
 
@@ -169,7 +167,7 @@ private slots:
 private:
 
     //! The button that constitute the body of the widget.
-    Plasma::IconWidget *m_button;
+    QPushButton *m_button;
 
     //! The main layout of the widget.
     QGraphicsGridLayout *m_layout;
