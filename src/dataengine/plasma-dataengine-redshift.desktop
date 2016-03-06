@@ -2,9 +2,11 @@
 # ctxt: plasma data engine
 Name=Redshift
 Comment=Redshift information
-X-KDE-ServiceTypes=Plasma/DataEngine
+
 Type=Service
 Icon=redshift
+
+X-KDE-ServiceTypes=Plasma/DataEngine
 X-KDE-Library=plasma_engine_redshift
 
 X-KDE-PluginInfo-Author=Simone Gaiarin
