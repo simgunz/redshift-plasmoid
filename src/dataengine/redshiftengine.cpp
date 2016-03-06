@@ -52,6 +52,7 @@ bool RedshiftEngine::sourceRequestEvent(const QString &source)
     return false;
 }
 
-K_EXPORT_PLASMA_DATAENGINE(timekpr, RedshiftEngine)
+// export the plugin; use the plugin name and the class name
+K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(redshift, RedshiftEngine, "plasma-dataengine-redshift.json")
 
 #include "redshiftengine.moc"
