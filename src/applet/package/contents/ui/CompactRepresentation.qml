@@ -30,14 +30,14 @@ MouseArea {
         if (data.Status[0] == "Running") {
             icon.source = "redshift-status-on"
             Plasmoid.toolTipMainText = "Click to toggle off."
-            tooltip.subTest = "Scroll the mouse wheel to set the color temperature manually."
-            tooltip.image = "redshift-status-on";
+            Plasmoid.toolTipSubText = "Scroll the mouse wheel to set the color temperature manually."
+            //tooltip.image = "redshift-status-on";
             //m_appletStatus = Plasma::PassiveStatus;
         } else {
             icon.source = "redshift-status-off"
             Plasmoid.toolTipMainText = "Click to toggle on."
             Plasmoid.toolTipSubText = "Scroll the mouse wheel to set the color temperature manually."
-            tooltip.image = "redshift-status-off"
+            //tooltip.image = "redshift-status-off"
             //m_appletStatus = Plasma::PassiveStatus;
         }
         if (data.Status == "RunningManual") {
