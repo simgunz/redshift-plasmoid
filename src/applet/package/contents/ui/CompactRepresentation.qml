@@ -61,10 +61,7 @@ MouseArea {
 
     function toogle()
     {
-    if(icon.source == "redshift-status-off") {
-        icon.source = "redshift-status-on";
-    } else {
-        icon.source = "redshift-status-off";
-    }
+        var operation = dataSource.serviceForSource("Controller").operationDescription("toggle");
+        dataSource.serviceForSource("Controller").startOperationCall(operation);
     }
 }
