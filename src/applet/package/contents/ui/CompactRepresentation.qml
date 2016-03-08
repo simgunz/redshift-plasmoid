@@ -24,7 +24,6 @@ MouseArea {
     id: dataSource
     engine: "redshift"
     connectedSources: ["Controller"]
-    interval: 500
 
     onNewData:{
         if (sourceName == "Controller") {
