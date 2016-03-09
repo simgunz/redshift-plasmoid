@@ -8,8 +8,6 @@ MouseArea {
 
     anchors.fill: parent
 
-    onClicked: toogle()//plasmoid.expanded = !plasmoid.expanded
-
     PlasmaCore.IconItem {
         id: icon
         anchors.fill: parent
@@ -53,12 +51,6 @@ MouseArea {
         }
     }
 
-    function toogle()
-    {
-        var operation = dataSource.serviceForSource("Controller").operationDescription("toggle");
-        dataSource.serviceForSource("Controller").startOperationCall(operation);
-    }
-
     // When this timer is running the wheel event is ignored, so it imposes a limit on how fast we can change the color temperature manually.
     // This is required to avoid to send to many operationCall to the dataEngine, since this causes plasma to crash.
     // FIXME: This is just a workaround, probably it's better to invoke redshift torugh the 'executable' dataEngine which doesn't make plasma crash.
@@ -66,6 +58,8 @@ MouseArea {
         id: inhibitTimer
         interval: 250;
     }
+
+    onClicked: toggle()
 
     // When we use the mouse wheel over the plasmoid we contact the dataEngine to increase/decrease the color temperature manually
     onWheel: {
@@ -79,4 +73,10 @@ MouseArea {
                 inhibitTimer.running = true;
             }
         }
+
+    function toggle()
+    {
+        var operation = dataSource.serviceForSource("Controller").operationDescription("toggle");
+        dataSource.serviceForSource("Controller").startOperationCall(operation);
+    }
 }
