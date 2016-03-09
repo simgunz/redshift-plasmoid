@@ -10,9 +10,6 @@ MouseArea {
 
     onClicked: toogle()//plasmoid.expanded = !plasmoid.expanded
 
-    Plasmoid.toolTipMainText: "Redshift - Click to toggle on."
-    Plasmoid.toolTipSubText: "Scroll the mouse wheel to set the color temperature manually."
-
     PlasmaCore.IconItem {
         id: icon
         anchors.fill: parent
