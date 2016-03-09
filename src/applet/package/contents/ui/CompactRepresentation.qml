@@ -29,21 +29,21 @@ MouseArea {
             if (sourceName == "Controller") {
                 if (data.Status == "Running") {
                     icon.source = "redshift-status-on"
-                    Plasmoid.toolTipMainText = "Click to toggle off."
-                    Plasmoid.toolTipSubText = "Scroll the mouse wheel to set the color temperature manually."
+                    plasmoid.toolTipMainText = "Click to toggle off."
+                    plasmoid.toolTipSubText = "Scroll the mouse wheel to set the color temperature manually."
                     //Plasmoid.image = "redshift-status-on";
                     //m_appletStatus = Plasma::PassiveStatus;
                 } else {
                     icon.source = "redshift-status-off"
-                    Plasmoid.toolTipMainText = "Click to toggle on."
-                    Plasmoid.toolTipSubText = "Scroll the mouse wheel to set the color temperature manually."
+                    plasmoid.toolTipMainText = "Click to toggle on."
+                    plasmoid.toolTipSubText = "Scroll the mouse wheel to set the color temperature manually."
                     //Plasmoid.image = "redshift-status-off"
                     //m_appletStatus = Plasma::PassiveStatus;
                 }
                 if (data.Status == "RunningManual") {
                     icon.source = "redshift-status-manual"
-                    Plasmoid.toolTipMainText = "Click to switch to auto mode."
-                    Plasmoid.toolTipSubText = "Scroll the mouse wheel to change the color temperature."
+                    plasmoid.toolTipMainText = "Click to switch to auto mode."
+                    plasmoid.toolTipSubText = "Scroll the mouse wheel to change the color temperature."
                     //m_appletStatus = Plasma::ActiveStatus;
                 }
                 //Start the timer to change the status, if the timer is already active this will restart it
