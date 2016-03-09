@@ -49,6 +49,7 @@ RedshiftController::RedshiftController()
     //Calls dataUpdated manually to initialize the controller. The controller reads the configuration file,
     //gets the current activity, and run the redshift process.
     dataUpdated("Status", m_activitiesEngine->query("Status"));
+    KProcess::execute("killall redshift");
 }
 
 RedshiftController::~RedshiftController()
