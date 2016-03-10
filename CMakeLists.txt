@@ -8,6 +8,7 @@ include(KDEInstallDirs)
 include(KDECompilerSettings)
 include(KDECMakeSettings)
 include(FeatureSummary)
+include(ECMInstallIcons)
 
 set(REQUIRED_QT_VERSION 5.3.0)
 set(KF5_MIN_VERSION 5.0.0)
@@ -18,5 +19,5 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     Config CoreAddons Plasma Service)
 
 add_subdirectory(src)
-#add_subdirectory(icons)
+add_subdirectory(icons)
 add_subdirectory(po)
