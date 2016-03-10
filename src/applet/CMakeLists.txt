@@ -13,4 +13,4 @@
 #install(TARGETS plasma_applet_redshift DESTINATION ${PLUGIN_INSTALL_DIR})
 #install(FILES plasma-applet-redshift.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-plasma_install_package(package org.kde.redshift)
+plasma_install_package(package org.kde.plasma.redshift)
