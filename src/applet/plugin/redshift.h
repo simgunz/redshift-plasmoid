@@ -17,10 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef REDSHIFT_H
+#define REDSHIFT_H
 
 #include <QObject>
+#include <QVariantMap>
 
 class Redshift : public QObject
 {
@@ -28,7 +29,20 @@ class Redshift : public QObject
 
 public:
     Redshift(QObject *parent = nullptr);
-    Q_INVOKABLE void configAccepted();
+
+    Q_INVOKABLE void writeConfig(QVariantMap data);
+    Q_INVOKABLE QVariantMap readConfig();
+
+    int dayTemp() const;
+    void setDayTemp(int temp);
+
+signals:
+    void configHasChanged();
+
+private:
+    int m_dayTemp;
+    int m_nightTemp;
+    bool m_autolaunch;
 };
 
-#endif // TIMER_H
+#endif // REDSHIFT_H
