@@ -59,7 +59,7 @@ MouseArea {
         interval: 250;
     }
 
-    onClicked: toggle()
+    onClicked: runOperation("toggle")
 
     // When we use the mouse wheel over the plasmoid we contact the dataEngine to increase/decrease the color temperature manually
     onWheel: {
@@ -74,9 +74,9 @@ MouseArea {
             }
         }
 
-    function toggle()
+    function runOperation(operationName)
     {
-        var operation = dataSource.serviceForSource("Controller").operationDescription("toggle");
+        var operation = dataSource.serviceForSource("Controller").operationDescription(operationName);
         dataSource.serviceForSource("Controller").startOperationCall(operation);
     }
 }
