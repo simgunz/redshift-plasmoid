@@ -4,8 +4,8 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name=""/>
- 
-  <group name="Configurate">
+
+  <group name="General">
     <entry name="latitude" type="String">
       <default>0.0</default>
     </entry>
@@ -13,32 +13,31 @@
       <default>0.0</default>
     </entry>
     <entry name="dayTemperature" type="String">
-      <default>0.0</default>
+      <default>5500</default>
     </entry>
     <entry name="nightTemperature" type="String">
-      <default>3000</default>
+      <default>3500</default>
     </entry>
     <entry name="brightness" type="String">
-      <default>1</default>
+      <default>100</default>
     </entry>
     <entry name="gammaR" type="String">
-      <default>0.00</default>
+      <default>1.00</default>
     </entry>
     <entry name="gammaG" type="String">
-      <default>0.00</default>
+      <default>1.00</default>
     </entry>
     <entry name="gammaB" type="String">
-        <default>0.00</default>
+        <default>1.00</default>
     </entry>
     <entry name="smoothTransition" type="Bool">
       <default>true</default>
     </entry>
     <entry name="autostart" type="Bool">
-      <default>false</default>
+      <default>true</default>
     </entry>
     <entry name="method" type="String">
       <default>Auto</default>
     </entry>
   </group>
- 
 </kcfg>
