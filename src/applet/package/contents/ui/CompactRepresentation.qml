@@ -3,15 +3,24 @@ import QtQuick 2.2
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.plasmoid 2.0
 
+import org.kde.plasma.private.redshift 1.0
+
 MouseArea {
     id: panelIconWidget
 
     anchors.fill: parent
 
+    property bool isConfiguring: false
+
     PlasmaCore.IconItem {
         id: icon
         anchors.fill: parent
         source: "redshift-status-off"
+    }
+
+    Redshift{
+        id: redshift
+        onConfigHasChanged: runOperation("restart")
     }
 
     PlasmaCore.DataSource {
@@ -40,6 +49,7 @@ MouseArea {
                     plasmoid.toolTipSubText = "Scroll the mouse wheel to change the color temperature."
                     //m_appletStatus = Plasma::ActiveStatus;
                 }
+                syncPlasmoidConfig()
                 //Start the timer to change the status, if the timer is already active this will restart it
                 //m_setStatusTimer->start();
             }
@@ -81,5 +91,33 @@ MouseArea {
         redshiftOSD.visible = true
         redshiftOSD.animateOpacity = true
         redshiftOSD.opacity = 0
+
+    function saveConfiguration()
+    {
+        console.log('Save config')
+        var data = {};
+        data.dayTemperature = plasmoid.configuration.dayTemperature
+        data.nightTemperature = plasmoid.configuration.nightTemperature
+        data.autostart = plasmoid.configuration.autostart
+        redshift.writeConfig(data)
+    }
+
+    function syncPlasmoidConfig(){
+        console.log('Sync config')
+        var data = redshift.readConfig()
+        console.log(data.dayTemperature)
+        plasmoid.configuration.dayTemperature = data.dayTemperature
+        plasmoid.configuration.nightTemperature = data.nightTemperature
+        plasmoid.configuration.autostart = data.autostart
+    }
+
+    Connections {
+        target: plasmoid
+        onUserConfiguringChanged: {
+            if (panelIconWidget.isConfiguring) {
+                saveConfiguration()
+            }
+            panelIconWidget.isConfiguring = !panelIconWidget.isConfiguring
+        }
     }
 }
