@@ -25,5 +25,5 @@ void RedshiftPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.private.redshift"));
 
-    qmlRegisterType<Redshift>(uri, 0, 1, "Redshift");
+    qmlRegisterType<Redshift>(uri, 1, 0, "Redshift");
 }
