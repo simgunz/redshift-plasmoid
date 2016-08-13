@@ -61,8 +61,8 @@ void Redshift::writeConfig(QVariantMap data)
         somethingChanged = true;
     }
     boolValue = data["autostart"].toBool();
-    if (boolValue != RedshiftSettings::autolaunch()) {
-        RedshiftSettings::setAutolaunch(boolValue);
+    if (boolValue != RedshiftSettings::autostart()) {
+        RedshiftSettings::setAutostart(boolValue);
         somethingChanged = true;
     }
     if (somethingChanged) {
@@ -78,7 +78,7 @@ QVariantMap Redshift::readConfig()
     QVariantMap data;
     data["dayTemperature"] = RedshiftSettings::dayTemp();
     data["nightTemperature"] = RedshiftSettings::nightTemp();
-    data["autostart"] = RedshiftSettings::autolaunch();
+    data["autostart"] = RedshiftSettings::autostart();
 
     return data;
 }

@@ -222,7 +222,7 @@ void RedshiftController::readConfig()
     m_gammaB = RedshiftSettings::gammaB();
     m_brightness = RedshiftSettings::brightness();
     m_smooth = RedshiftSettings::smooth();
-    m_autolaunch = RedshiftSettings::autolaunch();
+    m_autostart = RedshiftSettings::autostart();
     m_method = RedshiftSettings::method();
     QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7 -b %8")
                       .arg(m_latitude, 0, 'f', 1)
@@ -258,7 +258,7 @@ void RedshiftController::readConfig()
         m_runMode = AlwaysOff;
     }
     if (m_autoState == Undefined) {
-        if (m_autolaunch) {
+        if (m_autostart) {
             m_autoState = Running;
         } else {
             m_autoState = Stopped;

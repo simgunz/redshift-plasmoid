@@ -269,7 +269,7 @@ private:
     int m_manualTemp;
 
     //! Autostart flag, if true redshift is acivated on login.
-    bool m_autolaunch;
+    bool m_autostart;
 
     // The parameters here below are the ones that should be passed to the redshift process when launched.
     // They are read from the KConfig configuration file.

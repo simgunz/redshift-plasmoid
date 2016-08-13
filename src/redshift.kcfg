@@ -46,7 +46,7 @@
       <label context="@label - KCFG entry name">Smooth transition flag</label>
       <default>true</default>
     </entry>
-    <entry name="autolaunch" type="Bool">
+    <entry name="autostart" type="Bool">
       <label context="@label - KCFG entry name">Autostart flag</label>
       <default>false</default>
     </entry>
