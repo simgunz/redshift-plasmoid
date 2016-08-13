@@ -333,31 +333,4 @@ Item {
         })
     }
 
-    Label {
-        id: versionStringLabel
-        text: versionString
-        anchors.right: parent.right
-    }
-    Label {
-        text: i18n('Redshift version') + ': '
-        font.bold: true
-        anchors.right: versionStringLabel.left
-    }
-
-    PlasmaCore.DataSource {
-        id: getOptionsDS
-        engine: 'executable'
-
-        connectedSources: ['redshift -V']
-
-        onNewData: {
-            connectedSources.length = 0
-            if (data['exit code'] > 0) {
-                print('Error running redshift with command: ' + sourceName + '   ...stderr: ' + data.stderr)
-                return
-            }
-            versionString = data.stdout.split(' ')[1]
-        }
-    }
-
 }
