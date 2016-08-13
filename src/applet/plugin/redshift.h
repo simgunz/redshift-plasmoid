@@ -33,9 +33,6 @@ public:
     Q_INVOKABLE void writeConfig(QVariantMap data);
     Q_INVOKABLE QVariantMap readConfig();
 
-    int dayTemp() const;
-    void setDayTemp(int temp);
-
 signals:
     void configHasChanged();
 
