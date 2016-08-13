@@ -51,21 +51,18 @@ void Redshift::writeConfig(QVariantMap data)
     bool somethingChanged = false;
 
     value = data["dayTemperature"].toInt();
-    if (value != m_dayTemp) {
+    if (value != RedshiftSettings::dayTemp()) {
         RedshiftSettings::setDayTemp(value);
-        m_dayTemp = value;//FIXME: Implement better this
         somethingChanged = true;
     }
     value = data["nightTemperature"].toInt();
-    if (value != m_nightTemp) {
+    if (value != RedshiftSettings::nightTemp()) {
         RedshiftSettings::setNightTemp(value);
-        m_nightTemp = value;//FIXME: Implement better this
         somethingChanged = true;
     }
     boolValue = data["autostart"].toBool();
-    if (boolValue != m_autolaunch) {
+    if (boolValue != RedshiftSettings::autolaunch()) {
         RedshiftSettings::setAutolaunch(boolValue);
-        m_autolaunch = boolValue;//FIXME: Implement better this
         somethingChanged = true;
     }
     if (somethingChanged) {

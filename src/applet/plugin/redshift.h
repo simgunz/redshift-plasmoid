@@ -35,11 +35,6 @@ public:
 
 signals:
     void configHasChanged();
-
-private:
-    int m_dayTemp;
-    int m_nightTemp;
-    bool m_autolaunch;
 };
 
 #endif // REDSHIFT_H
