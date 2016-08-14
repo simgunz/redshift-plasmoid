@@ -10,7 +10,7 @@ kconfig_add_kcfg_files(redshift_engine_SRCS ../redshiftsettings.kcfgc)
 add_library(plasma_engine_redshift MODULE ${redshift_engine_SRCS})
 target_link_libraries(plasma_engine_redshift KF5::ConfigCore KF5::ConfigGui KF5::Plasma Qt5::DBus)
 
-kcoreaddons_desktop_to_json(plasma_engine_redshift plasma-dataengine-redshift.desktop)
+kcoreaddons_desktop_to_json(plasma_engine_redshift plasma-dataengine-redshift.desktop SERVICE_TYPES plasma-dataengine.desktop)
 
 install(TARGETS plasma_engine_redshift DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/dataengine)
 install(FILES plasma-dataengine-redshift.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
