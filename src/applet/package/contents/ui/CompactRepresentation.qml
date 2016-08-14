@@ -51,14 +51,6 @@ MouseArea {
         }
     }
 
-    // When this timer is running the wheel event is ignored, so it imposes a limit on how fast we can change the color temperature manually.
-    // This is required to avoid to send to many operationCall to the dataEngine, since this causes plasma to crash.
-    // FIXME: This is just a workaround, probably it's better to invoke redshift torugh the 'executable' dataEngine which doesn't make plasma crash.
-    Timer {
-        id: inhibitTimer
-        interval: 250;
-    }
-
     onClicked: runOperation("toggle")
 
     Osd {
@@ -68,14 +60,10 @@ MouseArea {
 
     // When we use the mouse wheel over the plasmoid we contact the dataEngine to increase/decrease the color temperature manually
     onWheel: {
-       if(!inhibitTimer.running) {
-            if (wheel.angleDelta.y > 0) {
-                var operation = dataSource.serviceForSource("Controller").operationDescription("increase");
-            } else {
-                var operation = dataSource.serviceForSource("Controller").operationDescription("decrease");
-            }
-            dataSource.serviceForSource("Controller").startOperationCall(operation);
-            inhibitTimer.running = true;
+        if(wheel.angleDelta.y > 0) {
+            runOperation("increase")
+        } else {
+            runOperation("decrease")
         }
     }
 
