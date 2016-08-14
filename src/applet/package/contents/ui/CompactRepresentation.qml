@@ -91,6 +91,7 @@ MouseArea {
         redshiftOSD.visible = true
         redshiftOSD.animateOpacity = true
         redshiftOSD.opacity = 0
+    }
 
     function saveConfiguration()
     {
