@@ -43,11 +43,11 @@ MouseArea {
                 //Start the timer to change the status, if the timer is already active this will restart it
                 //m_setStatusTimer->start();
             }
-                /*int temperature = data["Temperature"].toInt();
-                //Show the OSD only if the temperature is non-zero, i.e., only when redshift is inn "Manual" mode
-                if(temperature) {
-                showRedshiftOSD(temperature);
-                }*/
+            var temperature = data.Temperature;
+            //Show the OSD only if the temperature is non-zero, i.e., only when redshift is inn "Manual" mode
+            if(temperature) {
+                showOSD(temperature);
+            }
         }
     }
 
@@ -77,7 +77,6 @@ MouseArea {
             dataSource.serviceForSource("Controller").startOperationCall(operation);
             inhibitTimer.running = true;
         }
-        showOSD(4300)
     }
 
     function runOperation(operationName)
