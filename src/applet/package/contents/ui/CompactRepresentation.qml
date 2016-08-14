@@ -61,22 +61,38 @@ MouseArea {
 
     onClicked: runOperation("toggle")
 
+    Osd {
+        id: redshiftOSD
+        icon: "redshift-status-on"
+    }
+
     // When we use the mouse wheel over the plasmoid we contact the dataEngine to increase/decrease the color temperature manually
     onWheel: {
-            if(!inhibitTimer.running) {
-                if (wheel.angleDelta.y > 0) {
-                    var operation = dataSource.serviceForSource("Controller").operationDescription("increase");
-                } else {
-                    var operation = dataSource.serviceForSource("Controller").operationDescription("decrease");
-                }
-                dataSource.serviceForSource("Controller").startOperationCall(operation);
-                inhibitTimer.running = true;
+       if(!inhibitTimer.running) {
+            if (wheel.angleDelta.y > 0) {
+                var operation = dataSource.serviceForSource("Controller").operationDescription("increase");
+            } else {
+                var operation = dataSource.serviceForSource("Controller").operationDescription("decrease");
             }
+            dataSource.serviceForSource("Controller").startOperationCall(operation);
+            inhibitTimer.running = true;
         }
+        showOSD(4300)
+    }
 
     function runOperation(operationName)
     {
         var operation = dataSource.serviceForSource("Controller").operationDescription(operationName);
         dataSource.serviceForSource("Controller").startOperationCall(operation);
+    }
+
+    function showOSD(temperature)
+    {
+        redshiftOSD.osdValue = temperature + " K"
+        redshiftOSD.animateOpacity = false
+        redshiftOSD.opacity = 1
+        redshiftOSD.visible = true
+        redshiftOSD.animateOpacity = true
+        redshiftOSD.opacity = 0
     }
 }
