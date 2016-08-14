@@ -35,7 +35,7 @@ To start using the plasmoid reboot you machine or run the following command:
 
 Dependencies
 ------------
-* KDE SC 4.x
+* KDE 5.x
 * Redshift
 
 Build dependecies
