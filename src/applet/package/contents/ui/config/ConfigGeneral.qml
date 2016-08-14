@@ -52,7 +52,6 @@ Item {
     }
 
     GridLayout {
-        Layout.fillWidth: true
         columns: 4
 
         Label {
@@ -60,10 +59,14 @@ Item {
             Layout.columnSpan: parent.columns
             font.bold: true
         }
+        Label {
+            text: i18n("Automatic (geoclue):")
+            Layout.alignment: Qt.AlignRight
+        }
         CheckBox {
             id: geoclueLocationEnabled
-            text: i18n('Automatic (geoclue)')
-            Layout.columnSpan: parent.columns
+            text: i18n('Enabled')
+            Layout.columnSpan: 3
         }
         Label {
             text: i18n('Latitude:')
@@ -72,7 +75,7 @@ Item {
         }
         SpinBox {
             id: latitude
-            decimals: 7
+            decimals: 2
             stepSize: 1
             minimumValue: -90
             maximumValue: 90
@@ -100,7 +103,7 @@ Item {
         }
         SpinBox {
             id: longitude
-            decimals: 7
+            decimals: 2
             stepSize: 1
             minimumValue: -180
             maximumValue: 180
@@ -116,13 +119,8 @@ Item {
         }
 
         Label {
-            text: i18n('Temperature')
-            Layout.columnSpan: 2
-            font.bold: true
-        }
-        Label {
-            text: i18n('Brightness')
-            Layout.columnSpan: 2
+            text: i18n('Color Temperature')
+            Layout.columnSpan: parent.columns
             font.bold: true
         }
 
@@ -136,20 +134,7 @@ Item {
             stepSize: 250
             minimumValue: 1000
             maximumValue: 25000
-            Layout.columnSpan: 1
-        }
-
-        Label {
-            text: i18n('Day:')
-            Layout.alignment: Qt.AlignRight
-        }
-        SpinBox {
-            id: dayBrightness
-            decimals: 2
-            stepSize: 0.1
-            minimumValue: 0.1
-            maximumValue: 1
-            Layout.columnSpan: 1
+            Layout.columnSpan: 3
         }
 
         Label {
@@ -162,9 +147,26 @@ Item {
             stepSize: 250
             minimumValue: 1000
             maximumValue: 25000
-            Layout.columnSpan: 1
+            Layout.columnSpan: 3
         }
 
+        Label {
+            text: i18n('Brightness')
+            Layout.columnSpan: parent.columns
+            font.bold: true
+        }
+        Label {
+            text: i18n('Day:')
+            Layout.alignment: Qt.AlignRight
+        }
+        SpinBox {
+            id: dayBrightness
+            decimals: 2
+            stepSize: 0.1
+            minimumValue: 0.1
+            maximumValue: 1
+            Layout.columnSpan: 3
+        }
         Label {
             text: i18n('Night:')
             Layout.alignment: Qt.AlignRight
@@ -175,7 +177,7 @@ Item {
             stepSize: 0.1
             minimumValue: 0.1
             maximumValue: 1
-            Layout.columnSpan: 1
+            Layout.columnSpan: 3
         }
 
         Item {
@@ -224,13 +226,18 @@ Item {
             Layout.columnSpan: parent.columns
         }
         Label {
-            text: i18n('Mode')
+            text: i18n('Render Mode')
             Layout.columnSpan: parent.columns
             font.bold: true
+        }
+        Label {
+            text: i18n('Mode:')
+            Layout.alignment: Qt.AlignRight
         }
         // col 1
         ComboBox {
             id: modeCombo
+            Layout.columnSpan: 3
             model: ListModel {
                 ListElement {
                     text: 'Auto'
@@ -259,54 +266,71 @@ Item {
                 modeChanged()
             }
         }
-
-        // col 2
-        TextField {
-            id: renderModeScreen
-            placeholderText: i18n('Screen')
-            visible: isMode(['randr', 'vidmode'])
-            onTextChanged: modeChanged()
+        Label {
+            id: lblCard
+            visible: isMode(['drm', 'card'])
+            text: i18n('Card:')
+            Layout.alignment: Qt.AlignRight
         }
         TextField {
             id: renderModeCard
-            placeholderText: i18n('Card')
+            Layout.columnSpan: 3
             visible: isMode(['drm', 'card'])
             onTextChanged: modeChanged()
         }
-        TextField {
-            id: fakeTextField
-            opacity: 0
-            visible: !renderModeScreen.visible && !renderModeCard.visible
+        Label {
+            id: lblScreen
+            visible: isMode(['randr', 'vidmode'])
+            text: i18n('Screen:')
+            Layout.alignment: Qt.AlignRight
         }
-
-        // col 2
         TextField {
-            id: renderModeCrtc
-            width: advancedConfig / 8
-            placeholderText: i18n('CRTC')
-            opacity: isMode(['drm', 'randr']) ? 1 : 0
+            id: renderModeScreen
+            Layout.columnSpan: 3
+            visible: isMode(['randr', 'vidmode'])
             onTextChanged: modeChanged()
         }
-
+        Label {
+            id: lblCRTC
+            visible: isMode(['drm', 'randr'])
+            text: i18n('CRTC:')
+            Layout.alignment: Qt.AlignRight
+        }
+        TextField {
+            id: renderModeCrtc
+            Layout.columnSpan: 3
+            visible: isMode(['drm', 'randr'])
+            width: advancedConfig / 8
+            onTextChanged: modeChanged()
+        }
+        Label {
+            text: i18n('Preserve screen colour:')
+            Layout.alignment: Qt.AlignRight
+            visible: isMode(['randr', 'vidmode'])
+        }
         // col 4
         CheckBox {
             id: preserveScreenColour
-            text: i18n('Preserve screen colour')
-            opacity: isMode(['randr', 'vidmode']) ? 1 : 0
+            Layout.columnSpan: 3
+            text: i18n('Enabled')
+            visible: isMode(['randr', 'vidmode'])
             enabled: parseFloat(versionString) >= 1.11
             onCheckedChanged: modeChanged()
         }
-
+        Label {
+            id: lblCustomMode
+            text: i18n('Custom mode options:')
+            Layout.alignment: Qt.AlignRight
+            visible: !isMode([''])
+        }
         TextField {
             id: modeString
-            placeholderText: i18n('Insert custom mode options')
-            Layout.columnSpan: parent.columns
-            Layout.preferredWidth: parent.width - 5
+            Layout.columnSpan: 3
+            Layout.preferredWidth: parent.width - lblCustomMode.width*1.1
             enabled: isMode(['MANUAL'])
             visible: !isMode([''])
             onTextChanged: cfg_renderModeString = text
         }
-
     }
 
     function modeChanged() {
@@ -331,6 +355,33 @@ Item {
         return modes.some(function (iterMode) {
             return currentMode === iterMode
         })
+    }
+
+//     Label {
+//         id: versionStringLabel
+//         text: versionString
+//         anchors.right: parent.right
+//     }
+//     Label {
+//         text: i18n('Redshift version') + ': '
+//         font.bold: true
+//         anchors.right: versionStringLabel.left
+//     }
+
+    PlasmaCore.DataSource {
+        id: getOptionsDS
+        engine: 'executable'
+
+        connectedSources: ['redshift -V']
+
+        onNewData: {
+            connectedSources.length = 0
+            if (data['exit code'] > 0) {
+                print('Error running redshift with command: ' + sourceName + '   ...stderr: ' + data.stderr)
+                return
+            }
+            versionString = data.stdout.split(' ')[1]
+        }
     }
 
 }
