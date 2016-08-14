@@ -7,6 +7,6 @@ ConfigModel {
     ConfigCategory {
          name: i18n("General")
          icon: "redshift"
-         source: "Configurate.qml"
+         source: "config/configGeneral.qml"
     }
 }
