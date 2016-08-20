@@ -184,7 +184,7 @@ Item {
             id: renderModeCrtc
             Layout.columnSpan: 3
             visible: isMode(['drm', 'randr'])
-            width: advancedConfig / 8
+            width: advancedRedshiftConfig / 8
             onTextChanged: modeChanged()
         }
         Label {
