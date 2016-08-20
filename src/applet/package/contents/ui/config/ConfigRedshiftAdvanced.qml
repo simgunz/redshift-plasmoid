@@ -136,9 +136,11 @@ Item {
                 }
             }
             onCurrentIndexChanged: {
-                cfg_renderMode = model.get(currentIndex).val
-                print('saved: ' + cfg_renderMode)
-                modeChanged()
+                console.log('Redshift: Current index changed' + modeCombo.count)
+                if (modeCombo.count != 0) {
+                    cfg_renderMode = model.get(currentIndex).val
+                    print('saved: ' + cfg_renderMode)
+                    modeChanged()
                 }
             }
             Component.onCompleted: {
