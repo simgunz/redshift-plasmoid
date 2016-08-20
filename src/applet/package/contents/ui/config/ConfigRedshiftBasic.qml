@@ -8,7 +8,7 @@ Item {
     id: basicRedshiftConfig
 
     property alias cfg_autostart: autostart.checked
-    property alias cfg_smoothTransitions: smoothTransitions.checked
+    property alias cfg_smoothTransition: smoothTransition.checked
     property alias cfg_geoclueLocationEnabled: geoclueLocationEnabled.checked
     property alias cfg_latitude: latitude.value
     property alias cfg_longitude: longitude.value
@@ -48,11 +48,11 @@ Item {
             Layout.columnSpan: 3
         }
         Label {
-            text: i18n('Smooth Transitions:')
+            text: i18n('Smooth Transition:')
             Layout.alignment: Qt.AlignRight
         }
         CheckBox {
-            id: smoothTransitions
+            id: smoothTransition
             text: i18n('Enabled')
             Layout.columnSpan: 3
         }
