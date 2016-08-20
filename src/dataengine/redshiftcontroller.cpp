@@ -223,7 +223,7 @@ void RedshiftController::readConfig()
     m_gammaG = RedshiftSettings::gammaG();
     m_gammaB = RedshiftSettings::gammaB();
     m_dayBrightness = RedshiftSettings::dayBrightness();
-    m_nightBrightness = RedshiftSettings::dayBrightness();
+    m_nightBrightness = RedshiftSettings::nightBrightness();
     m_smooth = RedshiftSettings::smooth();
     m_autostart = RedshiftSettings::autostart();
     m_renderModeString = RedshiftSettings::renderModeString();
