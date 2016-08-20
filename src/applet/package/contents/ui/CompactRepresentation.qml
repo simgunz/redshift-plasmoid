@@ -95,21 +95,53 @@ MouseArea {
 
     function saveConfiguration()
     {
-        console.log('Save config')
         var data = {};
+        data.autostart = plasmoid.configuration.autostart
+        data.smoothTransition = plasmoid.configuration.smoothTransition
+        data.geoclueLocationEnabled = plasmoid.configuration.geoclueLocationEnabled
+        data.latitude = plasmoid.configuration.latitude
+        data.longitude = plasmoid.configuration.longitude
         data.dayTemperature = plasmoid.configuration.dayTemperature
         data.nightTemperature = plasmoid.configuration.nightTemperature
-        data.autostart = plasmoid.configuration.autostart
+        data.dayBrightness = plasmoid.configuration.dayBrightness
+        data.nightBrightness = plasmoid.configuration.nightBrightness
+        data.gammaR = plasmoid.configuration.gammaR
+        data.gammaG = plasmoid.configuration.gammaG
+        data.gammaB = plasmoid.configuration.gammaB
+        data.renderModeString = plasmoid.configuration.renderModeString
+
+        //Properties used only by the plasmoid
+        data.renderMode = plasmoid.configuration.renderMode
+        data.renderModeScreen = plasmoid.configuration.renderModeScreen
+        data.renderModeCard = plasmoid.configuration.renderModeCard
+        data.renderModeCrtc = plasmoid.configuration.renderModeCrtc
+        data.preserveScreenColour = plasmoid.configuration.preserveScreenColour
+
         redshift.writeConfig(data)
     }
 
     function syncPlasmoidConfig(){
-        console.log('Sync config')
         var data = redshift.readConfig()
-        console.log(data.dayTemperature)
+        plasmoid.configuration.autostart = data.autostart
+        plasmoid.configuration.smoothTransition = data.smoothTransition
+        plasmoid.configuration.geoclueLocationEnabled = data.geoclueLocationEnabled
+        plasmoid.configuration.latitude = data.latitude
+        plasmoid.configuration.longitude = data.longitude
         plasmoid.configuration.dayTemperature = data.dayTemperature
         plasmoid.configuration.nightTemperature = data.nightTemperature
-        plasmoid.configuration.autostart = data.autostart
+        plasmoid.configuration.dayBrightness = data.dayBrightness
+        plasmoid.configuration.nightBrightness = data.nightBrightness
+        plasmoid.configuration.gammaR = data.gammaR
+        plasmoid.configuration.gammaG = data.gammaG
+        plasmoid.configuration.gammaB = data.gammaB
+        plasmoid.configuration.renderModeString = data.renderModeString
+
+        //Properties used only by the plasmoid
+        plasmoid.configuration.renderMode = data.renderMode
+        plasmoid.configuration.renderModeScreen = data.renderModeScreen
+        plasmoid.configuration.renderModeCard = data.renderModeCard
+        plasmoid.configuration.renderModeCrtc = data.renderModeCrtc
+        plasmoid.configuration.preserveScreenColour = data.preserveScreenColour
     }
 
     Connections {
