@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
-    id: advancedConfig
+    id: basicRedshiftConfig
 
     property alias cfg_autostart: autostart.checked
     property alias cfg_smoothTransitions: smoothTransitions.checked
@@ -14,9 +14,6 @@ Item {
     property alias cfg_longitude: longitude.value
     property alias cfg_dayTemperature: dayTemperature.value
     property alias cfg_nightTemperature: nightTemperature.value
-
-    property string versionString: 'N/A'
-    property string modeString: ''
 
     PlasmaCore.DataSource {
         id: geolocationDS
@@ -64,7 +61,6 @@ Item {
             height: 10
             Layout.columnSpan: parent.columns
         }
-        
         Label {
             text: i18n('Location')
             Layout.columnSpan: parent.columns
