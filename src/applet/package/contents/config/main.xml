@@ -6,16 +6,25 @@
   <kcfgfile name=""/>
 
   <group name="General">
-    <entry name="latitude" type="String">
+    <entry name="autostart" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="smoothTransition" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="geoclueLocationEnabled" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="latitude" type="Double">
       <default>0.0</default>
     </entry>
-    <entry name="longitude" type="String">
+    <entry name="longitude" type="Double">
       <default>0.0</default>
     </entry>
-    <entry name="dayTemperature" type="String">
+    <entry name="dayTemperature" type="Int">
       <default>5500</default>
     </entry>
-    <entry name="nightTemperature" type="String">
+    <entry name="nightTemperature" type="Int">
       <default>3500</default>
     </entry>
     <entry name="dayBrightness" type="Double">
@@ -24,20 +33,14 @@
     <entry name="nightBrightness" type="Double">
         <default>1</default>
     </entry>
-    <entry name="gammaR" type="String">
+    <entry name="gammaR" type="Double">
       <default>1.00</default>
     </entry>
-    <entry name="gammaG" type="String">
+    <entry name="gammaG" type="Double">
       <default>1.00</default>
     </entry>
-    <entry name="gammaB" type="String">
+    <entry name="gammaB" type="Double">
         <default>1.00</default>
-    </entry>
-    <entry name="smoothTransition" type="Bool">
-      <default>true</default>
-    </entry>
-    <entry name="autostart" type="Bool">
-      <default>true</default>
     </entry>
     <entry name="renderMode" type="String">
         <default></default>
