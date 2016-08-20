@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
-    id: advancedConfig
+    id: advancedRedshiftConfig
 
     property alias cfg_dayBrightness: dayBrightness.value
     property alias cfg_nightBrightness: nightBrightness.value
