@@ -48,23 +48,102 @@ void Redshift::writeConfig(QVariantMap data)
 
     int value;
     bool boolValue;
+    double doubleValue;
+    QString stringValue;
     bool somethingChanged = false;
 
-    value = data["dayTemperature"].toInt();
-    if (value != RedshiftSettings::dayTemp()) {
-        RedshiftSettings::setDayTemp(value);
-        somethingChanged = true;
-    }
-    value = data["nightTemperature"].toInt();
-    if (value != RedshiftSettings::nightTemp()) {
-        RedshiftSettings::setNightTemp(value);
-        somethingChanged = true;
-    }
     boolValue = data["autostart"].toBool();
     if (boolValue != RedshiftSettings::autostart()) {
         RedshiftSettings::setAutostart(boolValue);
         somethingChanged = true;
     }
+    boolValue = data["smoothTransition"].toBool();
+    if (boolValue != RedshiftSettings::smooth()) {
+        RedshiftSettings::setSmooth(boolValue);
+        somethingChanged = true;
+    }
+    boolValue = data["geoclueLocationEnabled"].toBool();
+    if (boolValue != RedshiftSettings::geoclueLocationEnabled()) {
+        RedshiftSettings::setGeoclueLocationEnabled(boolValue);
+        somethingChanged = true;
+    }
+    doubleValue = data["latitude"].toDouble();
+    if (doubleValue != RedshiftSettings::latitude()) {
+        RedshiftSettings::setLatitude(doubleValue);
+        somethingChanged = true;
+    }
+    doubleValue = data["longitude"].toDouble();
+    if (doubleValue != RedshiftSettings::longitude()) {
+        RedshiftSettings::setLongitude(doubleValue);
+        somethingChanged = true;
+    }
+    value = data["dayTemperature"].toInt();
+    if (value != RedshiftSettings::dayTemperature()) {
+        RedshiftSettings::setDayTemperature(value);
+        somethingChanged = true;
+    }
+    value = data["nightTemperature"].toInt();
+    if (value != RedshiftSettings::nightTemperature()) {
+        RedshiftSettings::setNightTemperature(value);
+        somethingChanged = true;
+    }
+    doubleValue = data["dayBrightness"].toDouble();
+    if (doubleValue != RedshiftSettings::dayBrightness()) {
+        RedshiftSettings::setDayBrightness(doubleValue);
+        somethingChanged = true;
+    }
+    doubleValue = data["nightBrightness"].toDouble();
+    if (doubleValue != RedshiftSettings::nightBrightness()) {
+        RedshiftSettings::setNightBrightness(doubleValue);
+        somethingChanged = true;
+    }
+    doubleValue = data["gammaR"].toDouble();
+    if (doubleValue != RedshiftSettings::gammaR()) {
+        RedshiftSettings::setGammaR(doubleValue);
+        somethingChanged = true;
+    }
+    doubleValue = data["gammaG"].toDouble();
+    if (doubleValue != RedshiftSettings::gammaG()) {
+        RedshiftSettings::setGammaG(doubleValue);
+        somethingChanged = true;
+    }
+    doubleValue = data["gammaB"].toDouble();
+    if (doubleValue != RedshiftSettings::gammaB()) {
+        RedshiftSettings::setGammaB(doubleValue);
+        somethingChanged = true;
+    }
+    stringValue = data["renderModeString"].toString();
+    if (stringValue != RedshiftSettings::renderModeString()) {
+        RedshiftSettings::setRenderModeString(stringValue);
+        somethingChanged = true;
+    }
+
+    stringValue = data["renderMode"].toString();
+    if (stringValue != RedshiftSettings::renderMode()) {
+        RedshiftSettings::setRenderMode(stringValue);
+        somethingChanged = true;
+    }
+    stringValue = data["renderModeScreen"].toString();
+    if (stringValue != RedshiftSettings::renderModeScreen()) {
+        RedshiftSettings::setRenderModeScreen(stringValue);
+        somethingChanged = true;
+    }
+    stringValue = data["renderModeCard"].toString();
+    if (stringValue != RedshiftSettings::renderModeCard()) {
+        RedshiftSettings::setRenderModeCard(stringValue);
+        somethingChanged = true;
+    }
+    stringValue = data["renderModeCrtc"].toString();
+    if (stringValue != RedshiftSettings::renderModeCrtc()) {
+        RedshiftSettings::setRenderModeCrtc(stringValue);
+        somethingChanged = true;
+    }
+    boolValue = data["preserveScreenColour"].toBool();
+    if (boolValue != RedshiftSettings::preserveScreenColour()) {
+        RedshiftSettings::setPreserveScreenColour(boolValue);
+        somethingChanged = true;
+    }
+
     if (somethingChanged) {
         RedshiftSettings::self()->save();
         emit configHasChanged();
@@ -76,9 +155,25 @@ QVariantMap Redshift::readConfig()
     RedshiftSettings::self()->load();
 
     QVariantMap data;
-    data["dayTemperature"] = RedshiftSettings::dayTemp();
-    data["nightTemperature"] = RedshiftSettings::nightTemp();
     data["autostart"] = RedshiftSettings::autostart();
+    data["smoothTransition"] = RedshiftSettings::smooth();
+    data["geoclueLocationEnabled"] = RedshiftSettings::geoclueLocationEnabled();
+    data["dayTemperature"] = RedshiftSettings::dayTemperature();
+    data["nightTemperature"] = RedshiftSettings::nightTemperature();
+    data["latitude"] = RedshiftSettings::latitude();
+    data["longitude"] = RedshiftSettings::longitude();
+    data["dayBrightness"] = RedshiftSettings::dayBrightness();
+    data["nightBrightness"] = RedshiftSettings::nightBrightness();
+    data["gammaR"] = RedshiftSettings::gammaR();
+    data["gammaG"] = RedshiftSettings::gammaG();
+    data["gammaB"] = RedshiftSettings::gammaB();
+    data["renderModeString"] = RedshiftSettings::renderModeString();
+
+    data["renderMode"] = RedshiftSettings::renderMode();
+    data["renderModeScreen"] = RedshiftSettings::renderModeScreen();
+    data["renderModeCard"] = RedshiftSettings::renderModeCard();
+    data["renderModeCrtc"] = RedshiftSettings::renderModeCrtc();
+    data["preserveScreenColour"] = RedshiftSettings::preserveScreenColour();
 
     return data;
 }
