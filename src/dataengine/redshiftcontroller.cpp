@@ -252,6 +252,7 @@ void RedshiftController::readConfig()
         command.append(QString("%1").arg(m_manualTemp));
     }
 
+    qDebug() << "(Redshift plasmoid) Redshift command: " << command;
     m_process->setShellCommand(command);
 
     m_runMode = Auto;
