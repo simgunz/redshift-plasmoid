@@ -7,6 +7,8 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 Item {
     id: advancedConfig
 
+    property alias cfg_autostart: autostart.checked
+    property alias cfg_smoothTransitions: smoothTransitions.checked
     property alias cfg_geoclueLocationEnabled: geoclueLocationEnabled.checked
     property alias cfg_latitude: latitude.value
     property alias cfg_longitude: longitude.value
@@ -35,12 +37,41 @@ Item {
         columns: 4
 
         Label {
-            text: i18n("Location")
+            text: i18n('General')
             Layout.columnSpan: parent.columns
             font.bold: true
         }
         Label {
-            text: i18n("Automatic (geoclue):")
+            text: i18n('Autostart:')
+            Layout.alignment: Qt.AlignRight
+        }
+        CheckBox {
+            id: autostart
+            text: i18n('Enabled')
+            Layout.columnSpan: 3
+        }
+        Label {
+            text: i18n('Smooth Transitions:')
+            Layout.alignment: Qt.AlignRight
+        }
+        CheckBox {
+            id: smoothTransitions
+            text: i18n('Enabled')
+            Layout.columnSpan: 3
+        }
+        Item {
+            width: 2
+            height: 10
+            Layout.columnSpan: parent.columns
+        }
+        
+        Label {
+            text: i18n('Location')
+            Layout.columnSpan: parent.columns
+            font.bold: true
+        }
+        Label {
+            text: i18n('Automatic (geoclue):')
             Layout.alignment: Qt.AlignRight
         }
         CheckBox {
