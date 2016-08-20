@@ -141,7 +141,7 @@ Item {
                 }
                 ListElement {
                     text: 'Manual'
-                    val: 'MANUAL'
+                    val: 'Manual'
                 }
             }
             onCurrentIndexChanged: {
@@ -211,7 +211,7 @@ Item {
             id: modeString
             Layout.columnSpan: 3
             Layout.preferredWidth: parent.width - lblCustomMode.width*1.1
-            enabled: isMode(['MANUAL'])
+            enabled: isMode(['Manual'])
             visible: !isMode([''])
             onTextChanged: cfg_renderModeString = text
         }
