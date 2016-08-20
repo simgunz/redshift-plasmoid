@@ -22,15 +22,6 @@ Item {
     property string versionString: 'N/A'
     property string modeString: ''
 
-    onCfg_renderModeChanged: {
-        print('restore: ' + cfg_renderMode)
-        var comboIndex = modeCombo.find(cfg_renderMode)
-        print('restore index: ' + comboIndex)
-        if (comboIndex > -1) {
-            modeCombo.currentIndex = comboIndex
-        }
-    }
-
     GridLayout {
         columns: 4
 
@@ -148,6 +139,10 @@ Item {
                 cfg_renderMode = model.get(currentIndex).val
                 print('saved: ' + cfg_renderMode)
                 modeChanged()
+                }
+            }
+            Component.onCompleted: {
+                restoreRenderModeComboValue()
             }
         }
         Label {
@@ -214,6 +209,20 @@ Item {
             enabled: isMode(['Manual'])
             visible: !isMode([''])
             onTextChanged: cfg_renderModeString = text
+        }
+    }
+
+    function restoreRenderModeComboValue()
+    {
+        console.log('Redshift: Combo count:' + modeCombo.count)
+        if(modeCombo.count != 0) {
+            print('restore: ' + cfg_renderMode)
+            // Case sensitive find!
+            var comboIndex = modeCombo.find(cfg_renderMode)
+            print('restore index: ' + comboIndex)
+            if (comboIndex > -1) {
+                modeCombo.currentIndex = comboIndex
+            }
         }
     }
 
