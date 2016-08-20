@@ -191,6 +191,7 @@ void RedshiftController::start()
     if (m_state == Stopped) {
         m_state = Running;
         if (!m_process->state()) {
+            QProcess::execute("killall redshift");
             m_process->start();
         } else {
             kill(m_process->pid(), SIGUSR1);
@@ -213,34 +214,38 @@ void RedshiftController::readConfig()
 {
     //FIXME:Should I first call load?
     RedshiftSettings::self()->read();
+    m_geoclueLocationEnabled = RedshiftSettings::geoclueLocationEnabled();
     m_latitude = RedshiftSettings::latitude();
     m_longitude = RedshiftSettings::longitude();
-    m_dayTemp = RedshiftSettings::dayTemp();
-    m_nightTemp = RedshiftSettings::nightTemp();
+    m_dayTemperature = RedshiftSettings::dayTemperature();
+    m_nightTemperature = RedshiftSettings::nightTemperature();
     m_gammaR = RedshiftSettings::gammaR();
     m_gammaG = RedshiftSettings::gammaG();
     m_gammaB = RedshiftSettings::gammaB();
-    m_brightness = RedshiftSettings::brightness();
+    m_dayBrightness = RedshiftSettings::dayBrightness();
+    m_nightBrightness = RedshiftSettings::dayBrightness();
     m_smooth = RedshiftSettings::smooth();
     m_autostart = RedshiftSettings::autostart();
-    m_method = RedshiftSettings::method();
-    QString command = QString("redshift -c /dev/null -l %1:%2 -t %3:%4 -g %5:%6:%7 -b %8")
-                      .arg(m_latitude, 0, 'f', 1)
-                      .arg(m_longitude, 0, 'f', 1)
-                      .arg(m_dayTemp).arg(m_nightTemp)
+    m_renderModeString = RedshiftSettings::renderModeString();
+    QString command = QString("redshift -c /dev/null -t %1:%2 -g %3:%4:%5 -b %6:%7")
+                      .arg(m_dayTemperature)
+                      .arg(m_nightTemperature)
                       .arg(m_gammaR, 0, 'f', 2)
                       .arg(m_gammaG, 0, 'f', 2)
                       .arg(m_gammaB, 0, 'f', 2)
-                      .arg(m_brightness, 0, 'f', 2);
+                      .arg(m_dayBrightness, 0, 'f', 2)
+                      .arg(m_nightBrightness, 0, 'f', 2);
     if (!m_smooth) {
         command.append(" -r");
     }
-
-    if (m_method == 1) {
-        command.append(" -m randr");
-    } else if (m_method == 2) {
-        command.append(" -m vidmode");
+    if (!m_geoclueLocationEnabled) {
+        command.append(
+            QString(" -l %1:%2")
+            .arg(m_latitude, 0, 'f', 1)
+            .arg(m_longitude, 0, 'f', 1)
+        );
     }
+    command.append(" " + m_renderModeString);
 
     if (m_manualMode) {
         command.append(" -O ");
