@@ -25,6 +25,8 @@ Item {
     property string name
     property string icon
 
+    property alias redshiftActivityMode: modeCombo.currentIndex
+
     height: container.childrenRect.height
     width: parent.width
 
