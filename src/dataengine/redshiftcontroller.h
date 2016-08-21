@@ -269,10 +269,13 @@ private:
     int m_manualTemp;
 
     //! Autostart flag, if true redshift is acivated on login.
-    bool m_autolaunch;
+    bool m_autostart;
 
     // The parameters here below are the ones that should be passed to the redshift process when launched.
     // They are read from the KConfig configuration file.
+
+    //! Flag to enable geoclue automatic location detection
+    bool m_geoclueLocationEnabled;
 
     //! User latitude.
     float m_latitude;
@@ -281,10 +284,10 @@ private:
     float m_longitude;
 
     //! Daytime screen color temperature.
-    int m_dayTemp;
+    int m_dayTemperature;
 
     //! Nighttime screen color temperature.
-    int m_nightTemp;
+    int m_nightTemperature;
 
     //! Red gamma value.
     float m_gammaR;
@@ -295,14 +298,20 @@ private:
     //! Blue gamma value.
     float m_gammaB;
 
-    //! Screen brightness value.
-    float m_brightness;
+    //! Screen brightness value during the day.
+    float m_dayBrightness;
+
+    //! Screen brightness value during the night.
+    float m_nightBrightness;
+
+    //! Manual temperature step
+    int m_manualTemperatureStep;
 
     //! Smooth color transition flag, if true the color transition is performed smoothly.
     bool m_smooth;
 
     //! Color adjstment method, can be randr or vidmode.
-    int m_method;
+    QString m_renderModeString;
 };
 
 #endif // REDSHIFTCONTROLLER_H
