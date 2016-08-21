@@ -50,6 +50,10 @@
       <label context="@label - KCFG entry name">Night brightness</label>
       <default>1.00</default>
     </entry>
+    <entry name="manualTemperatureStep" type="Int">
+      <label context="@label - KCFG entry name">Manual temperature step</label>
+      <default>125</default>
+    </entry>
     <entry name="smooth" type="Bool">
       <label context="@label - KCFG entry name">Smooth transition flag</label>
       <default>true</default>

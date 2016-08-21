@@ -12,6 +12,7 @@ Item {
     property alias cfg_gammaR: gammaR.value
     property alias cfg_gammaG: gammaG.value
     property alias cfg_gammaB: gammaB.value
+    property alias cfg_manualTemperatureStep: manualTemperatureStep.value
     property string cfg_renderMode
     property alias cfg_renderModeScreen: renderModeScreen.text
     property alias cfg_renderModeCard: renderModeCard.text
@@ -95,6 +96,27 @@ Item {
             }
         }
 
+        Item {
+            width: 2
+            height: 10
+            Layout.columnSpan: parent.columns
+        }
+        Label {
+            text: i18n('Manual Mode')
+            Layout.columnSpan: parent.columns
+            font.bold: true
+        }
+        Label {
+            text: i18n("Temperature step:")
+            Layout.alignment: Qt.AlignRight
+        }
+        SpinBox {
+            id: manualTemperatureStep
+            decimals: 0
+            stepSize: 125
+            minimumValue: 1
+            maximumValue: 1000
+        }
         Item {
             width: 2
             height: 10

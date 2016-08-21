@@ -112,6 +112,11 @@ void Redshift::writeConfig(QVariantMap data)
         RedshiftSettings::setGammaB(doubleValue);
         somethingChanged = true;
     }
+    value = data["manualTemperatureStep"].toInt();
+    if (value != RedshiftSettings::manualTemperatureStep()) {
+        RedshiftSettings::setManualTemperatureStep(value);
+        somethingChanged = true;
+    }
     stringValue = data["renderModeString"].toString();
     if (stringValue != RedshiftSettings::renderModeString()) {
         RedshiftSettings::setRenderModeString(stringValue);
@@ -167,6 +172,7 @@ QVariantMap Redshift::readConfig()
     data["gammaR"] = RedshiftSettings::gammaR();
     data["gammaG"] = RedshiftSettings::gammaG();
     data["gammaB"] = RedshiftSettings::gammaB();
+    data["manualTemperatureStep"] = RedshiftSettings::manualTemperatureStep();
     data["renderModeString"] = RedshiftSettings::renderModeString();
 
     data["renderMode"] = RedshiftSettings::renderMode();

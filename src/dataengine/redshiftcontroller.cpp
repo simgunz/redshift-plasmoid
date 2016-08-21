@@ -34,7 +34,6 @@
 const int RedshiftController::MinTemperature = 1000;
 const int RedshiftController::MaxTemperature = 9900;
 const int RedshiftController::DefaultManualTemperature = 5000;
-const int RedshiftController::TemperatureStep = 100;
 
 RedshiftController::RedshiftController()
     : m_readyForStart(false),
@@ -87,15 +86,16 @@ int RedshiftController::currentTemperature()
 void RedshiftController::setTemperature(bool increase)
 {
     if (m_readyForStart && (m_runMode != AlwaysOff)) {
+        readConfig();
         m_manualMode = true;
         if (increase) {
-            m_manualTemp += RedshiftController::TemperatureStep;
+            m_manualTemp += m_manualTemperatureStep;
         } else {
-            m_manualTemp -= RedshiftController::TemperatureStep;
+            m_manualTemp -= m_manualTemperatureStep;
         }
         //Bounds the possible temperatures
         m_manualTemp = qMin(qMax(m_manualTemp,RedshiftController::MinTemperature),RedshiftController::MaxTemperature);
-        readConfig();
+
         m_state = Stopped;
         //Instantly kills the process without waiting the color transition
         if (m_process->state()) {
@@ -224,6 +224,7 @@ void RedshiftController::readConfig()
     m_gammaB = RedshiftSettings::gammaB();
     m_dayBrightness = RedshiftSettings::dayBrightness();
     m_nightBrightness = RedshiftSettings::nightBrightness();
+    m_manualTemperatureStep = RedshiftSettings::manualTemperatureStep();
     m_smooth = RedshiftSettings::smooth();
     m_autostart = RedshiftSettings::autostart();
     m_renderModeString = RedshiftSettings::renderModeString();

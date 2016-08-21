@@ -304,6 +304,9 @@ private:
     //! Screen brightness value during the night.
     float m_nightBrightness;
 
+    //! Manual temperature step
+    int m_manualTemperatureStep;
+
     //! Smooth color transition flag, if true the color transition is performed smoothly.
     bool m_smooth;
 

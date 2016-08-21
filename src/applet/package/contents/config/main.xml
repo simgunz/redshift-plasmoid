@@ -42,6 +42,9 @@
     <entry name="gammaB" type="Double">
         <default>1.00</default>
     </entry>
+    <entry name="manualTemperatureStep" type="Int">
+        <default>125</default>
+    </entry>
     <entry name="renderMode" type="String">
         <default></default>
     </entry>

@@ -108,6 +108,7 @@ MouseArea {
         data.gammaR = plasmoid.configuration.gammaR
         data.gammaG = plasmoid.configuration.gammaG
         data.gammaB = plasmoid.configuration.gammaB
+        data.manualTemperatureStep = plasmoid.configuration.manualTemperatureStep
         data.renderModeString = plasmoid.configuration.renderModeString
 
         //Properties used only by the plasmoid
@@ -134,6 +135,7 @@ MouseArea {
         plasmoid.configuration.gammaR = data.gammaR
         plasmoid.configuration.gammaG = data.gammaG
         plasmoid.configuration.gammaB = data.gammaB
+        plasmoid.configuration.manualTemperatureStep = data.manualTemperatureStep
         plasmoid.configuration.renderModeString = data.renderModeString
 
         //Properties used only by the plasmoid
