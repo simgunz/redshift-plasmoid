@@ -14,4 +14,9 @@ ConfigModel {
          icon: "redshift"
          source: "config/ConfigRedshiftAdvanced.qml"
     }
+    ConfigCategory {
+         name: i18n("Activities")
+         icon: "preferences-activities"
+         source: "config/ConfigActivities.qml"
+    }
 }
