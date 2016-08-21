@@ -33,6 +33,16 @@ Item {
             uid: DataEngineSource
             icon: activitySource.data[uid]["Icon"]
             name: activitySource.data[uid]["Name"]
+
+            Component.onCompleted: {
+                if( cfg_alwaysOnActivities!==undefined && cfg_alwaysOnActivities.indexOf(wrapper.uid) > -1) {
+                    redshiftActivityMode = 1
+                } else if (cfg_alwaysOnActivities!==undefined && cfg_alwaysOffActivities.indexOf(wrapper.uid) > -1) {
+                    redshiftActivityMode = 2
+                } else {
+                    redshiftActivityMode = 0
+                }
+            }
         }
     }
 
