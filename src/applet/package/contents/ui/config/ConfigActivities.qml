@@ -7,6 +7,9 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 Item {
     id: activitiesConfig
 
+    property var cfg_alwaysOnActivities
+    property var cfg_alwaysOffActivities
+
     PlasmaCore.DataSource {
         id: activitySource
         engine: "org.kde.activities"
