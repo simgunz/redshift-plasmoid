@@ -5,6 +5,10 @@
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="redshiftrc"/>
   <group name="General">
+    <entry name="geoclueLocationEnabled" type="Bool">
+    <label context="@label - KCFG entry name">Automatic location via geoclue flag</label>
+    <default>true</default>
+    </entry>
     <entry name="latitude" type="Double">
       <label context="@label - KCFG entry name">Latitude</label>
       <default code="true">0</default>
@@ -13,12 +17,12 @@
       <label context="@label- KCFG entry name">Longitude</label>
       <default code="true">0</default>
     </entry>
-    <entry name="dayTemp" type="Int">
+    <entry name="dayTemperature" type="Int">
       <label context="@label - KCFG entry name">Day color temperature</label>
       <tooltip context="@info:tooltip">A neutral color temperature is 6500 K.</tooltip>
       <default>5500</default>
     </entry>
-    <entry name="nightTemp" type="Int">
+    <entry name="nightTemperature" type="Int">
       <label context="@label - KCFG entry name">Night color temperature</label>
       <tooltip context="@info:tooltip">The recommended night color temperature is 4500 K.</tooltip>
       <default>3700</default>
@@ -38,22 +42,55 @@
       <tooltip context="@info:tooltip">Gamma correction (Blue)</tooltip>
       <default>1.00</default>
     </entry>
-    <entry name="brightness" type="Double">
-      <label context="@label - KCFG entry name">Brightness</label>
+    <entry name="dayBrightness" type="Double">
+      <label context="@label - KCFG entry name">Day brightness</label>
       <default>1.00</default>
+    </entry>
+    <entry name="nightBrightness" type="Double">
+      <label context="@label - KCFG entry name">Night brightness</label>
+      <default>1.00</default>
+    </entry>
+    <entry name="manualTemperatureStep" type="Int">
+      <label context="@label - KCFG entry name">Manual temperature step</label>
+      <default>125</default>
     </entry>
     <entry name="smooth" type="Bool">
       <label context="@label - KCFG entry name">Smooth transition flag</label>
       <default>true</default>
     </entry>
-    <entry name="autolaunch" type="Bool">
+    <entry name="autostart" type="Bool">
       <label context="@label - KCFG entry name">Autostart flag</label>
       <default>false</default>
     </entry>
-    <entry name="method" type="Int">
-        <label context="@label - KCFG entry name">Color adjustment method</label>
+    <entry name="renderModeString" type="String">
+        <label context="@label - KCFG entry name">Color adjustment method string parameters</label>
         <tooltip context="@info:tooltip">Redshift color adjustment method. If «Auto» («randr») doesn't work, try «vidmode».</tooltip>
-        <default>0</default>
+        <default></default>
+    </entry>
+    <entry name="renderMode" type="String">
+        <label context="@label - KCFG entry name">Color adjustment method string parameters</label>
+        <tooltip context="@info:tooltip">Redshift color adjustment method. If «Auto» («randr») doesn't work, try «vidmode».</tooltip>
+        <default></default>
+    </entry>
+    <entry name="renderModeScreen" type="String">
+        <label context="@label - KCFG entry name">Color adjustment method string parameters</label>
+        <tooltip context="@info:tooltip">Redshift color adjustment method. If «Auto» («randr») doesn't work, try «vidmode».</tooltip>
+        <default></default>
+    </entry>
+    <entry name="renderModeCard" type="String">
+        <label context="@label - KCFG entry name">Color adjustment method string parameters</label>
+        <tooltip context="@info:tooltip">Redshift color adjustment method. If «Auto» («randr») doesn't work, try «vidmode».</tooltip>
+        <default></default>
+    </entry>
+    <entry name="renderModeCrtc" type="String">
+        <label context="@label - KCFG entry name">Color adjustment method string parameters</label>
+        <tooltip context="@info:tooltip">Redshift color adjustment method. If «Auto» («randr») doesn't work, try «vidmode».</tooltip>
+        <default></default>
+    </entry>
+    <entry name="preserveScreenColour" type="Bool">
+        <label context="@label - KCFG entry name">Color adjustment method string parameters</label>
+        <tooltip context="@info:tooltip">Redshift color adjustment method. If «Auto» («randr») doesn't work, try «vidmode».</tooltip>
+        <default>false</default>
     </entry>
   </group>
   <group name="Activities">

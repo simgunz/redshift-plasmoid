@@ -23,10 +23,10 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: mainWindow
- 
+
     Plasmoid.compactRepresentation: CompactRepresentation {}
     // We don't want anything special on the full representation
     Plasmoid.fullRepresentation: CompactRepresentation {}
-   
+
 }
 
