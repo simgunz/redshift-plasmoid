@@ -149,6 +149,17 @@ void Redshift::writeConfig(QVariantMap data)
         somethingChanged = true;
     }
 
+    QStringList val = data["alwaysOnActivities"].toStringList();
+    if (val != RedshiftSettings::alwaysOnActivities()) {
+        RedshiftSettings::setAlwaysOnActivities(val);
+        somethingChanged = true;
+    }
+    val = data["alwaysOffActivities"].toStringList();
+    if (val != RedshiftSettings::alwaysOffActivities()) {
+        RedshiftSettings::setAlwaysOffActivities(val);
+        somethingChanged = true;
+    }
+
     if (somethingChanged) {
         RedshiftSettings::self()->save();
         emit configHasChanged();
@@ -180,6 +191,10 @@ QVariantMap Redshift::readConfig()
     data["renderModeCard"] = RedshiftSettings::renderModeCard();
     data["renderModeCrtc"] = RedshiftSettings::renderModeCrtc();
     data["preserveScreenColour"] = RedshiftSettings::preserveScreenColour();
+
+    //Activities
+    data["alwaysOnActivities"] = RedshiftSettings::alwaysOnActivities();
+    data["alwaysOffActivities"] = RedshiftSettings::alwaysOffActivities();
 
     return data;
 }

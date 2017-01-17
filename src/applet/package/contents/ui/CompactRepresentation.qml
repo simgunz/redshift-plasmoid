@@ -118,6 +118,10 @@ MouseArea {
         data.renderModeCrtc = plasmoid.configuration.renderModeCrtc
         data.preserveScreenColour = plasmoid.configuration.preserveScreenColour
 
+        //Activities
+        data.alwaysOnActivities = plasmoid.configuration.alwaysOnActivities
+        data.alwaysOffActivities = plasmoid.configuration.alwaysOffActivities
+
         redshift.writeConfig(data)
     }
 
@@ -144,6 +148,10 @@ MouseArea {
         plasmoid.configuration.renderModeCard = data.renderModeCard
         plasmoid.configuration.renderModeCrtc = data.renderModeCrtc
         plasmoid.configuration.preserveScreenColour = data.preserveScreenColour
+
+        //Activities
+        plasmoid.configuration.alwaysOnActivities = data.alwaysOnActivities
+        plasmoid.configuration.alwaysOffActivities = data.alwaysOffActivities
     }
 
     Connections {
