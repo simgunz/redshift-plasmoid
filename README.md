@@ -19,6 +19,15 @@ it is possible to manually adjust the color temperature by spinning the mouse wh
 The program will then switch to Manual Mode and won’t adjust the temperature automatically, but
 will keep the current. To exit Manual Mode you just click on the widget.
 
+Plasma 5 porting
+================
+
+I'm currently working on a port of the plasmoid for Plasma 5. This version of the plasmoid can be tested
+by checking out the branch `plasma5-porting`.
+
+This version is basically complete, beside a crash that I was not able to solve, also due to lack of time.
+Hopefully I'll get back to work on it sooner or later.
+
 Installation instructions
 =========================
 From redshift root directory execute:
@@ -82,6 +91,7 @@ Configuration pages
 * **Shortcut configuration page**
   In this page it's possible to set a global keyboard shortcut to toggle redshift on/off.
 
+Here are some useful notes about
 Author
 ======
 Simone Gaiarin \<simgunz AT gmail DOT com\>
